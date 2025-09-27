@@ -40,14 +40,14 @@ if ($existingGroup) {
     Write-Host "Created AAD group $EntraIdGroupName"
 }
 
-$rgSharedName = "rg-$($labName)"
-$rgExists = az group exists --name $rgSharedName
-if ($rgExists -eq "false") {
-    az group create --name $rgSharedName --location australiaeast > $null
-    Write-Host "Created shared resource group $rgSharedName"
-} else {
-    Write-Host "Shared resource group $rgSharedName already exists"
-}
+# $rgSharedName = "rg-$($labName)"
+# $rgExists = az group exists --name $rgSharedName
+# if ($rgExists -eq "false") {
+#     az group create --name $rgSharedName --location australiaeast > $null
+#     Write-Host "Created shared resource group $rgSharedName"
+# } else {
+#     Write-Host "Shared resource group $rgSharedName already exists"
+# }
 
 for ($i = $startNumber; $i -le $endNumber; $i++) {
     Write-Host "---------User--------------"
