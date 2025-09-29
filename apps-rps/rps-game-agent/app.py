@@ -45,7 +45,7 @@ def start_game():
     """Start the game with player name"""
     global game_agent
     
-    player_name = request.form.get('player_name', '').strip()
+    player_name = request.form.get('player_name', '').strip() + ' *'
     
     if not player_name:
         return redirect(url_for('index'))
