@@ -67,10 +67,9 @@ The return value of a vector search in LangChain is a list of `Document` objects
    );
    ```
 
-3. In the main function, beneath the const db = dbClient.db(dbname); line of code, add the following code 
+3. In the main function, paste this block where the `perform a vector search using the vector store` comment appears:
 
    ```javascript
-   // perform a vector search using the vector store
    const results = await vectorStore.similaritySearch(
      "What yellow products do you have?",
      AzureCosmosDBSimilarityType.CosineSimilarity,
