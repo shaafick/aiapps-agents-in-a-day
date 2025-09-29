@@ -7,7 +7,7 @@ Prompt engineering is a concept in Natural Language Processing (NLP) that involv
 Let's start with a few prompts and observe the response using the chat interface.
 
 :::info
-To start, select `completions` in the `Model` dropdown list in the right top corner under `Configuration`.
+To start, select `Model` from the dropdown list in the right top corner under `Configuration`.
 :::
 
 Here are some examples to try, but get creative with your own prompts and see what happens!

@@ -58,6 +58,14 @@ Your task is to complete the `translationApi` function to:
 - Extract translated text from the response
 - Manage errors and edge cases
 
+:::note Language Configuration
+**Important**: Make sure to adjust the `from` and `to` language parameters in the translation URL according to your needs:
+- `from=en` (source language: English)
+- `to=fr` (target language: French)
+- You can change these to any supported language codes (es, de, it, etc.)
+- Remove the `from` parameter to enable automatic language detection
+:::
+
 #### Key Requirements:
 - Use Azure Translator REST API
 - Configure proper endpoints and API keys
@@ -111,7 +119,8 @@ const Page = () => {
     }
 
     async function translationApi(text: string): Promise<string> {
-        const translation_url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=en&from=fr`;
+        // Translating from English to French for better first-time experience
+        const translation_url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=fr&from=en`;
         const translation_key = "<API_KEY>";
 
         const body = [{
@@ -141,7 +150,7 @@ const Page = () => {
             <h2>Translation</h2>
             <p></p>
             <p>
-                <input type="text" placeholder="(enter review in original language)" onChange={updateText} />
+                <input type="text" placeholder="(enter text in English to translate to French)" onChange={updateText} />
                 <button onClick={() => process()}>Translate</button><br />
                 {
                     (promiseInProgress === true) ?
@@ -167,10 +176,17 @@ export default Page;
 
 ### Step 6: Testing Your Implementation
 
-1. Test with different languages (French, Spanish, German, etc.)
-2. Try complex sentences with technical terms
-3. Test with mixed-language content
+1. Try English text like "Hello, how are you today?" (should translate to "Bonjour, comment allez-vous aujourd'hui?")
+2. Test with complex sentences with technical terms
+3. Verify that the French output appears correctly
 4. Verify error handling with invalid input
+
+:::tip Testing Tips
+- Start with simple English phrases to see immediate results
+- Try different English texts to test translation quality
+- You can modify the `from` and `to` parameters in the URL to test other language pairs
+- Remove the `from` parameter to enable automatic language detection
+:::
 
 ### Step 7: Advanced Features to Consider
 
