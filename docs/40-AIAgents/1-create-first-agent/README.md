@@ -51,6 +51,9 @@ az login --tenant f1146386-451a-4cc6-846b-a67f747921e9 --use-device-code
 
 ![alt text](images\image-5.png)
 
+:::info
+If you get this error `Found multiple accounts with the same username 'lab1user310@aiapps.top'`, use `az account clear` to clear the cached account info and try again.
+:::
 
 ## Deploy Azure AI Foundry Resource
 
