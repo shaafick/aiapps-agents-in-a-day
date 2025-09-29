@@ -141,10 +141,11 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
 
     If the above step does not work for you, use the `setup-auto.js` script to automatically fetch all configuration values from https://aiaaa-s2-setting.azurewebsites.net/api/configuration/all and replace the placeholders in your setup script. Run it to complete the replacement process.
 
-    Open `setup-auto.sh`, let's update `<DEV_Name>` setting with your own database name. Replace `add_value` with your assigned login name `lab1user310` (for example: lab1user310).
-
+    - Check and revert any file edits in the VS Code git tab. The setup script can only be run once.
+    - Open `setup-auto.sh`, let's update `<DEV_Name>` setting with your own database name. Replace `add_value` with your assigned login name `lab1user310` (for example: lab1user310).
     ![setup auto edit](images/setup-auto-edit.png)
-
+    
+    - Run below script
     ```bash
     chmod +x setup-auto.sh 
     ./setup-auto.sh
