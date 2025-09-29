@@ -30,24 +30,24 @@ var openAiSettings = {
     name: 'gpt-4o'
     version: '2024-05-13'
     deployment: {
-      name: 'gpt-4o'
+      name: 'gpt-4o' // if gpt-4o is not available, you can use gpt-4.1 but keep name as gpt-4o
     }
     sku: {
       name: 'GlobalStandard'
       capacity: 50
     }
   }
-  embeddingsModel: {
-    name: 'text-embedding-3-small'
-    version: '1'
-    deployment: {
-      name: 'embeddings'
-    }
-    sku: {
-      name: 'Standard'
-      capacity: 50
-    }
-  }
+  // embeddingsModel: {
+  //   name: 'text-embedding-3-small'
+  //   version: '1'
+  //   deployment: {
+  //     name: 'embeddings'
+  //   }
+  //   sku: {
+  //     name: 'Standard'
+  //     capacity: 50
+  //   }
+  // }
 }
 
 
@@ -189,27 +189,27 @@ resource aiServicesProject 'Microsoft.CognitiveServices/accounts/projects@2025-0
 }
 
 
-resource openAiEmbeddingsModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
-  parent: aiServices
-  name: openAiSettings.embeddingsModel.deployment.name  
-  sku: {
-    name: openAiSettings.embeddingsModel.sku.name
-    capacity: openAiSettings.embeddingsModel.sku.capacity
-  }
-  properties: {
-    model: {
-      format: 'OpenAI'
-      name: openAiSettings.embeddingsModel.name
-      version: openAiSettings.embeddingsModel.version
-    }
-  }
-}
+// resource openAiEmbeddingsModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
+//   parent: aiServices
+//   name: openAiSettings.embeddingsModel.deployment.name  
+//   sku: {
+//     name: openAiSettings.embeddingsModel.sku.name
+//     capacity: openAiSettings.embeddingsModel.sku.capacity
+//   }
+//   properties: {
+//     model: {
+//       format: 'OpenAI'
+//       name: openAiSettings.embeddingsModel.name
+//       version: openAiSettings.embeddingsModel.version
+//     }
+//   }
+// }
 
 resource openAiGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
   parent: aiServices
   name: openAiSettings.gptModel.deployment.name
   dependsOn: [
-    openAiEmbeddingsModelDeployment
+    // openAiEmbeddingsModelDeployment
   ]
   sku: {
     name: openAiSettings.gptModel.sku.name
@@ -224,51 +224,3 @@ resource openAiGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/deploy
   }
 }
 
-
-
-
-// // AI Services Connection to the Hub
-// resource aiServicesConnection 'Microsoft.MachineLearningServices/workspaces/connections@2024-07-01-preview' = {
-//   parent: aiFoundryHub
-//   name: aiServicesName
-//   properties: {
-//     authType: 'ApiKey'
-//     category: 'AIServices'
-//     target: 'https://${aiServicesName}.cognitiveservices.azure.com/'
-//     useWorkspaceManagedIdentity: true
-//     isSharedToAll: true
-//     sharedUserList: []
-//     peRequirement: 'NotRequired'
-//     peStatus: 'NotApplicable'
-//     credentials: {
-//       key: aiServices.listKeys().key1
-//     }
-//     metadata: {
-//       ApiType: 'Azure'
-//       ResourceId: aiServices.id
-//     }
-//   }
-// }
-
-// // Azure OpenAI Connection to the Hub
-// resource aoaiConnection 'Microsoft.MachineLearningServices/workspaces/connections@2024-07-01-preview' = {
-//   parent: aiFoundryHub
-//   name: '${openAiSettings.name}_aoai'
-//   properties: {
-//     authType: 'ApiKey'
-//     category: 'AzureOpenAI'
-//     target: 'https://${openAiSettings.name}.openai.azure.com/'
-//     useWorkspaceManagedIdentity: true
-//     isSharedToAll: true
-//     sharedUserList: []
-//     peRequirement: 'NotRequired'
-//     peStatus: 'NotApplicable'
-//     credentials: {
-//       key: openAiAccount.listKeys().key1
-//     }
-//     metadata: {
-//       ApiType: 'Azure'
-//       ResourceId: openAiAccount.id
-//     }
-//   }
-// }
