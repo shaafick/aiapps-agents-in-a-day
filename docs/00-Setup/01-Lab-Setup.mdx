@@ -110,20 +110,24 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
     ![edit setting](images/edit-settings-v1.png)
 
 
-4. **Use Copilot Agent Mode to Update the Script Automatically**
+4. Use `GitHub Copilot` Agent Mode to Update the Script Automatically. Instead of manually editing the `.sh` script file, you can use GitHub Copilot in Agent mode to automate this process:
 
-   Instead of manually editing the `.sh` script file, you can use GitHub Copilot in Agent mode to automate this process:
+   - Locate and open `setup.sh` script
+   - Open `GitHub Copilot` in VS Code by the icon on the top and select `Agent mode` as shown in the screenshot
+   ![edit setting](images/open-copilot.png)
 
-   - Open Copilot Agent mode in VS Code and open `setup.sh`
-   - Go to https://aiaaa-s2-setting.azurewebsites.net/api/configuration/all and copy all the configuration values.
-   - Paste the values into the Copilot chat 
-   - ask Copilot to `replace the <MONGODB_CONNECTION_STRING>, <AZURE_OPENAI_API_INSTANCE_NAME>, <AZURE_OPENAI_API_KEY> values in the script`
-   - If successful, Copilot will update the script for you—no manual editing needed!
-
+   - Go to https://aiaaa-s2-setting.azurewebsites.net/api/configuration/all in browser, and copy all the configuration values
+   - Paste copied values into the `Copilot chat` as shown in #1 (don't submmit yet)
+   - Then append instruction ` replace the <MONGODB_CONNECTION_STRING>, <AZURE_OPENAI_API_INSTANCE_NAME>, <AZURE_OPENAI_API_KEY> values in the script` in the same textbox, as shown in #2.
+   - Finally, submit the chat by `Enter` or click `Send icon` as shown in #3
    ![edit setting](images/edit-setting-copilot.png)
 
+   - Copilot will update the script for you by replacing placeholder values. Click `Keep` to accept the changes. No manual editing needed!
+   ![edit setting](images/edit-setting-copilot-keep.png)
+   
+
     :::info
-    This demonstrates how Copilot can be used for real-world automation and configuration tasks.
+    This demonstrates how GitHub Copilot can help with real-world development tasks and automation.
     :::
 
 5.  Go to terminal windows, save the `setup.sh` file and run below bash command to replace all variables in the repo. If you need to run `setup.sh` again to fix typos, you need to revert previous changes in `Source Control` tab or ask us for help.
@@ -175,7 +179,7 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
 
 ## Azure Resources Information
 
-The Azure Resources required for the labs have already been provisioned. The details of the shared Azure resources are provided in the table below. You will need these details to connect to the Azure services during the labs.
+The Azure Resources required for the labs have already been provisioned. The details of the shared Azure resources are provided in the table below. You will need these details to connect to the Azure services during the labs. This section is for your information only.
 
 :::info
 If you have an Azure Subscription, you can provision these resources yourself using the instructions and `bicep` files provided on the `Azure Deployment Guide` page. However, this is optional.
