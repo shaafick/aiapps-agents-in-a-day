@@ -101,7 +101,7 @@ class GameAgent:
         """Create vector store and upload files for file search"""
             
         vector_store_name = f"game-rulebook-store"
-        file_paths = ['C:\\RepoInsight\\aiapps-agents-in-a-day\\apps-rps\\rps-game-agent\\game_rulebook.txt']
+        file_paths = ['game_rulebook.txt']
         uploaded_files = []
         for file_path in file_paths:
             if os.path.exists(file_path):

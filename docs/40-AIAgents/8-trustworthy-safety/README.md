@@ -157,7 +157,7 @@ cd labs/40-AIAgents
 ```python
 python game_agent_v8_human.py
 ```
-// add screenshot of console output
+![Game Agent](./images/game_agent_human.png)
 
 - the agent will ask for your approval before using a function tool call.
 

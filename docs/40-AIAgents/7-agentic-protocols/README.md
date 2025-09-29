@@ -71,6 +71,7 @@ pip install -r requirements.txt
 ```python
 python mcp-server.py
 ```
+![alt text](./images/mcp-server.png)
 
 - open a new terminial windows and also navigate to `apps-rps/rps-game-mcp` folder.
 
@@ -84,6 +85,7 @@ cd apps-rps/rps-game-mcp
 python mcp-client.py
 ```
 
+![alt text](./images/mcp-client.png)
 
 ### Connect AI Agent to MCP server
 
@@ -93,14 +95,22 @@ python mcp-client.py
 cd labs/40-AIAgents
 ```
 
-- run the agent and see the console output.
+- The agent can connect to the MCP server and use the tools exposed by the server by using below code block. MCP support for agent service is currently in preview, we will not run below code for now.
 
 ```python
-python game_agent_v7_mcp.py
-```
-// add screenshot of console output
+    # Initialize agent MCP tool
+    mcp_server_url = os.environ.get("MCP_SERVER_URL", "http://127.0.0.1:3111/mcp")
+    mcp_server_label = os.environ.get("MCP_SERVER_LABEL", "weather")
 
-- the agent can now connect to the MCP server and use the tools exposed by the server.
+    self.mcp_tool = McpTool(
+        server_label=mcp_server_label,
+        server_url=mcp_server_url,
+        allowed_tools=[]
+    )
+    
+    tools.extend(self.mcp_tool.definitions)
+```
+
 
 ## Agent-to-Agent Protocol (A2A)
 

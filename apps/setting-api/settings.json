@@ -18,63 +18,56 @@
     "Name": "AZURE_OPENAI_API_INSTANCE_NAME",
     "Value": "aiaaa-s2-openai",
     "Description": "Name of the Azure OpenAI service instance",
-    "Category": "Azure OpenAI Resource Configuration"
+    "Category": "Azure OpenAI Resource Configuration",
+    "Placeholder": true
   },
   {
     "Id": 4,
     "Name": "AZURE_OPENAI_API_ENDPOINT",
     "Value": "https://aiaaa-s2-openai.openai.azure.com//",
     "Description": "Base endpoint URL for Azure OpenAI API calls",
-    "Category": "Azure OpenAI Resource Configuration"
+    "Category": "Azure OpenAI Resource Configuration",
+    "Placeholder": true
   },
   {
     "Id": 5,
     "Name": "AZURE_OPENAI_API_KEY",
     "Value": "",
     "Description": "Authentication key for Azure OpenAI API access",
-    "Category": "Azure OpenAI Resource Configuration"
+    "Category": "Azure OpenAI Resource Configuration",
+    "Placeholder": true
   },
   {
     "Id": 6,
     "Name": "AZURE_OPENAI_API_DEPLOYMENT_NAME",
     "Value": "gpt-4o",
     "Description": "Deployment name for text completion models",
-    "Category": "Azure OpenAI Resource Configuration"
+    "Category": "Azure OpenAI Resource Configuration",
+    "Placeholder": true
   },
   {
     "Id": 7,
     "Name": "AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME",
     "Value": "embeddings",
     "Description": "Deployment name for text embedding models",
-    "Category": "Azure OpenAI Resource Configuration"
+    "Category": "Azure OpenAI Resource Configuration",
+    "Placeholder": true
   },
   {
     "Id": 8,
     "Name": "AZURE_OPENAI_API_VERSION",
     "Value": "2023-09-01-preview",
     "Description": "API version for Azure OpenAI service calls",
-    "Category": "Azure OpenAI Resource Configuration"
+    "Category": "Azure OpenAI Resource Configuration",
+    "Placeholder": true
   },
   {
     "Id": 9,
     "Name": "MONGODB_CONNECTION_STRING",
     "Value": "",
     "Description": "Connection string for Azure Cosmos DB MongoDB API",
-    "Category": "Azure Cosmos DB for MongoDB"
-  },
-  {
-    "Id": 10,
-    "Name": "MONGODB_Name",
-    "Value": "aiaaa_{your_name}_{your_lucky_number}",
-    "Description": "Database name pattern for MongoDB (replace with actual name and number)",
-    "Category": "Azure Cosmos DB for MongoDB"
-  },
-  {
-    "Id": 11,
-    "Name": "MONGODB_Name (for example)",
-    "Value": "aiaaa_daniel_55",
-    "Description": "Example database name for MongoDB",
-    "Category": "Azure Cosmos DB for MongoDB"
+    "Category": "Azure Cosmos DB for MongoDB",
+    "Placeholder": true
   },
   {
     "Id": 12,
@@ -149,29 +142,25 @@
   {
     "Id": 22,
     "Name": "AZURE_FOUNDRY_PROJECT_ENDPOINT",
-    "Value": "https://foundry-df.services.ai.azure.com/api/projects/project-df",
-    "Description": "",
-    "Category": "Azure Foundry"
+    "Value": "",
+    "Description": "for example: https://aiapps-agents-aiservices-26c3aa.services.ai.azure.com/api/projects/foundryProject",
+    "Category": "Azure Foundry",
+    "Placeholder": false
   },
   {
     "Id": 23,
     "Name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
     "Value": "",
     "Description": "",
-    "Category": "Azure Foundry"
+    "Category": "Azure Foundry",
+    "Placeholder": false
   },
   {
     "Id": 24,
     "Name": "DEV_Name",
-    "Value": "player_{your_name}_{your_lucky_number}",
-    "Description": "",
-    "Category": "Azure Foundry"
-  },
-  {
-    "Id": 25,
-    "Name": "DEV_Name (for example)",
-    "Value": "player_dan_55",
-    "Description": "",
-    "Category": "Azure Foundry"
+    "Value": "lab1user310",
+    "Description": "for example: lab1user310",
+    "Category": "Azure Foundry",
+    "Placeholder": true
   }
 ]

@@ -150,7 +150,7 @@ There are multiple options available for performing bulk operations in Cosmos DB
 
    ![alt text](images/rag_load_data_image-6.png)
 
-2. Locate `MongoDb` extension icon in the left navigation bar, it looks like a leaf icon. Once opened, let's add a connection to the database. Please find db connection string on https://aiaaa-s2-setting.azurewebsites.net.  Click on `Connect` icon, copy CosmosDb connection string to the top textbox in VS Code. 
+2. Locate `MongoDb` extension icon in the left navigation bar, it looks like a leaf icon. Once opened, let's add a connection to the database. Please find db connection string on https://aiaaa-s2-setting.azurewebsites.net (MONGODB_CONNECTION_STRING).  Click on `Connect` icon, copy CosmosDb connection string to the top textbox in VS Code. 
 
    ![alt text](images/rag_load_data_image-2.png)
 

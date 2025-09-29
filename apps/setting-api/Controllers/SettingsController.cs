@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ConfigApi.Services;
 using ConfigApi.Models;
+using System.Linq;
 
 namespace ConfigApi.Controllers;
 
@@ -26,7 +27,8 @@ public class SettingsController : ControllerBase
     {
         _logger.LogInformation("Retrieving all settings");
 
-        var settings = await _configurationService.GetAllSettingsAsync();
+        var allSettings = await _configurationService.GetAllSettingsAsync();
+        var settings = allSettings.Where(r => r.Placeholder).ToList();
         
         return Ok(new { 
             count = settings.Count,

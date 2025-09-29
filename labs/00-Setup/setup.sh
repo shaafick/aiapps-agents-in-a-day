@@ -8,7 +8,6 @@ declare -A replacements=(
     ["<MONGODB_CONNECTION_STRING>"]="add_value"
     ["<AZURE_OPENAI_API_INSTANCE_NAME>"]="aiaaa-s2-openai"
     ["<AZURE_OPENAI_API_KEY>"]="add_value"
-    ["<APPLICATIONINSIGHTS_CONNECTION_STRING>"]="add_value"
     # see examples below
     # ["<DEV_Name>"]="dev_daniel_66"
     # ["<MONGODB_CONNECTION_STRING>"]="mongodb+srv://aiaaaadmin:aiaaapassword123@arg-syd-aiaaa-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"

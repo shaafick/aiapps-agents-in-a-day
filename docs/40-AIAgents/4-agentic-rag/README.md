@@ -86,8 +86,6 @@ Having tools that provide a clear record of actions is essential. Without them, 
 
 ![AgentRunExample](./images/AgentRunExample.png)
 
-![AgentRunExample2](./images/AgentRunExample2.png)
-
 ## Agentic RAG Example for Game Agent
 
 Here's how an Agentic RAG system might work for a RPS tournament agent:
@@ -136,7 +134,7 @@ cd labs/40-AIAgents
 ```python
 python game_agent_v4_rag.py
 ```
-// add screenshot of console output
+![Agentic RAG](./images/agentic-rag.png)
 
 - the agent will ingest a local document and use it as knowledge base to answer questions.
 

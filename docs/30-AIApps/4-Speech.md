@@ -124,7 +124,7 @@ const Page = () => {
     const speechConfigRef = useRef<sdk.SpeechConfig | null>(null);
 
     useEffect(() => {
-        const speech_key = '<API_KEY>';
+        const speech_key = '<Speech_Service_API_Key>';
         const speech_region = 'eastus';
         
         speechConfigRef.current = sdk.SpeechConfig.fromSubscription(
@@ -212,39 +212,14 @@ export default Page;
 </details>
 </details>
 
-## Accessibility Considerations
 
-### Screen Reader Compatibility
-```typescript
-// Announce when speech starts/ends
-const announceToScreenReader = (message: string) => {
-    const announcement = document.createElement('div');
-    announcement.setAttribute('aria-live', 'polite');
-    announcement.setAttribute('aria-atomic', 'true');
-    announcement.textContent = message;
-    document.body.appendChild(announcement);
-    setTimeout(() => document.body.removeChild(announcement), 1000);
-};
-```
+### Step 7: Testing it out
 
-### Keyboard Navigation
-```typescript
-const handleKeyPress = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter' && speechText) {
-        process();
-    }
-    if (event.key === 'Escape') {
-        // Stop current speech
-        synthesizerRef.current?.close();
-    }
-};
-```
-
-### Voice Control Options
-- Pause/Resume functionality
-- Speed control (slow, normal, fast)
-- Volume adjustment
-- Voice selection (male/female, different accents)
+- Replace `<Speech_Service_API_Key>` placeholder value by looking up  https://aiaaa-s2-setting.azurewebsites.net
+- Go to `apps-chat\chatbot-frontend` folder in terminal windows and run `npm run dev`
+- Navigate to `Speech` page in the top navigation bar
+- Type some texts into the input box
+- Click `Read` to play the speech
 
 ## Real-World Applications
 
@@ -265,39 +240,6 @@ const handleKeyPress = (event: React.KeyboardEvent) => {
 - Interactive tutorials
 - Assessment feedback
 - Language learning pronunciation
-
-## Advanced Features
-
-### Speech-to-Text Integration
-```typescript
-// Add speech recognition for voice input
-const recognizer = new sdk.SpeechRecognizer(speechConfig);
-recognizer.recognizeOnceAsync(result => {
-    setSpeechText(result.text);
-});
-```
-
-### Emotion and Style Control
-```typescript
-const ssmlWithEmotion = `
-<speak version="1.0" xml:lang="en-US">
-    <voice name="en-US-AriaNeural">
-        <mstts:express-as style="cheerful">
-            Welcome to our amazing store!
-        </mstts:express-as>
-    </voice>
-</speak>`;
-```
-
-### Batch Processing
-```typescript
-async function speakMultipleTexts(texts: string[]) {
-    for (const text of texts) {
-        await speechApi(text);
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Pause between texts
-    }
-}
-```
 
 ### Integration Opportunities
 

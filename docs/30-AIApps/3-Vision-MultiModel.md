@@ -46,7 +46,7 @@ GPT-4o with vision can:
 
 ### Step 2: Examine the Vision Component
 
-Navigate to `apps-chat\chatbot-frontend\pages\vision\Vision.tsx`. You'll find:
+Navigate to `/apps-chat/chatbot-frontend/src/pages/vision/Vision.tsx`. You'll find:
 - An image upload input for local files
 - A text input for questions about the image
 - A describe button to trigger analysis
@@ -160,7 +160,7 @@ const Page = () => {
         };
 
         const openai_url = "https://aiaaa-s2-openai.openai.azure.com/";
-        const openai_key = "<API_KEY>";
+        const openai_key = "<AZURE_OPENAI_API_KEY>";
         const client = new OpenAIClient(
             openai_url,
             new AzureKeyCredential(openai_key),
@@ -246,35 +246,14 @@ export default Page;
 </details>
 </details>
 
-### Step 5: Advanced Vision Applications
+### Step 5: Testing it out
 
-#### Product Quality Inspection
-```typescript
-const systemPrompt = `You are a quality control inspector. 
-Analyze the product image for:
-- Manufacturing defects
-- Damage or wear
-- Compliance with specifications
-- Overall condition assessment`;
-```
-
-#### Document Analysis
-```typescript
-const systemPrompt = `Extract and structure information from this document:
-- Key data points
-- Tables and forms
-- Signatures and stamps
-- Text content`;
-```
-
-#### Inventory Management
-```typescript
-const systemPrompt = `Analyze this inventory image:
-- Count visible items
-- Identify product types
-- Assess organization and storage
-- Note any issues or discrepancies`;
-```
+- Replace `<AZURE_OPENAI_API_KEY>` placeholder value by looking up  https://aiaaa-s2-setting.azurewebsites.net
+- Go to `apps-chat\chatbot-frontend` folder in terminal windows and run `npm run dev`
+- Navigate to `Vision` page in the top navigation bar
+- Click `Choose file` to select any image or photo
+- Enter a question into the text box
+- Click `Describe` button to see the answer
 
 
 ### Real-World Applications

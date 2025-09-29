@@ -66,8 +66,6 @@ Let's use the example of getting the current time in a city to illustrate:
     We will then take this schema and pass it to the client created previously, along with the users request to find the time in San Francisco. What's important to note is that a **tool call** is what is returned, **not** the final answer to the question. As mentioned earlier, the LLM returns the name of the function it selected for the task, and the arguments that will be passed to it.
 
     ```python
-    add code
-    //TODO
     function_schema = [
         {
             "name": "get_current_time",
@@ -107,39 +105,33 @@ Let's use the example of getting the current time in a city to illustrate:
     We can implement the code to answer tournament questions and select optimal moves. We will also need to write the code to extract the name and arguments from the response_message to get the final result.
 
      ```python
-     add code
-     //TODO
-     def get_current_time(city):
-    from datetime import datetime
-    import pytz
+    def get_current_time(city):
+        from datetime import datetime
+        import pytz
 
-    city_timezones = {
-        "San Francisco": "America/Los_Angeles",
-        "New York": "America/New_York",
-        "London": "Europe/London"
-    }
-    tz = pytz.timezone(city_timezones.get(city, "UTC"))
-    return datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
+        city_timezones = {
+            "San Francisco": "America/Los_Angeles",
+            "New York": "America/New_York",
+            "London": "Europe/London"
+        }
+        tz = pytz.timezone(city_timezones.get(city, "UTC"))
+        return datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
 
-    response_message = {
-        "tool_calls": [
-            {
-                "name": "get_current_time",
-                "arguments": {"city": "San Francisco"}
-            }
-        ]
-    }
+        response_message = {
+            "tool_calls": [
+                {
+                    "name": "get_current_time",
+                    "arguments": {"city": "San Francisco"}
+                }
+            ]
+        }
 
-    tool_call = response_message["tool_calls"][0]
-    result = None
-    if tool_call["name"] == "get_current_time":
-        result = get_current_time(tool_call["arguments"]["city"])
+        tool_call = response_message["tool_calls"][0]
+        result = None
+        if tool_call["name"] == "get_current_time":
+            result = get_current_time(tool_call["arguments"]["city"])
 
-    print(result)
-     ```
-
-     ```bash
-    add console output
+        print(result)
      ```
 
 Function Calling is at the heart of most, if not all agent tool use design, however implementing it from scratch can sometimes be challenging.
@@ -199,7 +191,7 @@ cd labs/40-AIAgents
 ```python
 python game_agent_v5_tool.py
 ```
-// add screenshot of console output
+![Agentic tools In Action](./images/tool.png)
 
 - the agent can know use a proper math calculation tool to answer the question rather than asking LLM to do so! spoiler alert: LLM is not always good at complex math calculation.
 
@@ -215,8 +207,6 @@ The following diagram illustrates the process of function calling with Semantic 
 In Semantic Kernel functions/tools are called <a href="https://learn.microsoft.com/semantic-kernel/concepts/plugins/?pivots=programming-language-python" target="_blank">Plugins</a>. We can convert the RPS tournament functions we saw earlier into a plugin by turning them into a class with the functions in it. We can also import the `kernel_function` decorator, which takes in the description of the function. When you then create a kernel with the RPSTournamentPlugin, the kernel will automatically serialize the functions and their parameters, creating the schema to send to the LLM in the process.
 
 ```python
-    add math calc example lab here for SK here
-    //TODO
     from semantic_kernel import Kernel, kernel_function, Plugin
 
     class MathCalcPlugin(Plugin):

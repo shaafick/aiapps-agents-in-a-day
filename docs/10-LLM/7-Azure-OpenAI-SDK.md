@@ -44,7 +44,7 @@ const client = new OpenAIClient(
 );
 ```
 
-7. Please edit the placeholder string to the right value. Azure OpenAI service endpoint is in the format of `https://<AZURE_OPENAI_API_INSTANCE_NAME>.openai.azure.com/`, for example, `https://aiaaa-s2-openai.openai.azure.com/`. Please find the configuration value on https://aiaaa-s2-setting.azurewebsites.net, or refer to `Lab Setup` step.
+7. Please edit the placeholder string to the right value. Azure OpenAI service endpoint is in the format of `https://<AZURE_OPENAI_API_INSTANCE_NAME>.openai.azure.com/`, for example, `https://aiaaa-s2-openai.openai.azure.com/`. Please find the configuration value on https://aiaaa-s2-setting.azurewebsites.net (find `AZURE_OPENAI_API_INSTANCE_NAME` & `AZURE_OPENAI_API_KEY`), or refer to `Lab Setup` step.
 
 8. Once the Azure OpenAI client has been created, the next step is to call the `.getCompletions` method on the client to perform a chat completion. And print the response from Azure OpenAI to the console.
 
@@ -90,7 +90,7 @@ const chatResponse = client.getChatCompletions("gpt-4o", [
 
 ## Conversation History
 
-You can send previous chat history to the model as part of the conversation. This can help the model provide more accurate responses. Replace the previous code block `Block Reference 1` in earlier step with new code block below.
+You can send previous chat history to the model as part of the conversation. This can help the model provide more accurate responses. Replace the previous code block `Block Reference 1` in earlier step with new code block below again.
 
 ```javascript
 // Block Reference 1
@@ -237,6 +237,7 @@ chatResponse
 node 7b-openai-sdk-func-call.js
 ```
 
+6. Take your time and have a good read of the output in the console windows. It shows all the request and response from/to LLM and function calls.
 
 :::tip
 Where do you think the actual `applyToolCall` execution is? on the server-side or client-side?

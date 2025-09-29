@@ -50,16 +50,9 @@ The return value of a vector search in LangChain is a list of `Document` objects
 
 1. Open the `3a-vector-search.js` file in the Visual Studio Code editor. Notice that it has the basic MongoDB connection setup.
 
-2. Add the following complete code block where the `TODO: Set up Azure Cosmos DB vector store and perform vector search` comment appears:
+2. Add the following complete code block where the `Set up Azure Cosmos DB vector store and perform vector search` comment appears:
 
    ```javascript
-   const {
-     AzureCosmosDBVectorStore,
-     AzureCosmosDBSimilarityType,
-   } = require("@langchain/community/vectorstores/azure_cosmosdb");
-   const { OpenAIEmbeddings } = require("@langchain/openai");
-
-   // set up the Azure Cosmos DB vector store using the initialized MongoDB client
    const azureCosmosDBConfig = {
      client: dbClient,
      databaseName: dbname,

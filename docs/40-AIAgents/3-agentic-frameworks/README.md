@@ -73,7 +73,6 @@ Common use cases:
 >
 > A: A great choice is to build your application in Semantic Kernel first and then use Azure AI Agent Service to deploy your agent. This approach allows you to easily persist your agents while leveraging the power to build multi-agent systems in Semantic Kernel. Additionally, Semantic Kernel has a connector in AutoGen, making it easy to use both frameworks together.
  
-What's the ideal use case for each of these frameworks?
 
 ## Integrate existing Azure ecosystem tools
 

@@ -13,7 +13,8 @@ slug: /10-LLM-Setup
 
 For this lab you are using a custom playground build on top of the Azure OpenAI Service. In this playground you will have the opportunity to play with the prompts and learn how to build AI apps and agents.
 
-AI Proxy Playground: https://aiaaa-s2-playground.azurewebsites.net
+- AI Proxy Playground: https://aiaaa-s2-playground.azurewebsites.net
+- Azure OpenAI API Key: https://aiaaa-s2-setting.azurewebsites.net (look for `Azure OpenAI API Key`)
 
 In the later modules, you will also be interacting with the Azure OpenAI Service using the Azure SDK.
 

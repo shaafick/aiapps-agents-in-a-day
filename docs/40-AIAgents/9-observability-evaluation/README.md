@@ -13,7 +13,7 @@ After completing this lesson, you will know how to/understand:
 
 The goal is to equip you with the knowledge to transform your "black box" agents into transparent, manageable, and dependable systems.
 
-_**Note:** It is important to deploy AI Agents that are safe and trustworthy. Check out the [Building Trustworthy AI Agents](./06-building-trustworthy-agents/README.md) lesson as well._
+_**Note:** It is important to deploy AI Agents that are safe and trustworthy. 
 
 ## Traces and Spans
 
@@ -53,7 +53,7 @@ Here are some of the most common metrics that observability tools monitor:
 
 **Accuracy:** How frequently does the agent produce correct or desirable outputs? Accuracy definitions vary (e.g., problem-solving correctness, information retrieval accuracy, user satisfaction). The first step is to define what success looks like for your agent. You can track accuracy via automated checks, evaluation scores, or task completion labels. For example, marking traces as "succeeded" or "failed". 
 
-**Automated Evaluation Metrics:** You can also set up automated evals. For instance, you can use an LLM to score the output of the agent e.g. if it is helpful, accurate, or not. There are also several open source libraries that help you to score different aspects of the agent. E.g. [RAGAS](https://docs.ragas.io/) for RAG agents or [LLM Guard](https://llm-guard.com/) to detect harmful language or prompt injection. 
+**Automated Evaluation Metrics:** You can also set up automated evals. For instance, you can use an LLM to score the output of the agent e.g. if it is helpful, accurate, or not. There are also several open source libraries that help you to score different aspects of the agent. E.g. RAGAS for RAG agents or LLM Guard to detect harmful language or prompt injection. 
 
 In practice, a combination of these metrics gives the best coverage of an AI agent’s health. In this chapters [example notebook](./code_samples/10_autogen_evaluation.ipynb), we'll show you how these metrics looks in real examples but first, we'll learn how a typical evaluation workflow looks like.
 
@@ -61,15 +61,7 @@ In practice, a combination of these metrics gives the best coverage of an AI age
 
 To gather tracing data, you’ll need to instrument your code. The goal is to instrument the agent code to emit traces and metrics that can be captured, processed, and visualized by an observability platform.
 
-**OpenTelemetry (OTel):** [OpenTelemetry](https://opentelemetry.io/) has emerged as an industry standard for LLM observability. It provides a set of APIs, SDKs, and tools for generating, collecting, and exporting telemetry data. 
-
-There are many instrumentation libraries that wrap existing agent frameworks and make it easy to export OpenTelemetry spans to an observability tool. Below is an example on instrumenting an AutoGen agent with the [OpenLit instrumentation library](https://github.com/openlit/openlit):
-
-```python
-import openlit
-
-openlit.init(tracer = langfuse._otel_tracer, disable_batch = True)
-```
+**OpenTelemetry (OTel):** [OpenTelemetry](https://opentelemetry.io/) has emerged as an industry standard for LLM observability. It provides a set of APIs, SDKs, and tools for generating, collecting, and exporting telemetry data. There are many instrumentation libraries that wrap existing agent frameworks and make it easy to export OpenTelemetry spans to an observability tool. 
 
 ### Add Application Insights to Game Agent
 
@@ -88,7 +80,8 @@ cd labs/40-AIAgents
 ```python
 python game_agent_v9_ob.py
 ```
-// add screenshot of console output
+
+![alt text](images\observability.png)
 
 - the agent wiill ingest the logs and events into application insights.
 
@@ -110,7 +103,7 @@ There are two categories of evaluations for AI agents: **online evaluation** and
 
 This involves evaluating the agent in a controlled setting, typically using test datasets, not live user queries. You use curated datasets where you know what the expected output or correct behavior is, and then run your agent on those. 
 
-For instance, if you built a math word-problem agent, you might have a [test dataset](https://huggingface.co/datasets/gsm8k) of 100 problems with known answers. Offline evaluation is often done during development (and can be part of CI/CD pipelines) to check improvements or guard against regressions. The benefit is that it’s **repeatable and you can get clear accuracy metrics since you have ground truth**. You might also simulate user queries and measure the agent’s responses against ideal answers or use automated metrics as described above. 
+For instance, if you built a math word-problem agent, you might have a test dataset of 100 problems with known answers. Offline evaluation is often done during development (and can be part of CI/CD pipelines) to check improvements or guard against regressions. The benefit is that it’s **repeatable and you can get clear accuracy metrics since you have ground truth**. You might also simulate user queries and measure the agent’s responses against ideal answers or use automated metrics as described above. 
 
 The key challenge with offline eval is ensuring your test dataset is comprehensive and stays relevant – the agent might perform well on a fixed test set but encounter very different queries in production. Therefore, you should keep test sets updated with new edge cases and examples that reflect real-world scenarios​. A mix of small “smoke test” cases and larger evaluation sets is useful: small sets for quick checks and larger ones for broader performance metrics​.
 
@@ -154,8 +147,4 @@ Here are some strategies to manage the costs of deploying AI agents to productio
 **Using a Router Model:** A similar strategy is to use a diversity of models and sizes. You can use an LLM/SLM or serverless function to route requests based on complexity to the best fit models. This will also help reduce costs while also ensuring performance on the right tasks. For example, route simple queries to smaller, faster models, and only use expensive large models for complex reasoning tasks.
 
 **Caching Responses:** Identifying common requests and tasks and providing the responses before they go through your agentic system is a good way to reduce the volume of similar requests. You can even implement a flow to identify how similar a request is to your cached requests using more basic AI models. This strategy can significantly reduce costs for frequently asked questions or common workflows.
-
-## Lets see how this works in practice
-
-In the [example notebook of this section](./code_samples/10_autogen_evaluation.ipynb), we’ll see examples of how we can use observability tools to monitor and evaluate our agent.
 

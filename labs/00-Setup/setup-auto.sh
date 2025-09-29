@@ -2,8 +2,8 @@
 CONFIG_URL="https://aiaaa-s2-setting.azurewebsites.net/api/configuration/all"
 
  # please edit below to your assigned user name
-DEV_Name="lab1user200"
-# DEV_Name="lab1user200"
+DEV_Name="lab1user310"
+# DEV_Name="lab1user310"
 
 echo "Fetching configuration from $CONFIG_URL..."
 config_json=$(curl -s "$CONFIG_URL")

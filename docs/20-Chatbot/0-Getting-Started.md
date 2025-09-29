@@ -15,11 +15,9 @@ title: Getting Started
 
 For this lab, you will be building a chatbot for a bicycle store that can answer queries about bicycles and accessories for you.
 
-Please see the [lab outline section](#lab-outline) below for more details.
-
 ### Chatbot Demo
 
-https://aiaaa-s2-chatbot.azurewebsites.net
+Hosted RAG chatbot example is here: https://aiaaa-s2-chatbot.azurewebsites.net
 
 ![alt text](images/chatbot-image.png)
 

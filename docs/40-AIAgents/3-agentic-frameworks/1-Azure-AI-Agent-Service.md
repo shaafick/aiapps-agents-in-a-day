@@ -20,7 +20,7 @@ cd labs/40-AIAgents
 ```python
 python game_agent_v3_aiagent.py
 ```
-// add screenshot of console output
+![AI Agent](images/aiagent.png)
 
 - navigate to Azure AI Foundry portal, you should see the agent created in the portal.
 

@@ -139,6 +139,7 @@ cd labs/40-AIAgents
 ```python
 python game_agent_v6_multiagent.py
 ```
-// add screenshot of console output
+
+![Multiagent](./images/multi-agent.png)
 
 - our second agent is able do more work! Break down of work for each agent is much easier to define requirements and instructions for the agent.

@@ -18,10 +18,10 @@ By the end of this lab, you should be able to:
 
 The lab is organized into two parts. The first part focuses on understanding the basics of interacting with OpenAI models. You will be exploring the various prompt techniques and understanding how to guide the models to create better answers. The second part focuses on building a chatbot using the concepts learned in the first part. You will be using the Azure OpenAI Service and bringing in external knowledge using RAG (Retrieval Augmented Generation) to answer questions based on the knowledge base provided.
 
-- [Setup Instructions](/01-Lab-Setup.mdx). Set up your development environment.
+- [Setup Instructions](/docs/lab-setup/). Set up your development environment.
 - [LAB 1 - Interact with Open AI Models](/docs/10-LLM-Setup/). Learn the basics of interacting with the GPT Models and how to guide the models to create better answers.
-- [LAB 2 - Building Chatbot](/docs/30-Chatbot-Setup/). Implement RAG (Retrieval Augmented Generation) to bring in external knowledge for the solution.
-- [LAB 3 - Building AI Apps](/docs/40-AI-Apps-Setup/). Implement various AI features in applications.
+- [LAB 2 - Building Chatbot](/docs/Chatbot/Getting-Started/). Implement RAG (Retrieval Augmented Generation) to bring in external knowledge for the solution.
+- [LAB 3 - Building AI Apps](/docs/AIApps/Getting-Started/). Implement various AI features in applications.
 - [LAB 4 - Building AI Agents](/docs/50-AI-Agents-Setup/). Implement AI Agents.
 - [LAB 5 - Game Time](/docs/GameTime/Ready/). Implement AI Agents.
 

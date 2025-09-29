@@ -41,11 +41,11 @@ if __name__ == "__main__":
         "What is 15 + 27?"
     ]
 
-    with GameAgent() as agent:
-        for question in test_questions:
-            answer = agent.answer_question(question)
-            print(f"Q: {question}")
-            print(f"A: {answer}")
-            print()
+    agent = GameAgent()
+    for question in test_questions:
+        answer = agent.answer_question(question)
+        print(f"Q: {question}")
+        print(f"A: {answer}")
+        print()
             
     print("Game Agent: Test complete")

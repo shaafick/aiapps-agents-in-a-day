@@ -144,7 +144,7 @@ if __name__ == "__main__":
 
     print("Game Agent: Test starting...")
     test_questions = [
-        "What is 15 + 27?"
+        "What is (15 + 27) ^ 2 / 82 ?"
     ]
     
     with GameAgent() as agent:

@@ -72,9 +72,6 @@ When developing a backend API, it is often useful to run the application locally
 
 6. Select **Execute** to send the request. 
 
-//TODO- this line is not related to the output.
-Observe that the response indicates the price as being `$1431.50`.
-
    ![The Swagger UI displays the POST /ai endpoint response that has a status of ready.](images/local_backend_swagger_ui_ai_response.png "Local backend api Swagger UI AI response")
 
 7. Please keep the backend running.

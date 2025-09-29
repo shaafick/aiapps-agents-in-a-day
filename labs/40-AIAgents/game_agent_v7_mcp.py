@@ -75,7 +75,7 @@ class GameAgent:
         """Create vector store and upload files for file search"""
             
         vector_store_name = f"game-rulebook-store"
-        file_paths = ['C:\\RepoInsight\\aiapps-agents-in-a-day\\apps-rps\\rps-game-agent\\game_rulebook.txt']
+        file_paths = ['game_rulebook.txt']
         uploaded_files = []
         for file_path in file_paths:
             if os.path.exists(file_path):
@@ -122,7 +122,7 @@ class GameAgent:
             print(f"Deleted existing agent: {self.agent_name}")
         
         tools = self._setup_tools()
-        tool_resources = self.file_search_tool.resources
+        # tool_resources = self.file_search_tool.resources
             
         self.agent_stock = self.project_client.agents.create_agent(
             model=self.model_deployment_name,
@@ -140,7 +140,7 @@ class GameAgent:
             name=self.agent_name,
             instructions=f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games. You have access to file search capabilities to help answer questions from uploaded documents. Keep answer short and precise, dont need to explain.",
             tools=tools,
-            tool_resources=tool_resources
+            # tool_resources=tool_resources
         )
         print(f"Created new agent: {self.agent_name}")
         
@@ -167,15 +167,48 @@ class GameAgent:
             print(f"Created run, ID: {run.id}")
             
             if run.status == "requires_action":
-                tool_calls = run.required_action.submit_tool_outputs.tool_calls
-                tool_outputs = []
-                for tool_call in tool_calls:
-                    if tool_call.function.name == "math_tool_function":
-                        import json
-                        args = json.loads(tool_call.function.arguments)
-                        output = GameAgent.math_tool_function(args.get("expression", ""))
-                        tool_outputs.append({"tool_call_id": tool_call.id, "output": output})
-                self.project_client.agents.runs.submit_tool_outputs(thread_id=self.thread.id, run_id=run.id, tool_outputs=tool_outputs)
+                required_action = run.required_action
+                
+                # Handle MCP tool approval
+                if isinstance(required_action, SubmitToolApprovalAction):
+                    # Get the MCP tool calls that require approval
+                    mcp_tool_calls = required_action.tool_calls
+                    tool_approvals = []
+                    
+                    for tool_call in mcp_tool_calls:
+                        if isinstance(tool_call, RequiredMcpToolCall):
+                            # Approve the MCP tool call
+                            approval = ToolApproval(
+                                tool_call_id=tool_call.id,
+                                approve=True
+                            )
+                            tool_approvals.append(approval)
+                    
+                    # Submit the approvals
+                    if tool_approvals:
+                        self.project_client.agents.runs.submit_tool_approval(
+                            thread_id=self.thread.id, 
+                            run_id=run.id, 
+                            tool_approvals=tool_approvals
+                        )
+                
+                # Handle regular tool outputs (for non-MCP tools like math_tool_function)
+                elif hasattr(required_action, 'submit_tool_outputs'):
+                    tool_calls = required_action.submit_tool_outputs.tool_calls
+                    tool_outputs = []
+                    for tool_call in tool_calls:
+                        if tool_call.function.name == "math_tool_function":
+                            import json
+                            args = json.loads(tool_call.function.arguments)
+                            output = GameAgent.math_tool_function(args.get("expression", ""))
+                            tool_outputs.append({"tool_call_id": tool_call.id, "output": output})
+                    
+                    if tool_outputs:
+                        self.project_client.agents.runs.submit_tool_outputs(
+                            thread_id=self.thread.id, 
+                            run_id=run.id, 
+                            tool_outputs=tool_outputs
+                        )
         
         print(f"Run completed with status: {run.status}")
         if run.status == "failed":
@@ -256,13 +289,13 @@ class GameAgent:
         function_tool = FunctionTool(functions=user_functions)
         tools.extend(function_tool.definitions)
         
-        file_search_tool = self.setup_file_search_tool()
-        tools.extend(file_search_tool.definitions)
+        # file_search_tool = self.setup_file_search_tool()
+        # tools.extend(file_search_tool.definitions)
 
         # Initialize agent MCP tool
-        # mcp_server_url = os.environ.get("MCP_SERVER_URL", "https://gitmcp.io/Azure/azure-rest-api-specs")
-        mcp_server_url = os.environ.get("MCP_SERVER_URL", "http://127.0.0.1:8000/mcp")
-        mcp_server_label = os.environ.get("MCP_SERVER_LABEL", "weather")
+        mcp_server_url = os.environ.get("MCP_SERVER_URL", "https://gitmcp.io/Azure/azure-rest-api-specs")
+        # mcp_server_url = os.environ.get("MCP_SERVER_URL", "http://127.0.0.1:3111/mcp")
+        mcp_server_label = os.environ.get("MCP_SERVER_LABEL", "azure")
 
         self.mcp_tool = McpTool(
             server_label=mcp_server_label,
@@ -282,7 +315,7 @@ if __name__ == "__main__":
 
     print("Game Agent: Test starting...")
     test_questions = [
-        "Listen to this audio clip and identify the animal sound? https://cdn.pixabay.com/download/audio/2025/09/15/audio_a3a77f6c7e.mp3?filename=dog-running-amp-barking-404938.mp3"
+        "what are Azure App Service APIs ?"
     ]
     
     with GameAgent() as agent:

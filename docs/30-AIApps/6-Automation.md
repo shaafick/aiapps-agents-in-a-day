@@ -44,7 +44,7 @@ Function calling allows LLMs to:
 
 ### Step 2: Design Your Automation Functions
 
-Start by identifying common store operations that can be automated:
+Start by identifying common store operations that can be automated. Let's write a program to control the light automation.
 
 ### Step 3: Code Solution
 
@@ -69,7 +69,7 @@ Start by identifying common store operations that can be automated:
 
       const client = new OpenAIClient(
         "https://aiaaa-s2-openai.openai.azure.com/",
-        new AzureKeyCredential("<API_KEY>")
+        new AzureKeyCredential("<AZURE_OPENAI_API_KEY>")
       );
 
       const deploymentId = "gpt-4o";
@@ -212,6 +212,21 @@ Start by identifying common store operations that can be automated:
     </details>
 </details>
 
+### Step 4: Testing it out
+
+- Replace `<AZURE_OPENAI_API_KEY>` placeholder value by looking up  https://aiaaa-s2-setting.azurewebsites.net
+- Go to `labs\30-AIApps` folder in terminal windows and run `npm install`
+- Start the code by running `node automation.js`
+- Try to control light on and off in different rooms
+
+```
+User: how many lights?
+There are three lights available: Living Room Light, Bedroom Light, and Kitchen Light.
+
+User: turn off living room
+I've turned off the lights in the living room for you. If you need anything else, feel free to ask!
+```
+
 ## Real-World Automation Examples
 
 ### Inventory Management
@@ -247,10 +262,3 @@ Start by identifying common store operations that can be automated:
 - **Email Systems**: Automated email campaigns and notifications
 - **SMS Gateways**: Text message automation for urgent alerts
 - **Mobile Apps**: Push notifications and in-app automation
-
-## Additional Resources
-
-- [Azure Logic Apps Documentation](https://docs.microsoft.com/azure/logic-apps/)
-- [Microsoft Power Automate](https://docs.microsoft.com/power-automate/)
-- [OpenAI Function Calling Guide](https://platform.openai.com/docs/guides/function-calling)
-- [Workflow Automation Best Practices](https://docs.microsoft.com/azure/automation/automation-intro)

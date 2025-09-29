@@ -20,18 +20,23 @@ In the previous lab, we configured and hosted the backend API code locally. The 
    ```
    :::
 
-2. Start the app with below commands, open browser and visit url: http://localhost:4000/.
+2. Run the following command to install any dependencies:
+   ```
+   npm install
+   ```
+
+3. Start the app with below commands, open browser and visit url: http://localhost:4000/.
 
    ```
    npm run dev
    ```
    
-3. Take your time and have a look at these files:
+4. Take your time and have a look at these files:
    - `apps-chat\chatbot-frontend\scr\api.index.ts` points to backend api
    - `apps-chat\chatbot-frontend\scr\pages\chat\Chat.tsx` manages chat conversations
    - `apps-chat\chatbot-frontend\scr\components\Answer\Answer.tsx` manages chat response
 
-4. Navigating to local URL in the browser accesses the front-end application. Through this front-end application user interface, questions can be submitted to the Azure OpenAI model about the Bike Store company data, then it will generate responses accordingly.
+5. Navigating to local URL in the browser accesses the front-end application. Through this front-end application user interface, questions can be submitted to the Azure OpenAI model about the Bike Store company data, then it will generate responses accordingly.
 
    ![Front-end Web Application User Interface](images/bike_store_chatbot.png)
 

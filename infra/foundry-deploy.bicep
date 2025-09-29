@@ -1,6 +1,6 @@
 // Main bicep template for AI Apps and Agents infrastructure
 @description('Location for all resources')
-param location string = 'eastus'
+param location string
 
 @description('Application name prefix')
 param appName string = 'aiapps-agents'
@@ -33,7 +33,7 @@ var openAiSettings = {
       name: 'gpt-4o'
     }
     sku: {
-      name: 'Standard'
+      name: 'GlobalStandard'
       capacity: 50
     }
   }

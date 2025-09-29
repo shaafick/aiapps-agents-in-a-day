@@ -44,7 +44,7 @@ First, ensure you have access to:
 
 ### Step 2: Examine the Existing Code
 
-Navigate to the Design page located at `apps-chat\chatbot-frontend\pages\design\Design.tsx`. You'll find:
+Navigate to the Design page located at `/apps-chat/chatbot-frontend/src/pages/design/Design.tsx`. You'll find:
 - An input textbox for design descriptions
 - A button to trigger AI image generation
 - A placeholder for displaying generated images
@@ -168,10 +168,13 @@ export default Page;
 
 ### Step 6: Testing it out
 
-1. Enter a creative description in the input field
-2. Click the Generate button
-3. Verify the image loads correctly
-4. Test with various prompts to ensure robustness
+- Replace `<AZURE_OPENAI_API_KEY>` placeholder value by looking up  https://aiaaa-s2-setting.azurewebsites.net
+- Go to `apps-chat\chatbot-frontend` folder in terminal windows and run `npm run dev`
+- Navigate to `Design` page in the top navigation bar
+- Enter a creative description in the input field
+- Click the Generate button
+- Verify the image loads correctly
+- Test with various prompts to ensure robustness
 
 ## Additional Resources
 
