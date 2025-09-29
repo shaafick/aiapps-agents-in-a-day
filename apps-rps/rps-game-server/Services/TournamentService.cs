@@ -83,6 +83,29 @@ public class TournamentService : ITournamentService
         }
     }
 
+    public bool UnregisterAllPlayers()
+    {
+        lock (_lock)
+        {
+            if (!_tournament.Players.Any())
+                return false;
+
+            // Clear all players from tournament
+            _tournament.Players.Clear();
+
+            // Clear all player results from all rounds
+            foreach (var round in _tournament.Rounds)
+            {
+                round.PlayerResults.Clear();
+            }
+
+            // Reset player ID counter
+            _nextPlayerId = 1;
+
+            return true;
+        }
+    }
+
     public bool StartTournament()
     {
         lock (_lock)

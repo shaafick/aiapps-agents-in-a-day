@@ -129,7 +129,18 @@
                 <!-- Players Section -->
                 <div class="row mt-4" id="playersSection">
                     <div class="col-12">
-                        <h4>Registered Players</h4>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4>Registered Players</h4>
+                            @if (Model.Players.Any())
+                            {
+                                <form method="post" asp-action="UnregisterAllPlayers" style="display: inline;"
+                                      onsubmit="return confirm('Are you sure you want to unregister ALL players? This action cannot be undone and will remove all @Model.Players.Count players from the tournament.');">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-users-slash"></i> Unregister All Players
+                                    </button>
+                                </form>
+                            }
+                        </div>
                         @if (Model.Players.Any())
                         {
                             <div class="table-responsive">

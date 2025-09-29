@@ -33,11 +33,22 @@
                                 
                                 @if (currentRound.Status == RpsGameServer.Models.RoundStatus.Pending)
                                 {
-                                    <p>Click to start round @currentRound.RoundNumber with a random question.</p>
-                                    <form method="post" asp-action="StartRound" class="mt-2">
-                                        <input type="hidden" name="roundNumber" value="@currentRound.RoundNumber" />
-                                        <button type="submit" class="btn btn-success">Start Round @currentRound.RoundNumber</button>
-                                    </form>
+                                    <p>Round @currentRound.RoundNumber is ready to start.</p>
+                                    @if (Context.Session.GetString("AdminAuthenticated") == "true")
+                                    {
+                                        <p>Click to start round @currentRound.RoundNumber with a random question.</p>
+                                        <form method="post" asp-action="StartRound" class="mt-2">
+                                            <input type="hidden" name="roundNumber" value="@currentRound.RoundNumber" />
+                                            <button type="submit" class="btn btn-success">Start Round @currentRound.RoundNumber</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-muted">Waiting for admin to start the round...</p>
+                                        <a href="/Admin/Login" class="btn btn-outline-warning">
+                                            <i class="fas fa-lock"></i> Admin Login Required
+                                        </a>
+                                    }
                                 }
                                 else if (currentRound.Status == RpsGameServer.Models.RoundStatus.InProgress)
                                 {
@@ -154,12 +165,24 @@
                                     </div>
                                     
                                     <!-- End Round Button -->
-                                    <form method="post" asp-action="EndRound" class="mt-2">
-                                        <input type="hidden" name="roundNumber" value="@currentRound.RoundNumber" />
-                                        <button type="submit" class="btn btn-warning btn-lg">
-                                            <i class="fas fa-stop"></i> End Round @currentRound.RoundNumber
-                                        </button>
-                                    </form>
+                                    @if (Context.Session.GetString("AdminAuthenticated") == "true")
+                                    {
+                                        <form method="post" asp-action="EndRound" class="mt-2">
+                                            <input type="hidden" name="roundNumber" value="@currentRound.RoundNumber" />
+                                            <button type="submit" class="btn btn-warning btn-lg">
+                                                <i class="fas fa-stop"></i> End Round @currentRound.RoundNumber
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <div class="mt-2">
+                                            <p class="text-muted">Waiting for admin to end the round...</p>
+                                            <a href="/Admin/Login" class="btn btn-outline-warning">
+                                                <i class="fas fa-lock"></i> Admin Login Required
+                                            </a>
+                                        </div>
+                                    }
                                 }
                             </div>
                         }
@@ -167,9 +190,21 @@
                         {
                             <div class="mt-3">
                                 <p>All rounds completed!</p>
-                                <form method="post" asp-action="EndTournament" class="mt-2">
-                                    <button type="submit" class="btn btn-danger">End Tournament</button>
-                                </form>
+                                @if (Context.Session.GetString("AdminAuthenticated") == "true")
+                                {
+                                    <form method="post" asp-action="EndTournament" class="mt-2">
+                                        <button type="submit" class="btn btn-danger">End Tournament</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <div class="mt-2">
+                                        <p class="text-muted">Waiting for admin to end the tournament...</p>
+                                        <a href="/Admin/Login" class="btn btn-outline-warning">
+                                            <i class="fas fa-lock"></i> Admin Login Required
+                                        </a>
+                                    </div>
+                                }
                             </div>
                         }
                     }

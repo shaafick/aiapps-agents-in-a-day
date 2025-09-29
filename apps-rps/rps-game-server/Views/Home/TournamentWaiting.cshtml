@@ -81,11 +81,23 @@
             <div class="referee-controls">
                 @if (Model.Players.Count > 0)
                 {
-                    <form method="post" asp-action="StartTournament" class="d-inline">
-                        <button type="submit" class="btn btn-success btn-lg pulse-animation">
-                            <i class="fas fa-play"></i> Start Tournament
-                        </button>
-                    </form>
+                    @if (Context.Session.GetString("AdminAuthenticated") == "true")
+                    {
+                        <form method="post" asp-action="StartTournament" class="d-inline">
+                            <button type="submit" class="btn btn-success btn-lg pulse-animation">
+                                <i class="fas fa-play"></i> Start Tournament
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="d-inline-block">
+                            <p class="text-muted mb-2">Tournament ready to start!</p>
+                            <a href="/Admin/Login" class="btn btn-outline-warning btn-lg">
+                                <i class="fas fa-lock"></i> Admin Login Required
+                            </a>
+                        </div>
+                    }
                 }
                 else
                 {

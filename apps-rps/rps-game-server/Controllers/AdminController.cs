@@ -76,6 +76,27 @@ public class AdminController : Controller
     }
 
     [HttpPost]
+    public IActionResult UnregisterAllPlayers()
+    {
+        if (!IsAuthenticated())
+        {
+            return RedirectToAction("Login");
+        }
+
+        var success = _tournamentService.UnregisterAllPlayers();
+        if (success)
+        {
+            TempData["Success"] = "All players unregistered successfully.";
+        }
+        else
+        {
+            TempData["Error"] = "No players to unregister or operation failed.";
+        }
+
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
     public IActionResult ResetCurrentRound()
     {
         if (!IsAuthenticated())

@@ -7,10 +7,16 @@ namespace RpsGameServer.Controllers;
 public class HomeController : Controller
 {
     private readonly ITournamentService _tournamentService;
+    private const string AdminSessionKey = "AdminAuthenticated";
 
     public HomeController(ITournamentService tournamentService)
     {
         _tournamentService = tournamentService;
+    }
+
+    private bool IsAuthenticated()
+    {
+        return HttpContext.Session.GetString(AdminSessionKey) == "true";
     }
 
     public IActionResult Index()
@@ -22,6 +28,12 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult StartTournament()
     {
+        if (!IsAuthenticated())
+        {
+            TempData["Error"] = "Admin access required to start tournament";
+            return RedirectToAction("Index");
+        }
+
         _tournamentService.StartTournament();
         return RedirectToAction("Index");
     }
@@ -29,6 +41,12 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult EndTournament()
     {
+        if (!IsAuthenticated())
+        {
+            TempData["Error"] = "Admin access required to end tournament";
+            return RedirectToAction("Index");
+        }
+
         _tournamentService.EndTournament();
         return RedirectToAction("GrandFinish");
     }
@@ -36,6 +54,12 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult ResetTournament()
     {
+        if (!IsAuthenticated())
+        {
+            TempData["Error"] = "Admin access required to reset tournament";
+            return RedirectToAction("Index");
+        }
+
         _tournamentService.ResetTournament();
         return RedirectToAction("Index");
     }
@@ -43,6 +67,12 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult StartRound(int roundNumber)
     {
+        if (!IsAuthenticated())
+        {
+            TempData["Error"] = "Admin access required to start round";
+            return RedirectToAction("Index");
+        }
+
         var success = _tournamentService.StartRound(roundNumber);
         if (!success)
         {
@@ -55,6 +85,12 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult EndRound(int roundNumber)
     {
+        if (!IsAuthenticated())
+        {
+            TempData["Error"] = "Admin access required to end round";
+            return RedirectToAction("Index");
+        }
+
         var success = _tournamentService.EndRound(roundNumber);
         if (!success)
         {

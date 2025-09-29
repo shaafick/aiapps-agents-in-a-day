@@ -24,7 +24,17 @@
             .ToList();
         
         var topThree = finalStandings.Take(3).ToList();
-        var others = finalStandings.Skip(3).ToList();
+        
+        // Get players with non-zero scores for bottom 3
+        var playersWithScores = finalStandings.Where(p => p.TotalScore > 0).ToList();
+        var bottomThree = playersWithScores.Skip(Math.Max(0, playersWithScores.Count - 3)).Reverse().ToList();
+        
+        // Remove top 3 and bottom 3 from the middle group
+        var topThreeIds = topThree.Select(p => p.Id).ToHashSet();
+        var bottomThreeIds = bottomThree.Select(p => p.Id).ToHashSet();
+        var others = finalStandings.Skip(3)
+            .Where(p => !bottomThreeIds.Contains(p.Id))
+            .ToList();
     }
 
     <!-- Podium Section -->
@@ -105,7 +115,7 @@
             <div class="col-md-8 mx-auto">
                 <div class="card shadow-lg other-players-card">
                     <div class="card-header bg-secondary text-white text-center">
-                        <h4><i class="fas fa-users"></i> All Participants</h4>
+                        <h4><i class="fas fa-users"></i> Other Participants</h4>
                         <p class="mb-0">Thank you for playing!</p>
                     </div>
                     <div class="card-body">
@@ -135,6 +145,42 @@
         </div>
     }
 
+    <!-- Bottom Three Section -->
+    @if (bottomThree.Any() && bottomThree.Count >= 3)
+    {
+        <div class="row mt-5">
+            <div class="col-md-10 mx-auto">
+                <div class="bottom-three-container">
+                    <h2 class="text-center mb-4">🎯 SPECIAL RECOGNITION 🎯</h2>
+                    <p class="text-center text-white mb-4">Sometimes the best victories come from the greatest challenges!</p>
+                    <div class="bottom-podium">
+                        @for (int i = 0; i < Math.Min(3, bottomThree.Count); i++)
+                        {
+                            var player = bottomThree[i];
+                            var rank = i + 1;
+                            var medal = rank == 1 ? "🌟" : rank == 2 ? "⭐" : "✨";
+                            var rankText = rank == 1 ? "MOST CHALLENGING JOURNEY" : 
+                                          rank == 2 ? "HONORABLE MENTION" : 
+                                          "PARTICIPATION CHAMPION";
+                            
+                            <div class="bottom-champion-card" style="animation-delay: @((i + 1) * 0.3)s">
+                                <div class="bottom-champion-avatar">
+                                    <i class="fas fa-heart fa-3x"></i>
+                                </div>
+                                <div class="bottom-champion-details">
+                                    <h4>@player.Name</h4>
+                                    <div class="bottom-medal">@medal</div>
+                                    <div class="bottom-score">@player.TotalScore points</div>
+                                    <div class="bottom-badge">@rankText</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
     <!-- Controls Section -->
     <div class="row mt-5 mb-5">
         <div class="col-12 text-center">
@@ -145,11 +191,20 @@
                 <a href="/Home/Grid" class="btn btn-secondary btn-lg me-3">
                     <i class="fas fa-table"></i> Results Grid
                 </a>
-                <form method="post" asp-action="ResetTournament" class="d-inline">
-                    <button type="submit" class="btn btn-success btn-lg" onclick="return confirm('Start a new tournament? This will reset all scores but keep the players.')">
-                        <i class="fas fa-redo"></i> New Tournament
-                    </button>
-                </form>
+                @if (Context.Session.GetString("AdminAuthenticated") == "true")
+                {
+                    <form method="post" asp-action="ResetTournament" class="d-inline">
+                        <button type="submit" class="btn btn-success btn-lg" onclick="return confirm('Start a new tournament? This will reset all scores but keep the players.')">
+                            <i class="fas fa-redo"></i> New Tournament
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <a href="/Admin/Login" class="btn btn-outline-warning btn-lg">
+                        <i class="fas fa-lock"></i> Admin Required for New Tournament
+                    </a>
+                }
             </div>
         </div>
     </div>
