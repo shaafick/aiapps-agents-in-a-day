@@ -8,7 +8,7 @@ async function main() {
 
   const client = new OpenAIClient(
     "https://aiaaa-s2-openai.openai.azure.com/",
-    new AzureKeyCredential("ee8b7517ac664a608953cad44faa22bd")
+    new AzureKeyCredential("<AZURE_OPENAI_API_KEY>")
   );
 
   const deploymentId = "gpt-4o";
