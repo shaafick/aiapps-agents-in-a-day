@@ -762,6 +762,13 @@
                     <input type="text" id="player_name" name="player_name" required 
                            placeholder="Enter your name to join the tournament" autofocus>
                 </div>
+                <div class="form-group">
+                    <label for="room_id">Select Room:</label>
+                    <select id="room_id" name="room_id" required>
+                        <option value="1">Room 1</option>
+                        <option value="2">Room 2</option>
+                    </select>
+                </div>
                 <button type="submit">🚀 Start Playing</button>
             </form>
             
@@ -771,6 +778,13 @@
                     <label for="player_id">Enter Your Player ID:</label>
                     <input type="number" id="player_id" name="player_id" required 
                            placeholder="Enter your existing player ID">
+                </div>
+                <div class="form-group">
+                    <label for="room_id_reconnect">Select Room:</label>
+                    <select id="room_id_reconnect" name="room_id" required>
+                        <option value="1">Room 1</option>
+                        <option value="2">Room 2</option>
+                    </select>
                 </div>
                 <button type="submit">🔗 Reconnect</button>
             </form>
@@ -810,7 +824,7 @@
         <!-- Game Status Display -->
         <div class="status-section">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2>Player: {{ player_name }} (ID: {{ player_id }})</h2>
+                <h2>Player: {{ player_name }} (ID: {{ player_id }}) - Room {{ room_id }}</h2>
                 <a href="/reset" class="reset-btn" style="text-decoration: none; color: white;">Reset Game</a>
             </div>
             

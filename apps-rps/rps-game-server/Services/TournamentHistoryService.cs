@@ -60,7 +60,8 @@ public class TournamentHistoryService : ITournamentHistoryService
                 EndedAt = tournament.EndedAt,
                 Status = tournament.Status,
                 TotalPlayers = tournament.Players.Count,
-                TotalRounds = tournament.Rounds.Count
+                TotalRounds = tournament.Rounds.Count,
+                RoomId = tournament.RoomId
             };
 
             // Find winner

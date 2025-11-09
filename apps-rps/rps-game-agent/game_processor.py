@@ -8,9 +8,10 @@ from game_agent import GameAgent
 class GameProcessor:
     """Autonomous game agent for RPS Tournament"""
     
-    def __init__(self, player_name: str):
+    def __init__(self, player_name: str, room_id: int = 1):
         self.player_name = player_name
-        self.client = RPSGameClient()
+        self.room_id = room_id
+        self.client = RPSGameClient(room_id=room_id)
         self.agent = GameAgent()
         self.player_id: Optional[int] = None
         self.current_round = 1

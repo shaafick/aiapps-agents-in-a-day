@@ -43,26 +43,27 @@ public class AdminController : Controller
         return View();
     }
 
-    public IActionResult Index()
+    public IActionResult Index(int roomId = 1)
     {
         if (!IsAuthenticated())
         {
             return RedirectToAction("Login");
         }
 
-        var tournament = _tournamentService.GetTournament();
+        ViewBag.RoomId = roomId;
+        var tournament = _tournamentService.GetTournament(roomId);
         return View(tournament);
     }
 
     [HttpPost]
-    public IActionResult UnregisterPlayer(int playerId)
+    public IActionResult UnregisterPlayer(int playerId, int roomId = 1)
     {
         if (!IsAuthenticated())
         {
             return RedirectToAction("Login");
         }
 
-        var success = _tournamentService.UnregisterPlayer(playerId);
+        var success = _tournamentService.UnregisterPlayer(playerId, roomId);
         if (success)
         {
             TempData["Success"] = "Player unregistered successfully.";
@@ -72,18 +73,18 @@ public class AdminController : Controller
             TempData["Error"] = "Failed to unregister player.";
         }
 
-        return RedirectToAction("Index");
+        return RedirectToAction("Index", new { roomId });
     }
 
     [HttpPost]
-    public IActionResult UnregisterAllPlayers()
+    public IActionResult UnregisterAllPlayers(int roomId = 1)
     {
         if (!IsAuthenticated())
         {
             return RedirectToAction("Login");
         }
 
-        var success = _tournamentService.UnregisterAllPlayers();
+        var success = _tournamentService.UnregisterAllPlayers(roomId);
         if (success)
         {
             TempData["Success"] = "All players unregistered successfully.";
@@ -93,18 +94,18 @@ public class AdminController : Controller
             TempData["Error"] = "No players to unregister or operation failed.";
         }
 
-        return RedirectToAction("Index");
+        return RedirectToAction("Index", new { roomId });
     }
 
     [HttpPost]
-    public IActionResult ResetCurrentRound()
+    public IActionResult ResetCurrentRound(int roomId = 1)
     {
         if (!IsAuthenticated())
         {
             return RedirectToAction("Login");
         }
 
-        var success = _tournamentService.ResetCurrentRound();
+        var success = _tournamentService.ResetCurrentRound(roomId);
         if (success)
         {
             TempData["Success"] = "Current round reset successfully.";
@@ -114,18 +115,18 @@ public class AdminController : Controller
             TempData["Error"] = "Failed to reset current round.";
         }
 
-        return RedirectToAction("Index");
+        return RedirectToAction("Index", new { roomId });
     }
 
     [HttpPost]
-    public IActionResult ResetTournament()
+    public IActionResult ResetTournament(int roomId = 1)
     {
         if (!IsAuthenticated())
         {
             return RedirectToAction("Login");
         }
 
-        var success = _tournamentService.ResetTournament();
+        var success = _tournamentService.ResetTournament(roomId);
         if (success)
         {
             TempData["Success"] = "Tournament reset successfully. All players remain registered.";
@@ -135,7 +136,7 @@ public class AdminController : Controller
             TempData["Error"] = "Failed to reset tournament.";
         }
 
-        return RedirectToAction("Index");
+        return RedirectToAction("Index", new { roomId });
     }
 
     [HttpPost]

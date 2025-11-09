@@ -27,7 +27,16 @@ public class PlayerController : ControllerBase
             });
         }
 
-        var response = _tournamentService.RegisterPlayer(request.Name);
+        if (request.RoomId != 1 && request.RoomId != 2)
+        {
+            return BadRequest(new RegisterPlayerResponse
+            {
+                PlayerId = 0,
+                Message = "Room ID must be 1 or 2"
+            });
+        }
+
+        var response = _tournamentService.RegisterPlayer(request.Name, request.RoomId);
         
         if (response.PlayerId == 0)
         {
@@ -38,14 +47,14 @@ public class PlayerController : ControllerBase
     }
 
     [HttpGet("{playerId}/status")]
-    public ActionResult<TournamentStatusResponse> GetStatus(int playerId)
+    public ActionResult<TournamentStatusResponse> GetStatus(int playerId, [FromQuery] int roomId = 1)
     {
-        var status = _tournamentService.GetTournamentStatus(playerId);
+        var status = _tournamentService.GetTournamentStatus(playerId, roomId);
         return Ok(status);
     }
 
     [HttpPost("submit-answer")]
-    public ActionResult<SubmitAnswerResponse> SubmitAnswer([FromBody] SubmitAnswerRequest request)
+    public ActionResult<SubmitAnswerResponse> SubmitAnswer([FromBody] SubmitAnswerRequest request, [FromQuery] int roomId = 1)
     {
         if (request.PlayerId <= 0)
         {
@@ -65,7 +74,7 @@ public class PlayerController : ControllerBase
             });
         }
 
-        var response = _tournamentService.SubmitAnswer(request);
+        var response = _tournamentService.SubmitAnswer(request, roomId);
         
         if (!response.Success)
         {
@@ -76,9 +85,9 @@ public class PlayerController : ControllerBase
     }
 
     [HttpGet("{playerId}/results")]
-    public ActionResult<List<PlayerRoundResult>> GetPlayerResults(int playerId)
+    public ActionResult<List<PlayerRoundResult>> GetPlayerResults(int playerId, [FromQuery] int roomId = 1)
     {
-        var results = _tournamentService.GetPlayerResults(playerId);
+        var results = _tournamentService.GetPlayerResults(playerId, roomId);
         return Ok(results);
     }
 }

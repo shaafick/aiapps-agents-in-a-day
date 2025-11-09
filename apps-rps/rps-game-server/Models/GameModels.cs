@@ -59,6 +59,7 @@ public class Player
     public string Name { get; set; } = string.Empty;
     public int TotalScore { get; set; }
     public DateTime RegisteredAt { get; set; }
+    public int RoomId { get; set; } = 1;
 }
 
 public class PlayerRoundResult
@@ -96,6 +97,7 @@ public class Tournament
     public int CurrentRound { get; set; } = 1;
     public DateTime? StartedAt { get; set; }
     public DateTime? EndedAt { get; set; }
+    public int RoomId { get; set; } = 1;
 
     public const int MaxRounds = 5;
 }
@@ -103,6 +105,7 @@ public class Tournament
 public class RegisterPlayerRequest
 {
     public string Name { get; set; } = string.Empty;
+    public int RoomId { get; set; } = 1;
 }
 
 public class RegisterPlayerResponse
@@ -132,6 +135,7 @@ public class TournamentStatusResponse
     public RoundStatus? CurrentRoundStatus { get; set; }
     public string? CurrentQuestion { get; set; }
     public bool CanSubmit { get; set; }
+    public int RoomId { get; set; }
 }
 
 public class LeaderboardEntry
@@ -165,6 +169,7 @@ public class TournamentHistory
     public int TotalRounds { get; set; }
     public string? WinnerName { get; set; }
     public int? WinnerScore { get; set; }
+    public int RoomId { get; set; } = 1;
     public List<PlayerHistory> Players { get; set; } = new();
     public List<RoundHistory> Rounds { get; set; } = new();
 }

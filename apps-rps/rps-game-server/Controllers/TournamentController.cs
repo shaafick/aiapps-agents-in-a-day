@@ -16,23 +16,23 @@ public class TournamentController : ControllerBase
     }
 
     [HttpGet("status")]
-    public ActionResult<Tournament> GetTournamentStatus()
+    public ActionResult<Tournament> GetTournamentStatus([FromQuery] int roomId = 1)
     {
-        var tournament = _tournamentService.GetTournament();
+        var tournament = _tournamentService.GetTournament(roomId);
         return Ok(tournament);
     }
 
     [HttpGet("leaderboard")]
-    public ActionResult<List<LeaderboardEntry>> GetLeaderboard()
+    public ActionResult<List<LeaderboardEntry>> GetLeaderboard([FromQuery] int roomId = 1)
     {
-        var leaderboard = _tournamentService.GetLeaderboard(hideForLastTwoRounds: true);
+        var leaderboard = _tournamentService.GetLeaderboard(roomId, hideForLastTwoRounds: true);
         return Ok(leaderboard);
     }
 
     [HttpGet("round/{roundNumber}/results")]
-    public ActionResult<List<RoundResultEntry>> GetRoundResults(int roundNumber)
+    public ActionResult<List<RoundResultEntry>> GetRoundResults(int roundNumber, [FromQuery] int roomId = 1)
     {
-        var results = _tournamentService.GetRoundResults(roundNumber);
+        var results = _tournamentService.GetRoundResults(roomId, roundNumber);
         return Ok(results);
     }
 }

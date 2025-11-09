@@ -33,11 +33,12 @@ def index():
                              show_form=False,
                              player_name=game_agent.player_name,
                              player_id=game_agent.player_id,
+                             room_id=game_agent.room_id,
                              tournament_status=game_agent.tournament_status,
                              round_status=game_agent.round_status,
                              current_round=game_agent.current_round,
                              is_running=game_agent.is_running,
-                             status_log=filtered_log[::-1],  # Show filtered messages, latest first
+                             status_log=filtered_log[::-1],
                              results=game_agent.results)
 
 @app.route('/start', methods=['POST'])
@@ -46,20 +47,17 @@ def start_game():
     global game_agent
     
     player_name = request.form.get('player_name', '').strip() + ' *'
+    room_id = int(request.form.get('room_id', '1'))
     
     if not player_name:
         return redirect(url_for('index'))
     
-    # Create new game agent
-    game_agent = GameProcessor(player_name)
+    game_agent = GameProcessor(player_name, room_id)
     
-    # Register player
     if game_agent.register_player():
-        # Start autonomous play
         game_agent.start_autonomous_play()
         return redirect(url_for('index'))
     else:
-        # Registration failed, reset
         game_agent = None
         return redirect(url_for('index'))
 
@@ -69,6 +67,7 @@ def reconnect_game():
     global game_agent
     
     player_id = request.form.get('player_id', '').strip()
+    room_id = int(request.form.get('room_id', '1'))
     
     if not player_id:
         return redirect(url_for('index'))
@@ -78,13 +77,11 @@ def reconnect_game():
     except ValueError:
         return redirect(url_for('index'))
     
-    # Create game agent with existing player ID
-    game_agent = GameProcessor(f"Player {player_id}")
+    game_agent = GameProcessor(f"Player {player_id}", room_id)
     game_agent.player_id = player_id
     
-    # Verify the player exists by getting status
     from api_client import RPSGameClient
-    client = RPSGameClient()
+    client = RPSGameClient(room_id=room_id)
     status_response = client.get_player_status(player_id)
     
     if "error" in status_response:
@@ -94,10 +91,8 @@ def reconnect_game():
     
     game_agent.log_status(f"Successfully reconnected as Player ID: {player_id}")
     
-    # Get current results
     game_agent.get_current_results()
     
-    # Start autonomous play
     game_agent.start_autonomous_play()
     return redirect(url_for('index'))
 

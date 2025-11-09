@@ -5,9 +5,17 @@ namespace RpsGameServer.Services;
 
 public class TournamentService : ITournamentService
 {
-    private readonly Tournament _tournament = new();
+    private readonly Dictionary<int, Tournament> _tournaments = new()
+    {
+        { 1, new Tournament { RoomId = 1 } },
+        { 2, new Tournament { RoomId = 2 } }
+    };
+    private readonly Dictionary<int, int> _nextPlayerIds = new()
+    {
+        { 1, 1 },
+        { 2, 1 }
+    };
     private readonly object _lock = new();
-    private int _nextPlayerId = 1;
     private readonly Random _random = new();
     private readonly IQuestionService _questionService;
     private readonly IServiceProvider _serviceProvider;
@@ -20,19 +28,26 @@ public class TournamentService : ITournamentService
         _logger = logger;
     }
 
-    public Tournament GetTournament()
+    public Tournament GetTournament(int roomId = 1)
     {
         lock (_lock)
         {
-            return _tournament;
+            if (!_tournaments.ContainsKey(roomId))
+            {
+                _tournaments[roomId] = new Tournament { RoomId = roomId };
+                _nextPlayerIds[roomId] = 1;
+            }
+            return _tournaments[roomId];
         }
     }
 
-    public RegisterPlayerResponse RegisterPlayer(string playerName)
+    public RegisterPlayerResponse RegisterPlayer(string playerName, int roomId = 1)
     {
         lock (_lock)
         {
-            if (_tournament.Status != TournamentStatus.Pending)
+            var tournament = GetTournament(roomId);
+            
+            if (tournament.Status != TournamentStatus.Pending)
             {
                 return new RegisterPlayerResponse
                 {
@@ -43,34 +58,34 @@ public class TournamentService : ITournamentService
 
             var player = new Player
             {
-                Id = _nextPlayerId++,
+                Id = _nextPlayerIds[roomId]++,
                 Name = playerName,
-                RegisteredAt = DateTime.UtcNow
+                RegisteredAt = DateTime.UtcNow,
+                RoomId = roomId
             };
 
-            _tournament.Players.Add(player);
+            tournament.Players.Add(player);
 
             return new RegisterPlayerResponse
             {
                 PlayerId = player.Id,
-                Message = $"Player {playerName} registered successfully with ID {player.Id}"
+                Message = $"Player {playerName} registered successfully with ID {player.Id} in Room {roomId}"
             };
         }
     }
 
-    public bool UnregisterPlayer(int playerId)
+    public bool UnregisterPlayer(int playerId, int roomId = 1)
     {
         lock (_lock)
         {
-            var player = _tournament.Players.FirstOrDefault(p => p.Id == playerId);
+            var tournament = GetTournament(roomId);
+            var player = tournament.Players.FirstOrDefault(p => p.Id == playerId);
             if (player == null)
                 return false;
 
-            // Remove player from tournament
-            _tournament.Players.Remove(player);
+            tournament.Players.Remove(player);
 
-            // Remove player from all round results
-            foreach (var round in _tournament.Rounds)
+            foreach (var round in tournament.Rounds)
             {
                 var playerResult = round.PlayerResults.FirstOrDefault(pr => pr.PlayerId == playerId);
                 if (playerResult != null)
@@ -83,68 +98,69 @@ public class TournamentService : ITournamentService
         }
     }
 
-    public bool UnregisterAllPlayers()
+    public bool UnregisterAllPlayers(int roomId = 1)
     {
         lock (_lock)
         {
-            if (!_tournament.Players.Any())
+            var tournament = GetTournament(roomId);
+            
+            if (!tournament.Players.Any())
                 return false;
 
-            // Clear all players from tournament
-            _tournament.Players.Clear();
+            tournament.Players.Clear();
 
-            // Clear all player results from all rounds
-            foreach (var round in _tournament.Rounds)
+            foreach (var round in tournament.Rounds)
             {
                 round.PlayerResults.Clear();
             }
 
-            // Reset player ID counter
-            _nextPlayerId = 1;
+            _nextPlayerIds[roomId] = 1;
 
             return true;
         }
     }
 
-    public bool StartTournament()
+    public bool StartTournament(int roomId = 1)
     {
         lock (_lock)
         {
-            if (_tournament.Status != TournamentStatus.Pending)
+            var tournament = GetTournament(roomId);
+            
+            if (tournament.Status != TournamentStatus.Pending)
                 return false;
 
-            _tournament.Status = TournamentStatus.InProgress;
-            _tournament.StartedAt = DateTime.UtcNow;
-            _tournament.CurrentRound = 1;
+            tournament.Status = TournamentStatus.InProgress;
+            tournament.StartedAt = DateTime.UtcNow;
+            tournament.CurrentRound = 1;
 
-            // Initialize rounds
             for (int i = 1; i <= Tournament.MaxRounds; i++)
             {
-                _tournament.Rounds.Add(new Round { RoundNumber = i });
+                tournament.Rounds.Add(new Round { RoundNumber = i });
             }
 
             return true;
         }
     }
 
-    public bool EndTournament()
+    public bool EndTournament(int roomId = 1)
     {
         lock (_lock)
         {
-            if (_tournament.Status != TournamentStatus.InProgress)
+            var tournament = GetTournament(roomId);
+            
+            if (tournament.Status != TournamentStatus.InProgress)
                 return false;
 
-            _tournament.Status = TournamentStatus.Completed;
-            _tournament.EndedAt = DateTime.UtcNow;
+            tournament.Status = TournamentStatus.Completed;
+            tournament.EndedAt = DateTime.UtcNow;
             
-            // Save tournament to history asynchronously
             _ = Task.Run(async () =>
             {
                 try
                 {
                     using var scope = _serviceProvider.CreateScope();
                     var historyService = scope.ServiceProvider.GetRequiredService<ITournamentHistoryService>();
-                    await historyService.SaveTournamentAsync(_tournament);
+                    await historyService.SaveTournamentAsync(tournament);
                     _logger.LogInformation("Tournament saved to history successfully");
                 }
                 catch (Exception ex)
@@ -157,45 +173,44 @@ public class TournamentService : ITournamentService
         }
     }
 
-    public bool ResetTournament()
+    public bool ResetTournament(int roomId = 1)
     {
         lock (_lock)
         {
-            // Reset tournament state but keep players
-            _tournament.Status = TournamentStatus.Pending;
-            _tournament.CurrentRound = 1;
-            _tournament.StartedAt = null;
-            _tournament.EndedAt = null;
+            var tournament = GetTournament(roomId);
             
-            // Reset all player scores but keep the players registered
-            foreach (var player in _tournament.Players)
+            tournament.Status = TournamentStatus.Pending;
+            tournament.CurrentRound = 1;
+            tournament.StartedAt = null;
+            tournament.EndedAt = null;
+            
+            foreach (var player in tournament.Players)
             {
                 player.TotalScore = 0;
             }
             
-            // Clear all rounds
-            _tournament.Rounds.Clear();
+            tournament.Rounds.Clear();
             
             return true;
         }
     }
 
-    public bool StartRound(int roundNumber, string? question = null, string? correctAnswer = null)
+    public bool StartRound(int roomId, int roundNumber, string? question = null, string? correctAnswer = null)
     {
         lock (_lock)
         {
-            if (_tournament.Status != TournamentStatus.InProgress)
+            var tournament = GetTournament(roomId);
+            
+            if (tournament.Status != TournamentStatus.InProgress)
                 return false;
 
-            var round = _tournament.Rounds.FirstOrDefault(r => r.RoundNumber == roundNumber);
+            var round = tournament.Rounds.FirstOrDefault(r => r.RoundNumber == roundNumber);
             if (round == null || round.Status != RoundStatus.Pending)
                 return false;
 
-            // Use sequential question based on round number if not provided
             QuestionAnswer qa;
             if (string.IsNullOrWhiteSpace(question) || string.IsNullOrWhiteSpace(correctAnswer))
             {
-                // Get question by order (round number) to ensure exact sequence
                 var sequentialQuestion = _questionService.GetQuestionByOrderAsync(roundNumber).GetAwaiter().GetResult();
                 if (sequentialQuestion != null)
                 {
@@ -203,7 +218,6 @@ public class TournamentService : ITournamentService
                 }
                 else
                 {
-                    // Fallback to random if no question found for this order
                     _logger.LogWarning($"No question found for round {roundNumber}, falling back to random question");
                     qa = _questionService.GetRandomQuestionAsync().GetAwaiter().GetResult();
                 }
@@ -222,8 +236,7 @@ public class TournamentService : ITournamentService
             round.ServerMove = GenerateRandomMove();
             round.StartedAt = DateTime.UtcNow;
 
-            // Initialize player results for this round
-            foreach (var player in _tournament.Players)
+            foreach (var player in tournament.Players)
             {
                 round.PlayerResults.Add(new PlayerRoundResult
                 {
@@ -232,52 +245,51 @@ public class TournamentService : ITournamentService
                 });
             }
 
-            _tournament.CurrentRound = roundNumber;
+            tournament.CurrentRound = roundNumber;
             return true;
         }
     }
 
-    public bool EndRound(int roundNumber)
+    public bool EndRound(int roomId, int roundNumber)
     {
         lock (_lock)
         {
-            var round = _tournament.Rounds.FirstOrDefault(r => r.RoundNumber == roundNumber);
+            var tournament = GetTournament(roomId);
+            var round = tournament.Rounds.FirstOrDefault(r => r.RoundNumber == roundNumber);
             if (round == null || round.Status != RoundStatus.InProgress)
                 return false;
 
             round.Status = RoundStatus.Completed;
             round.EndedAt = DateTime.UtcNow;
 
-            // Calculate scores for this round
-            CalculateRoundScores(round);
+            CalculateRoundScores(round, tournament);
 
-            // Automatically move to next round if not the last round
             if (roundNumber < Tournament.MaxRounds)
             {
-                _tournament.CurrentRound = roundNumber + 1;
+                tournament.CurrentRound = roundNumber + 1;
             }
 
             return true;
         }
     }
 
-    public bool ResetCurrentRound()
+    public bool ResetCurrentRound(int roomId = 1)
     {
         lock (_lock)
         {
-            var currentRound = GetCurrentRound();
+            var currentRound = GetCurrentRound(roomId);
             if (currentRound == null)
                 return false;
 
-            // Reset round status
+            var tournament = GetTournament(roomId);
+
             currentRound.Status = RoundStatus.Pending;
             currentRound.StartedAt = null;
             currentRound.EndedAt = null;
             currentRound.Question = string.Empty;
             currentRound.CorrectAnswer = string.Empty;
-            currentRound.ServerMove = Move.Rock; // Default value
+            currentRound.ServerMove = Move.Rock;
 
-            // Reset all player results for this round
             foreach (var playerResult in currentRound.PlayerResults)
             {
                 playerResult.Answer = null;
@@ -287,13 +299,11 @@ public class TournamentService : ITournamentService
                 playerResult.SubmittedAt = null;
             }
 
-            // Reset player total scores only for this round's contribution
-            foreach (var player in _tournament.Players)
+            foreach (var player in tournament.Players)
             {
                 var playerResult = currentRound.PlayerResults.FirstOrDefault(pr => pr.PlayerId == player.Id);
                 if (playerResult != null)
                 {
-                    // Subtract this round's score from total (recalculated scores will be 0)
                     player.TotalScore -= playerResult.Score;
                 }
             }
@@ -302,38 +312,42 @@ public class TournamentService : ITournamentService
         }
     }
 
-    public Round? GetCurrentRound()
+    public Round? GetCurrentRound(int roomId = 1)
     {
         lock (_lock)
         {
-            return _tournament.Rounds.FirstOrDefault(r => r.RoundNumber == _tournament.CurrentRound);
+            var tournament = GetTournament(roomId);
+            return tournament.Rounds.FirstOrDefault(r => r.RoundNumber == tournament.CurrentRound);
         }
     }
 
-    public TournamentStatusResponse GetTournamentStatus(int playerId)
+    public TournamentStatusResponse GetTournamentStatus(int playerId, int roomId = 1)
     {
         lock (_lock)
         {
-            var currentRound = GetCurrentRound();
+            var tournament = GetTournament(roomId);
+            var currentRound = GetCurrentRound(roomId);
             var playerResult = currentRound?.PlayerResults.FirstOrDefault(pr => pr.PlayerId == playerId);
             
             return new TournamentStatusResponse
             {
-                TournamentStatus = _tournament.Status,
-                CurrentRound = _tournament.CurrentRound,
+                TournamentStatus = tournament.Status,
+                CurrentRound = tournament.CurrentRound,
                 CurrentRoundStatus = currentRound?.Status,
                 CurrentQuestion = currentRound?.Status == RoundStatus.InProgress ? currentRound.Question : null,
                 CanSubmit = currentRound?.Status == RoundStatus.InProgress && 
-                          (playerResult == null || (playerResult != null && !playerResult.HasSubmitted))
+                          (playerResult == null || (playerResult != null && !playerResult.HasSubmitted)),
+                RoomId = roomId
             };
         }
     }
 
-    public SubmitAnswerResponse SubmitAnswer(SubmitAnswerRequest request)
+    public SubmitAnswerResponse SubmitAnswer(SubmitAnswerRequest request, int roomId = 1)
     {
         lock (_lock)
         {
-            var round = _tournament.Rounds.FirstOrDefault(r => r.RoundNumber == request.RoundNumber);
+            var tournament = GetTournament(roomId);
+            var round = tournament.Rounds.FirstOrDefault(r => r.RoundNumber == request.RoundNumber);
             if (round == null || round.Status != RoundStatus.InProgress)
             {
                 return new SubmitAnswerResponse
@@ -375,16 +389,18 @@ public class TournamentService : ITournamentService
         }
     }
 
-    public List<LeaderboardEntry> GetLeaderboard(bool hideForLastTwoRounds = false)
+    public List<LeaderboardEntry> GetLeaderboard(int roomId = 1, bool hideForLastTwoRounds = false)
     {
         lock (_lock)
         {
-            if (hideForLastTwoRounds && _tournament.CurrentRound >= Tournament.MaxRounds - 1)
+            var tournament = GetTournament(roomId);
+            
+            if (hideForLastTwoRounds && tournament.CurrentRound >= Tournament.MaxRounds - 1)
             {
                 return new List<LeaderboardEntry>();
             }
 
-            var leaderboard = _tournament.Players
+            var leaderboard = tournament.Players
                 .Select(p => new LeaderboardEntry
                 {
                     PlayerId = p.Id,
@@ -404,16 +420,17 @@ public class TournamentService : ITournamentService
         }
     }
 
-    public List<RoundResultEntry> GetRoundResults(int roundNumber)
+    public List<RoundResultEntry> GetRoundResults(int roomId, int roundNumber)
     {
         lock (_lock)
         {
-            var round = _tournament.Rounds.FirstOrDefault(r => r.RoundNumber == roundNumber);
+            var tournament = GetTournament(roomId);
+            var round = tournament.Rounds.FirstOrDefault(r => r.RoundNumber == roundNumber);
             if (round == null)
                 return new List<RoundResultEntry>();
 
             return round.PlayerResults
-                .Join(_tournament.Players, pr => pr.PlayerId, p => p.Id, (pr, p) => new RoundResultEntry
+                .Join(tournament.Players, pr => pr.PlayerId, p => p.Id, (pr, p) => new RoundResultEntry
                 {
                     PlayerId = p.Id,
                     PlayerName = p.Name,
@@ -430,11 +447,12 @@ public class TournamentService : ITournamentService
         }
     }
 
-    public List<PlayerRoundResult> GetPlayerResults(int playerId)
+    public List<PlayerRoundResult> GetPlayerResults(int playerId, int roomId = 1)
     {
         lock (_lock)
         {
-            return _tournament.Rounds
+            var tournament = GetTournament(roomId);
+            return tournament.Rounds
                 .SelectMany(r => r.PlayerResults)
                 .Where(pr => pr.PlayerId == playerId)
                 .OrderBy(pr => pr.RoundNumber)
@@ -448,7 +466,7 @@ public class TournamentService : ITournamentService
         return moves[_random.Next(moves.Length)];
     }
 
-    private void CalculateRoundScores(Round round)
+    private void CalculateRoundScores(Round round, Tournament tournament)
     {
         foreach (var result in round.PlayerResults)
         {
@@ -460,27 +478,23 @@ public class TournamentService : ITournamentService
 
             int score = 0;
 
-            // Score for correct answer
             if (result.AnswerCorrect)
             {
                 score += 30;
             }
 
-            // Score for winning rock-paper-scissors
             if (DetermineWinner(result.Move.Value, round.ServerMove))
             {
                 score += 20;
             }
             else if (result.Move.Value == round.ServerMove)
             {
-                // Tie gives half points
                 score += 10;
             }
 
             result.Score = score;
 
-            // Update player total score
-            var player = _tournament.Players.FirstOrDefault(p => p.Id == result.PlayerId);
+            var player = tournament.Players.FirstOrDefault(p => p.Id == result.PlayerId);
             if (player != null)
             {
                 player.TotalScore += score;
@@ -492,17 +506,14 @@ public class TournamentService : ITournamentService
     {
         if (string.IsNullOrWhiteSpace(answerRule) || answerRule.Equals("Exact", StringComparison.OrdinalIgnoreCase))
         {
-            // Default exact matching (case-insensitive)
             return string.Equals(playerAnswer, correctAnswer, StringComparison.OrdinalIgnoreCase);
         }
         
         if (answerRule.Equals("FuzzyMatch", StringComparison.OrdinalIgnoreCase))
         {
-            // Fuzzy matching - check if player answer contains the correct answer (case-insensitive)
             return playerAnswer.Contains(correctAnswer, StringComparison.OrdinalIgnoreCase);
         }
         
-        // Default to exact matching for unknown rules
         return string.Equals(playerAnswer, correctAnswer, StringComparison.OrdinalIgnoreCase);
     }
 

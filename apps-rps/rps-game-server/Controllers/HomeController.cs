@@ -19,122 +19,128 @@ public class HomeController : Controller
         return HttpContext.Session.GetString(AdminSessionKey) == "true";
     }
 
-    public IActionResult Index()
+    public IActionResult Index(int roomId = 1)
     {
-        var tournament = _tournamentService.GetTournament();
+        ViewBag.RoomId = roomId;
+        var tournament = _tournamentService.GetTournament(roomId);
         return View(tournament);
     }
 
     [HttpPost]
-    public IActionResult StartTournament()
+    public IActionResult StartTournament(int roomId = 1)
     {
         if (!IsAuthenticated())
         {
             TempData["Error"] = "Admin access required to start tournament";
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { roomId });
         }
 
-        _tournamentService.StartTournament();
-        return RedirectToAction("Index");
+        _tournamentService.StartTournament(roomId);
+        return RedirectToAction("Index", new { roomId });
     }
 
     [HttpPost]
-    public IActionResult EndTournament()
+    public IActionResult EndTournament(int roomId = 1)
     {
         if (!IsAuthenticated())
         {
             TempData["Error"] = "Admin access required to end tournament";
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { roomId });
         }
 
-        _tournamentService.EndTournament();
-        return RedirectToAction("GrandFinish");
+        _tournamentService.EndTournament(roomId);
+        return RedirectToAction("GrandFinish", new { roomId });
     }
 
     [HttpPost]
-    public IActionResult ResetTournament()
+    public IActionResult ResetTournament(int roomId = 1)
     {
         if (!IsAuthenticated())
         {
             TempData["Error"] = "Admin access required to reset tournament";
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { roomId });
         }
 
-        _tournamentService.ResetTournament();
-        return RedirectToAction("Index");
+        _tournamentService.ResetTournament(roomId);
+        return RedirectToAction("Index", new { roomId });
     }
 
     [HttpPost]
-    public IActionResult StartRound(int roundNumber)
+    public IActionResult StartRound(int roundNumber, int roomId = 1)
     {
         if (!IsAuthenticated())
         {
             TempData["Error"] = "Admin access required to start round";
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { roomId });
         }
 
-        var success = _tournamentService.StartRound(roundNumber);
+        var success = _tournamentService.StartRound(roomId, roundNumber);
         if (!success)
         {
             TempData["Error"] = "Failed to start round";
         }
         
-        return RedirectToAction("Index");
+        return RedirectToAction("Index", new { roomId });
     }
 
     [HttpPost]
-    public IActionResult EndRound(int roundNumber)
+    public IActionResult EndRound(int roundNumber, int roomId = 1)
     {
         if (!IsAuthenticated())
         {
             TempData["Error"] = "Admin access required to end round";
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { roomId });
         }
 
-        var success = _tournamentService.EndRound(roundNumber);
+        var success = _tournamentService.EndRound(roomId, roundNumber);
         if (!success)
         {
             TempData["Error"] = "Failed to end round";
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { roomId });
         }
         
-        return RedirectToAction("RoundComplete", new { roundNumber });
+        return RedirectToAction("RoundComplete", new { roundNumber, roomId });
     }
 
-    public IActionResult RoundComplete(int roundNumber)
+    public IActionResult RoundComplete(int roundNumber, int roomId = 1)
     {
-        var tournament = _tournamentService.GetTournament();
+        ViewBag.RoomId = roomId;
+        var tournament = _tournamentService.GetTournament(roomId);
         var viewModel = new RoundCompleteViewModel
         {
             Tournament = tournament,
             CompletedRoundNumber = roundNumber,
-            RoundResults = _tournamentService.GetRoundResults(roundNumber),
+            RoundResults = _tournamentService.GetRoundResults(roomId, roundNumber),
             IsLastRound = roundNumber >= Tournament.MaxRounds
         };
         return View(viewModel);
     }
 
-    public IActionResult TournamentWaiting()
+    public IActionResult TournamentWaiting(int roomId = 1)
     {
-        var tournament = _tournamentService.GetTournament();
+        ViewBag.RoomId = roomId;
+        var tournament = _tournamentService.GetTournament(roomId);
         return View(tournament);
     }
 
-    public IActionResult GrandFinish()
+    public IActionResult GrandFinish(int roomId = 1)
     {
-        var tournament = _tournamentService.GetTournament();
+        ViewBag.RoomId = roomId;
+        var tournament = _tournamentService.GetTournament(roomId);
         return View(tournament);
     }
 
-    public IActionResult Results()
+    public IActionResult Results(int roomId = 1)
     {
-        var tournament = _tournamentService.GetTournament();
+        ViewBag.RoomId = roomId;
+        var tournament = _tournamentService.GetTournament(roomId);
         return View(tournament);
     }
 
-    public IActionResult Grid()
+    public IActionResult Grid(int roomId = 1)
     {
-        var tournament = _tournamentService.GetTournament();
+        ViewBag.RoomId = roomId;
+        var tournament = _tournamentService.GetTournament(roomId);
         var viewModel = new GridViewModel
         {
             Players = tournament.Players,
@@ -149,7 +155,7 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public IActionResult Register(string playerName)
+    public IActionResult Register(string playerName, int roomId = 1)
     {
         if (string.IsNullOrWhiteSpace(playerName))
         {
@@ -157,12 +163,13 @@ public class HomeController : Controller
             return View();
         }
 
-        var response = _tournamentService.RegisterPlayer(playerName);
+        var response = _tournamentService.RegisterPlayer(playerName, roomId);
         if (response.PlayerId > 0)
         {
             ViewBag.Success = true;
             ViewBag.PlayerId = response.PlayerId;
             ViewBag.PlayerName = playerName;
+            ViewBag.RoomId = roomId;
             ViewBag.Message = response.Message;
         }
         else
@@ -173,9 +180,10 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult Play()
+    public IActionResult Play(int roomId = 1)
     {
-        var currentRound = _tournamentService.GetCurrentRound();
+        ViewBag.RoomId = roomId;
+        var currentRound = _tournamentService.GetCurrentRound(roomId);
         if (currentRound != null && currentRound.Status == RoundStatus.InProgress)
         {
             ViewBag.CurrentQuestion = currentRound.Question;
@@ -185,8 +193,10 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public IActionResult Play(int playerId, string answer, string move)
+    public IActionResult Play(int playerId, string answer, string move, int roomId = 1)
     {
+        ViewBag.RoomId = roomId;
+        
         if (playerId <= 0)
         {
             TempData["Error"] = "Invalid player ID";
@@ -199,8 +209,8 @@ public class HomeController : Controller
             return View();
         }
 
-        var tournament = _tournamentService.GetTournament();
-        var currentRound = _tournamentService.GetCurrentRound();
+        var tournament = _tournamentService.GetTournament(roomId);
+        var currentRound = _tournamentService.GetCurrentRound(roomId);
         
         if (currentRound == null || currentRound.Status != RoundStatus.InProgress)
         {
@@ -216,7 +226,7 @@ public class HomeController : Controller
             Move = parsedMove
         };
 
-        var response = _tournamentService.SubmitAnswer(request);
+        var response = _tournamentService.SubmitAnswer(request, roomId);
         if (response.Success)
         {
             ViewBag.Success = true;

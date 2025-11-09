@@ -1,20 +1,35 @@
 @model RpsGameServer.Models.Tournament
 @{
     ViewData["Title"] = "Tournament Dashboard";
+    var roomId = ViewBag.RoomId ?? 1;
 }
+
+<!-- Room Selector -->
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="btn-group" role="group">
+            <a href="/Home/Index?roomId=1" class="btn @(roomId == 1 ? "btn-primary" : "btn-outline-primary")">
+                <i class="fas fa-door-open"></i> Room 1
+            </a>
+            <a href="/Home/Index?roomId=2" class="btn @(roomId == 2 ? "btn-primary" : "btn-outline-primary")">
+                <i class="fas fa-door-open"></i> Room 2
+            </a>
+        </div>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-8">
         <div class="card">
             <div class="card-header">
-                <h3>Tournament Status: @Model.Status</h3>
+                <h3>Room @roomId - Tournament Status: @Model.Status</h3>
             </div>
             <div class="card-body">
                 @if (Model.Status == RpsGameServer.Models.TournamentStatus.Pending)
                 {
                     <div class="text-center">
                         <p class="lead">Tournament is waiting for players to join!</p>
-                        <a href="/Home/TournamentWaiting" class="btn btn-primary btn-lg">
+                        <a href="/Home/TournamentWaiting?roomId=@roomId" class="btn btn-primary btn-lg">
                             <i class="fas fa-users"></i> View Tournament Lobby
                         </a>
                     </div>
@@ -39,6 +54,7 @@
                                         <p>Click to start round @currentRound.RoundNumber with a random question.</p>
                                         <form method="post" asp-action="StartRound" class="mt-2">
                                             <input type="hidden" name="roundNumber" value="@currentRound.RoundNumber" />
+                                            <input type="hidden" name="roomId" value="@roomId" />
                                             <button type="submit" class="btn btn-success">Start Round @currentRound.RoundNumber</button>
                                         </form>
                                     }
@@ -169,6 +185,7 @@
                                     {
                                         <form method="post" asp-action="EndRound" class="mt-2">
                                             <input type="hidden" name="roundNumber" value="@currentRound.RoundNumber" />
+                                            <input type="hidden" name="roomId" value="@roomId" />
                                             <button type="submit" class="btn btn-warning btn-lg">
                                                 <i class="fas fa-stop"></i> End Round @currentRound.RoundNumber
                                             </button>
@@ -193,6 +210,7 @@
                                 @if (Context.Session.GetString("AdminAuthenticated") == "true")
                                 {
                                     <form method="post" asp-action="EndTournament" class="mt-2">
+                                        <input type="hidden" name="roomId" value="@roomId" />
                                         <button type="submit" class="btn btn-danger">End Tournament</button>
                                     </form>
                                 }
@@ -213,10 +231,10 @@
                 {
                     <div class="text-center">
                         <h4 class="text-success">🏆 Tournament Complete! 🏆</h4>
-                        <a href="/Home/GrandFinish" class="btn btn-warning btn-lg me-2">
+                        <a href="/Home/GrandFinish?roomId=@roomId" class="btn btn-warning btn-lg me-2">
                             <i class="fas fa-crown"></i> View Champions
                         </a>
-                        <a href="/Home/Results" class="btn btn-info btn-lg">
+                        <a href="/Home/Results?roomId=@roomId" class="btn btn-info btn-lg">
                             <i class="fas fa-chart-bar"></i> Detailed Results
                         </a>
                     </div>
