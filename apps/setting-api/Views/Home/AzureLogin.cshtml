@@ -136,10 +136,13 @@ else if (!string.IsNullOrEmpty(Model.ClaimedByName))
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h5><i class="fas fa-list"></i> All Login Entries</h5>
+                <h5><i class="fas fa-list"></i> Claimed Login Entries</h5>
             </div>
             <div class="card-body">
-                @if (Model.LoginEntries.Any())
+                @{
+                    var claimedLogins = Model.LoginEntries.Where(l => !string.IsNullOrEmpty(l.ClaimedBy)).ToList();
+                }
+                @if (claimedLogins.Any())
                 {
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
@@ -147,14 +150,13 @@ else if (!string.IsNullOrEmpty(Model.ClaimedByName))
                                 <tr>
                                     <th>Email</th>
                                     <th>Password</th>
-                                    <th>Status</th>
                                     <th>Claimed By</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var login in Model.LoginEntries)
+                                @foreach (var login in claimedLogins)
                                 {
-                                    <tr class="@(string.IsNullOrEmpty(login.ClaimedBy) ? "" : "table-secondary")">
+                                    <tr class="table-secondary">
                                         <td>
                                             <code>@login.LoginEmail</code>
                                             <button class="btn btn-sm btn-outline-secondary ms-2" onclick="copyToClipboard('@login.LoginEmail')" title="Copy email">
@@ -163,11 +165,11 @@ else if (!string.IsNullOrEmpty(Model.ClaimedByName))
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <input type="password" id="pwd_@(Model.LoginEntries.IndexOf(login))" class="form-control form-control-sm" 
+                                                <input type="password" id="pwd_@(claimedLogins.IndexOf(login))" class="form-control form-control-sm" 
                                                        value="@login.LoginPassword" readonly style="width: 150px;">
                                                 <button class="btn btn-sm btn-outline-secondary ms-1" 
-                                                        onclick="togglePassword('pwd_@(Model.LoginEntries.IndexOf(login))')" title="Show/Hide password">
-                                                    <i class="fas fa-eye" id="pwd_@(Model.LoginEntries.IndexOf(login))_icon"></i>
+                                                        onclick="togglePassword('pwd_@(claimedLogins.IndexOf(login))')" title="Show/Hide password">
+                                                    <i class="fas fa-eye" id="pwd_@(claimedLogins.IndexOf(login))_icon"></i>
                                                 </button>
                                                 <button class="btn btn-sm btn-outline-secondary ms-1" 
                                                         onclick="copyToClipboard('@login.LoginPassword')" title="Copy password">
@@ -176,24 +178,7 @@ else if (!string.IsNullOrEmpty(Model.ClaimedByName))
                                             </div>
                                         </td>
                                         <td>
-                                            @if (string.IsNullOrEmpty(login.ClaimedBy))
-                                            {
-                                                <span class="badge bg-success">Available</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="badge bg-secondary">Claimed</span>
-                                            }
-                                        </td>
-                                        <td>
-                                            @if (!string.IsNullOrEmpty(login.ClaimedBy))
-                                            {
-                                                <span class="text-muted">@login.ClaimedBy</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="text-muted">-</span>
-                                            }
+                                            <span class="text-muted">@login.ClaimedBy</span>
                                         </td>
                                     </tr>
                                 }
@@ -204,8 +189,8 @@ else if (!string.IsNullOrEmpty(Model.ClaimedByName))
                 else
                 {
                     <div class="alert alert-info">
-                        <h5>No Login Entries</h5>
-                        <p>There are currently no login entries configured in the system.</p>
+                        <h5>No Claimed Login Entries</h5>
+                        <p>No login credentials have been claimed yet. Use the form above to claim a credential.</p>
                     </div>
                 }
             </div>
