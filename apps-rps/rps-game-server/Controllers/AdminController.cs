@@ -21,10 +21,10 @@ public class AdminController : Controller
 
     public IActionResult Login()
     {
-        // If already authenticated, redirect to admin index
+        // If already authenticated, redirect to settings
         if (IsAuthenticated())
         {
-            return RedirectToAction("Index");
+            return RedirectToAction("Settings");
         }
         
         return View();
@@ -36,7 +36,7 @@ public class AdminController : Controller
         if (passcode == AdminPasscode)
         {
             HttpContext.Session.SetString(AdminSessionKey, "true");
-            return RedirectToAction("Index");
+            return RedirectToAction("Settings");
         }
 
         TempData["Error"] = "Invalid passcode. Please try again.";
@@ -44,6 +44,16 @@ public class AdminController : Controller
     }
 
     public IActionResult Index()
+    {
+        if (!IsAuthenticated())
+        {
+            return RedirectToAction("Login");
+        }
+
+        return RedirectToAction("Settings");
+    }
+
+    public IActionResult Settings()
     {
         if (!IsAuthenticated())
         {
@@ -72,7 +82,7 @@ public class AdminController : Controller
             TempData["Error"] = "Failed to unregister player.";
         }
 
-        return RedirectToAction("Index");
+        return RedirectToAction("Settings");
     }
 
     [HttpPost]
@@ -93,7 +103,7 @@ public class AdminController : Controller
             TempData["Error"] = "No players to unregister or operation failed.";
         }
 
-        return RedirectToAction("Index");
+        return RedirectToAction("Settings");
     }
 
     [HttpPost]
@@ -114,7 +124,7 @@ public class AdminController : Controller
             TempData["Error"] = "Failed to reset current round.";
         }
 
-        return RedirectToAction("Index");
+        return RedirectToAction("Settings");
     }
 
     [HttpPost]
@@ -135,7 +145,7 @@ public class AdminController : Controller
             TempData["Error"] = "Failed to reset tournament.";
         }
 
-        return RedirectToAction("Index");
+        return RedirectToAction("Settings");
     }
 
     [HttpPost]

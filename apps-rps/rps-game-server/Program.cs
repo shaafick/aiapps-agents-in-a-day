@@ -37,6 +37,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddSingleton<IQuestionService, QuestionService>();
 builder.Services.AddScoped<ITournamentHistoryService, TournamentHistoryService>();
 builder.Services.AddSingleton<ITournamentService, TournamentService>();
+builder.Services.AddSingleton<ILoginService, LoginService>();
 
 var app = builder.Build();
 

@@ -1,0 +1,27 @@
+[
+  {
+    "loginEmail": "user1@example.com",
+    "loginPassword": "Password123!",
+    "claimedBy": "Test User"
+  },
+  {
+    "loginEmail": "user2@example.com",
+    "loginPassword": "Password456!",
+    "claimedBy": null
+  },
+  {
+    "loginEmail": "user3@example.com",
+    "loginPassword": "Password789!",
+    "claimedBy": null
+  },
+  {
+    "loginEmail": "user4@example.com",
+    "loginPassword": "PasswordAbc!",
+    "claimedBy": null
+  },
+  {
+    "loginEmail": "user5@example.com",
+    "loginPassword": "PasswordXyz!",
+    "claimedBy": null
+  }
+]
