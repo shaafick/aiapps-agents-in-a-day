@@ -1,0 +1,154 @@
+@model List<ConfigApi.Models.Setting>
+
+@{
+    ViewData["Title"] = "Application Settings";
+    var settingsByCategory = Model.GroupBy(s => s.Category).OrderBy(g => g.Key).ToList();
+}
+
+<div class="row">
+    <div class="col-12">
+        <h1>Application Settings</h1>
+        <p class="text-muted">Overview of all application settings organized by category</p>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-3">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Settings</h5>
+                <h2 class="text-primary">@Model.Count</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h5 class="card-title">Categories</h5>
+                <h2 class="text-info">@settingsByCategory.Count</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        @if (Model.Any())
+        {
+            @foreach (var categoryGroup in settingsByCategory)
+            {
+                <div class="card mb-4">
+                    <div class="card-header text-white">
+                        <h5 class="mb-0 text-dark ">
+                            <i class="fas fa-folder"></i> @categoryGroup.Key Settings 
+                            <span class="badge bg-light text-dark ms-2">@categoryGroup.Count() items</span>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th width="200px">Key Name</th>
+                                        <th>Value</th>
+                                        <th width="400px">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var setting in categoryGroup.OrderBy(s => s.Id))
+                                    {
+                                        <tr>
+                                            <td><span>@setting.Name</span></td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <code class="text-success me-2">@setting.Value</code>
+                                                    <i class="fas fa-copy copy-icon" 
+                                                       data-copy-value="@setting.Value"
+                                                       onclick="copyToClipboard(this)" 
+                                                       title="Copy value"></i>
+                                                </div>
+                                            </td>
+                                            <td class="text-muted">@setting.Description</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">
+                <h4>No Settings Found</h4>
+                <p>There are currently no settings configured in the system.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>API Endpoints</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span><code>GET /api/configuration/all</code></span>
+                        <small class="text-muted">Get all configurations</small>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span><code>GET /api/configuration/health</code></span>
+                        <small class="text-muted">Health check</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.copy-icon {
+    cursor: pointer;
+    color: #6c757d;
+    padding: 0.25rem;
+    font-size: 0.9rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.copy-icon:hover {
+    color: #0d6efd;
+    transform: scale(1.1);
+}
+
+.copy-icon.copied {
+    color: #198754;
+}
+</style>
+
+<script>
+function copyToClipboard(iconElement) {
+    const text = iconElement.getAttribute('data-copy-value');
+    
+    navigator.clipboard.writeText(text).then(function() {
+        // Add copied class to the icon
+        iconElement.classList.add('copied');
+        
+        // Change icon temporarily
+        const originalClass = iconElement.className;
+        iconElement.className = iconElement.className.replace('fa-copy', 'fa-check');
+        
+        // Reset after 2 seconds
+        setTimeout(function() {
+            iconElement.classList.remove('copied');
+            iconElement.className = originalClass;
+        }, 2000);
+    }).catch(function(err) {
+        console.error('Failed to copy text: ', err);
+        alert('Failed to copy to clipboard');
+    });
+}
+</script>

@@ -25,10 +25,32 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" href="/">AI Apps and Agent in a Day (Settings)</a>
-                <div class="navbar-nav ms-auto">
-                    <a class="nav-link" href="/swagger">API Docs</a>
-                    <a class="nav-link" href="/api/configuration/health">Health</a>
+                <a class="navbar-brand" href="@Url.Action("Index", "Home")">
+                    <i class="fas fa-cogs"></i> Configuration Portal
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <div class="navbar-nav me-auto">
+                        <a class="nav-link" href="@Url.Action("Index", "Home")">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                        <a class="nav-link" href="@Url.Action("Settings", "Home")">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                        <a class="nav-link" href="@Url.Action("AzureLogin", "Home")">
+                            <i class="fas fa-key"></i> Azure Login
+                        </a>
+                    </div>
+                    <div class="navbar-nav">
+                        <a class="nav-link" href="/swagger">
+                            <i class="fas fa-book"></i> API Docs
+                        </a>
+                        <a class="nav-link" href="/api/configuration/health">
+                            <i class="fas fa-heartbeat"></i> Health
+                        </a>
+                    </div>
                 </div>
             </div>
         </nav>

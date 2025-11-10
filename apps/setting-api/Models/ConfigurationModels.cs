@@ -22,3 +22,17 @@ public class ConfigurationResponse
     public string Description { get; set; } = string.Empty;
     public string? Value { get; set; }
 }
+
+public class LoginEntry
+{
+    public string LoginEmail { get; set; } = string.Empty;
+    public string LoginPassword { get; set; } = string.Empty;
+    public string? ClaimedBy { get; set; }
+}
+
+public class AzureLoginViewModel
+{
+    public List<LoginEntry> LoginEntries { get; set; } = new();
+    public string ClaimedByName { get; set; } = string.Empty;
+    public LoginEntry? AssignedLogin { get; set; }
+}
