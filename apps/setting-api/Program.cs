@@ -28,6 +28,15 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Add session support
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 // Register configuration service
 builder.Services.AddScoped<IConfigurationService, ConfigurationService>();
 
@@ -47,6 +56,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors();
+
+app.UseSession();
 
 app.UseRouting();
 

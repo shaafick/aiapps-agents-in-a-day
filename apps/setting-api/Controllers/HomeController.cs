@@ -26,8 +26,50 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult Login()
+    {
+        if (IsAuthenticated())
+        {
+            return RedirectToAction("Index");
+        }
+
+        return View(new LoginViewModel());
+    }
+
+    [HttpPost]
+    public IActionResult Login(LoginViewModel model)
+    {
+        if (model.Password == "ai")
+        {
+            HttpContext.Session.SetString("IsAuthenticated", "true");
+            _logger.LogInformation("User successfully authenticated");
+            return RedirectToAction("Index");
+        }
+
+        model.ErrorMessage = "Invalid password. Please try again.";
+        _logger.LogWarning("Failed login attempt with password: {Password}", model.Password);
+        return View(model);
+    }
+
+    public IActionResult Logout()
+    {
+        HttpContext.Session.Clear();
+        _logger.LogInformation("User logged out");
+        return RedirectToAction("Index");
+    }
+
+    private bool IsAuthenticated()
+    {
+        return HttpContext.Session.GetString("IsAuthenticated") == "true";
+    }
+
     public async Task<IActionResult> Settings()
     {
+        if (!IsAuthenticated())
+        {
+            return RedirectToAction("Login");
+        }
+
         _logger.LogInformation("Loading settings page with settings list");
         
         var settings = await _configurationService.GetAllSettingsAsync();
@@ -37,6 +79,11 @@ public class HomeController : Controller
 
     public async Task<IActionResult> AzureLogin()
     {
+        if (!IsAuthenticated())
+        {
+            return RedirectToAction("Login");
+        }
+
         _logger.LogInformation("Loading Azure login page");
 
         var viewModel = new AzureLoginViewModel
@@ -50,6 +97,11 @@ public class HomeController : Controller
     [HttpPost]
     public async Task<IActionResult> AzureLogin(string claimedByName)
     {
+        if (!IsAuthenticated())
+        {
+            return RedirectToAction("Login");
+        }
+
         _logger.LogInformation("Processing Azure login claim for {ClaimedBy}", claimedByName);
 
         if (string.IsNullOrWhiteSpace(claimedByName))

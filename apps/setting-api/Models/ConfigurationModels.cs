@@ -36,3 +36,9 @@ public class AzureLoginViewModel
     public string ClaimedByName { get; set; } = string.Empty;
     public LoginEntry? AssignedLogin { get; set; }
 }
+
+public class LoginViewModel
+{
+    public string Password { get; set; } = string.Empty;
+    public string? ErrorMessage { get; set; }
+}
