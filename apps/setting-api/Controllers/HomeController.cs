@@ -178,6 +178,7 @@ public class HomeController : Controller
                 {
                     LoginEmail = jsonElement.GetProperty("loginemail").GetString() ?? "",
                     LoginPassword = jsonElement.GetProperty("loginpassword").GetString() ?? "",
+                    Region = jsonElement.GetProperty("region").GetString() ?? "",
                     ClaimedBy = jsonElement.TryGetProperty("claimedby", out var claimedBy) && claimedBy.ValueKind != JsonValueKind.Null 
                         ? claimedBy.GetString() : null
                 };
@@ -230,6 +231,7 @@ public class HomeController : Controller
                     {
                         loginemail = e.LoginEmail,
                         loginpassword = e.LoginPassword,
+                        region = e.Region,
                         claimedby = e.ClaimedBy
                     }).ToList();
 
@@ -290,6 +292,7 @@ public class HomeController : Controller
                 {
                     LoginEmail = jsonElement.GetProperty("loginemail").GetString() ?? "",
                     LoginPassword = jsonElement.GetProperty("loginpassword").GetString() ?? "",
+                    Region = jsonElement.GetProperty("region").GetString() ?? "",
                     ClaimedBy = jsonElement.TryGetProperty("claimedby", out var claimedBy) && claimedBy.ValueKind != JsonValueKind.Null 
                         ? claimedBy.GetString() : null
                 };

@@ -51,7 +51,7 @@
                                     <tr>
                                         <th width="200px">Key Name</th>
                                         <th>Value</th>
-                                        <th width="400px">Description</th>
+                                        <th>Description</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -61,7 +61,11 @@
                                             <td><span>@setting.Name</span></td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <code class="text-success me-2">@setting.Value</code>
+                                                    <input type="text" 
+                                                           class="form-control form-control-sm me-2" 
+                                                           value="@setting.Value" 
+                                                           readonly 
+                                                           style="max-width: 250px; font-family: monospace; font-size: 0.875rem; color: #198754;">
                                                     <i class="fas fa-copy copy-icon" 
                                                        data-copy-value="@setting.Value"
                                                        onclick="copyToClipboard(this)" 
