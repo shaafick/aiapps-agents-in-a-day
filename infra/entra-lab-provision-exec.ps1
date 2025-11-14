@@ -6,7 +6,7 @@
 # sub-aiaaa-lab1
 # .\entra-lab-provision.ps1 ba15181f-9a45-4eff-9043-4ddf263b6dc2 aiapps.top lab1 310 319
 
-sub-aiaaa-lab2
+# sub-aiaaa-lab2
 .\entra-lab-provision.ps1 22f484c3-b754-45aa-8cec-e40bb48bcb34 aiapps.top lab2 320 329
 
 # sub-aiaaa-lab3

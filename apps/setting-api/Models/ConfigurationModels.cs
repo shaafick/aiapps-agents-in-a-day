@@ -7,7 +7,6 @@ public class Setting
     public string Value { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Category { get; set; } = string.Empty;
-    public string Region { get; set; } = string.Empty;
     public bool Placeholder { get; set; }
 }
 
@@ -29,6 +28,7 @@ public class LoginEntry
     public string LoginEmail { get; set; } = string.Empty;
     public string LoginPassword { get; set; } = string.Empty;
     public string? ClaimedBy { get; set; }
+    public string Region { get; set; } = string.Empty;
 }
 
 public class AzureLoginViewModel
