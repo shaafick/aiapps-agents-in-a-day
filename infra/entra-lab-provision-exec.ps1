@@ -1,4 +1,6 @@
 
+# NOTE: also purge key vault and foundry instance manually from portal
+
 # az login --tenant f1146386-451a-4cc6-846b-a67f747921e9
 
 # sub-aiaaa-lab1
