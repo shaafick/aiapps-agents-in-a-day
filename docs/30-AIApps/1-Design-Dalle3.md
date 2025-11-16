@@ -180,4 +180,4 @@ export default Page;
 
 - [Azure OpenAI DALL-E Documentation](https://docs.microsoft.com/azure/cognitive-services/openai/dall-e-quickstart)
 - [Content Safety Guidelines](https://docs.microsoft.com/azure/cognitive-services/content-safety/)
-- [OpenAI Client SDK Documentation](https://docs.microsoft.com/javascript/api/@azure/openai/)
+- [OpenAI Library for TypeScript Documentation](https://learn.microsoft.com/en-us/javascript/api/overview/azure/openai-readme?view=azure-node-latest)
