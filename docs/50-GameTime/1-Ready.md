@@ -21,6 +21,8 @@ The game agent is an AI Agent that is written in python, let's use one of the ag
 pip install -r requirements.txt
 ```
 
+- Also check the `.env` file in  `apps-rps\rps-game-agent` folder, it needs to be edited as `.env` in `labs\40-AIAgents`.
+
 - Once dependencies are installed, run the following command to start the game client:
 
 ```bash
