@@ -5,3 +5,4 @@ openai
 dotenv
 autogen
 semantic-kernel
+azure-ai-projects==1.0.0
