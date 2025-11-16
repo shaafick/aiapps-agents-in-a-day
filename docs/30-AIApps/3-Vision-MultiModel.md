@@ -290,6 +290,4 @@ Consider combining vision analysis with:
 
 ## Additional Resources
 
-- [GPT-4o Vision Documentation](https://docs.microsoft.com/azure/cognitive-services/openai/gpt-4-vision)
 - [Computer Vision Best Practices](https://docs.microsoft.com/azure/cognitive-services/computer-vision/overview)
-- [Image Processing Guidelines](https://docs.microsoft.com/azure/cognitive-services/openai/concepts/gpt-with-vision)

@@ -32,7 +32,7 @@ In the previous lab, we configured and hosted the backend API code locally. The 
    ```
    
 4. Take your time and have a look at these files:
-   - `apps-chat\chatbot-frontend\scr\api.index.ts` points to backend api
+   - `apps-chat\chatbot-frontend\scr\api\index.ts` points to backend api
    - `apps-chat\chatbot-frontend\scr\pages\chat\Chat.tsx` manages chat conversations
    - `apps-chat\chatbot-frontend\scr\components\Answer\Answer.tsx` manages chat response
 
