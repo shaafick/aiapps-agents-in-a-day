@@ -28,3 +28,9 @@
 
 # sub-aiaaa-lab8
 .\entra-lab-deprovision.ps1 bfa1eb08-61a0-41d1-99ef-f02f3286f537 aiapps.top lab8 380 389
+
+
+# individual if needed
+# .\entra-lab-provision.ps1 22f484c3-b754-45aa-8cec-e40bb48bcb34 aiapps.top lab6 369 369
+# .\entra-lab-provision.ps1 bb2b6250-daa2-4e16-8387-2fa677dc4d7f aiapps.top lab7 374 374
+# .\entra-lab-provision.ps1 ac5c4d49-95c6-4b65-a273-5e3e562e7544 aiapps.top lab7 375 375
