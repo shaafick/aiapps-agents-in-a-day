@@ -26,7 +26,7 @@ You will be using your AI Proxy API Key that you registered for.
 
 2. Enter the **API Key** at top-right and click `Authorize` to login.
 
-   ![AI Tour Playground](./images/aitour-playground-chat.png)
+   ![AI Tour Playground](images/aitour-playground-chat.png)
 
 ## Explore
 
@@ -34,7 +34,7 @@ Once the **API Key** is entered, the playground application should update to sho
 
 Let's take a minute to familiarize ourselves with the different regions of this app.
 
-![AI Tour Playground Regions](./images/aitour-playground-regions-v1.png)
+![AI Tour Playground Regions](images/aitour-playground-regions-v1.png)
 
 - Region 1️⃣ | Once authorized, shows the event profile.
 - Region 2️⃣ | User prompt - used to enter text questions for AI
