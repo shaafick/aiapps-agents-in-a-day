@@ -219,7 +219,7 @@ export default Page;
 - Go to `apps-chat\chatbot-frontend` folder in terminal windows and run `npm run dev`
 - Navigate to `Speech` page in the top navigation bar
 - Type some texts into the input box
-- Click `Read` to play the speech
+- Click `Read` to play the speech (use Chrome for best compatibility)
 
 ## Real-World Applications
 
