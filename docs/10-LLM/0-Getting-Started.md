@@ -4,11 +4,8 @@ slug: /10-LLM-Setup
 ---
 
 :::info LAB PRE-REQUISITES
-
 - Access to the **AI Proxy Playground** (Use edge or chrome for the best experience)
 - Azure OpenAI API Key
-- VS Code
-
 :::
 
 For this lab you are using a custom playground build on top of the Azure OpenAI Service. In this playground you will have the opportunity to play with the prompts and learn how to build AI apps and agents.
