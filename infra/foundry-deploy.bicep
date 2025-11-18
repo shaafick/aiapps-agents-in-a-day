@@ -27,27 +27,16 @@ var openAiSettings = {
   maxConversationTokens: '100'
   maxCompletionTokens: '500'
   gptModel: {
-    name: 'gpt-4o'
+    name: 'gpt-4o' // if gpt-4o is not available, you can use gpt-4.1 but keep deployment name as gpt-4o
     version: '2024-05-13'
     deployment: {
-      name: 'gpt-4o' // if gpt-4o is not available, you can use gpt-4.1 but keep name as gpt-4o
+      name: 'gpt-4o'
     }
     sku: {
       name: 'GlobalStandard'
       capacity: 50
     }
   }
-  // embeddingsModel: {
-  //   name: 'text-embedding-3-small'
-  //   version: '1'
-  //   deployment: {
-  //     name: 'embeddings'
-  //   }
-  //   sku: {
-  //     name: 'Standard'
-  //     capacity: 50
-  //   }
-  // }
 }
 
 
