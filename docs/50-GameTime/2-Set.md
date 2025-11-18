@@ -1,7 +1,7 @@
 
 # Set
 
-The game server is hosted on Azure. We will have the server page open on the big screen.
+The game server is hosted on Azure. We will have the server page open on the big screen. https://aiaaa-s2-game-server.azurewebsites.net/
 
 ![alt text](images\image.png)
 
