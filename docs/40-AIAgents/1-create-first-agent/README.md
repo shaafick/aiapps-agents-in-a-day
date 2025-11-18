@@ -10,13 +10,9 @@ Let's start to create our first agent in Foundry
 
 Let's start creating Azure AI Foundry resource in Azure Portal.
 
-- Go to https://aiaaa-s2-setting.azurewebsites.net page in browser, and sign in with the password, then go to `Azure Login` page
-
-- Claim a Azure login in the lab demo Azure tenant using the `Claim a Login` panel. Once claimed, you can see login email, password and region in the table.
-
 - Then go to https://portal.azure.com/ in the browser
 
-- Sign in with your lab account, e.g. `lab1user310@aiapps.top`. Use the azure login provided.
+- Sign in with your lab account, e.g. `lab1user310@aiapps.top`. Use the azure login and password you have claimed in the `Lab Setup`.
 
 - Setup 2FA using Authenticator app if required. You can remove the account from Authenticator app after the lab.
 

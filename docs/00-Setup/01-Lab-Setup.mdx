@@ -22,6 +22,7 @@ The repository contains the following folders:
 - Game MCP Server: `~/apps-rps/rps-game-mcp`
 - Bicep Deployment: `~/infra`
 
+
 ## Lab Environment Setup
 
 <Tabs>
@@ -90,9 +91,22 @@ Once restarted, search `Windows Sandbox` in `Start` button.
 </Tabs>
 
 
+## Lab Azure login
+
+Let's now claim your Azure login in the demo Azure tenant.
+
+- Go to https://aiaaa-s2-setting.azurewebsites.net page in browser, and sign in with the password (the password will be shared during the day)
+
+- Navigate to `Azure Login` page and find `Claim a login` section
+
+- Claim a Azure login by entering `Your Name` so that we can retrieve this login later. 
+
+- Once claimed, you can see Azure `login email`, `password` and `region` in the table. Make a note of the information, save them to a local notepad file. You will need these details later on.
+
+
 ## Lab Configuration & Verify Connection
 
-Let us test the connection to Cosmos DB instance and OpenAI service.
+Next step is to test the connection to Cosmos DB instance and OpenAI service.
 
 1.  Open VS Code and navigate to the `aiapps-agents` repository folder. If you are using Codespaces, you should already be in the repository folder.
 
@@ -101,11 +115,7 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
     cd labs/00-Setup/
     ```
 
-3.  Open `setup.sh`, let's update `<DEV_Name>` setting with your own database name. Replace `add_value` with your assigned lab username (for example: `lab1user310`).
-
-    :::info
-    if you are deploying your own Azure resources (optional), please update keys and connection string with your own.
-    :::
+3.  Open `setup.sh`, let's update `<DEV_Name>` setting with the Azure login name you claimed earlier. e.g. if you azure login is `lab1user310@aiapps.top`, then enter `<DEV_Name>` as `lab1user310`. Replace `add_value` with your assigned lab username (for example: `lab1user310`).
 
     ![edit setting](images/edit-settings-v1.png)
 
@@ -137,29 +147,33 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
     ./setup.sh
     ```
 
-    :::info Plan B (Skip if 5 worked)
+    <details>
+        <summary>Plan B (Skip if Step 5 worked)</summary>
 
-    If the above step does not work for you, use the `setup-auto.js` script to automatically fetch all configuration values from https://aiaaa-s2-setting.azurewebsites.net/api/configuration/all and replace the placeholders in your setup script. Run it to complete the replacement process.
+        If the above step does not work for you, use the `setup-auto.js` script to automatically fetch all configuration values from https://aiaaa-s2-setting.azurewebsites.net/api/configuration/all and replace the placeholders in your setup script. Run it to complete the replacement process.
 
-    - Check and revert any file edits in the VS Code git tab. The setup script can only be run once.
-    - Open `setup-auto.sh`, let's update `<DEV_Name>` setting with your own database name. Replace `add_value` with your assigned login name `lab1user310` (for example: lab1user310).
-    ![setup auto edit](images/setup-auto-edit.png)
-    
-    - Run below script
-    ```bash
-    chmod +x setup-auto.sh 
-    ./setup-auto.sh
-    ```
-    :::
+        - Check and revert any file edits in the VS Code git tab. The setup script can only be run once.
+        - Open `setup-auto.sh`, let's update `<DEV_Name>` setting with your own database name. Replace `add_value` with your assigned login name `lab1user310` (for example: lab1user310).
+        ![setup auto edit](images/setup-auto-edit.png)
+        
+        - Run below script
+        
+        ```bash
+        chmod +x setup-auto.sh 
+        ./setup-auto.sh
+        ```
+    </details>
 
-    :::info Plan C (Skip if Plan B worked)
-    If you have issue running above script, you can also carry out variable replacement manually. 
-    - Switch to VS Code `Search` tab, replace `<DEV_Name>` placeholder with your own database name. 
-    - Search for `<DEV_Name>` and replace with your assigned lab username (for example: `lab1user310`). 
-    - Then click `Replace All` icon, there will be multiple items to be replaced. The placeholder string will be replaced in the whole repo so that you have a dedicated database on the shared Cosmos DB instance.
+    <details>
+    <summary>Plan C (Skip if Plan B worked)</summary>
 
-    ![alt text](images/setup.png)
-    :::
+        If you have issue running above script, you can also carry out variable replacement manually. 
+        - Switch to VS Code `Search` tab, replace `<DEV_Name>` placeholder with your own database name. 
+        - Search for `<DEV_Name>` and replace with your assigned lab username (for example: `lab1user310`). 
+        - Then click `Replace All` icon, there will be multiple items to be replaced. The placeholder string will be replaced in the whole repo so that you have a dedicated database on the shared Cosmos DB instance.
+
+        ![alt text](images/setup.png)
+    </details>
 
 6.  Install node packages for test program.
 
