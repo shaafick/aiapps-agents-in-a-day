@@ -119,7 +119,7 @@ const Page = () => {
     }
 
     async function translationApi(text: string): Promise<string> {
-        const translation_url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=en&from=fr`;
+        const translation_url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=fr&from=en`;
         const translation_key = "<Translator_Service_API_Key>";
 
         const body = [{
