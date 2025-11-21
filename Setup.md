@@ -8,6 +8,8 @@
 
 - Go to Azure Portal and Entra -> Users. Search for login name starting with `lab`, select all items in the list and delete them. 
 
+- Login to Azure CLI using `az login`. `az login --tenant f1146386-451a-4cc6-846b-a67f747921e9 --use-device-code`, sign in as `admin@aiapps.top`
+
 - Go to `infra` folder, check `entra-lab-deprovision-exec.ps1` script and run it. make sure to uncomment lines as required.
 
 - Go to Azure Portal and Foundry. Purge all deleted resources for each subscription. 
