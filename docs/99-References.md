@@ -10,6 +10,8 @@ Special thanks to the original developers for their content and labs.
 
 ### AI Agents for Beginners - A Course
 
+Most of the AI agent content is from below repo.
+
 https://github.com/microsoft/ai-agents-for-beginners
 
 ### Azure OpenAI Cosmos DB hackathon
