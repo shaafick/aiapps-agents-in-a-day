@@ -2,7 +2,9 @@
 
 ## Provisioning Resources
 
+- Go to `infra` folder, check `entra-lab-provision-exec.ps1` script and run it. make sure to uncomment lines as required.
 
+- open `apps\setting-api` in VS Code, update the password value in `login.json` and deploy manually from VS Code. the app is hosted in insight demo tenant called `aiaaa-s2-setting`
 
 ## Deprovisioning Resources
 
