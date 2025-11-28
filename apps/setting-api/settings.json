@@ -24,7 +24,7 @@
   {
     "Id": 4,
     "Name": "AZURE_OPENAI_API_ENDPOINT",
-    "Value": "https://aiaaa-s2-openai.openai.azure.com//",
+    "Value": "https://aiaaa-s2-openai.openai.azure.com/",
     "Description": "Base endpoint URL for Azure OpenAI API calls",
     "Category": "Azure OpenAI Resource Configuration",
     "Placeholder": true
@@ -114,30 +114,34 @@
   {
     "Id": 18,
     "Name": "Translator Service Endpoint",
-    "Value": "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=xx&from=xx",
+    "Value": "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0",
     "Description": "Endpoint for Azure Translator service (replace xx with language codes)",
-    "Category": "Azure AI Resource Configuration"
+    "Category": "Azure AI Resource Configuration",
+    "Placeholder": true
   },
   {
     "Id": 19,
     "Name": "Translator Service API Key",
     "Value": "",
     "Description": "API key for Translator service access",
-    "Category": "Azure AI Resource Configuration"
+    "Category": "Azure AI Resource Configuration",
+    "Placeholder": true
   },
   {
     "Id": 20,
     "Name": "Speech Service Endpoint",
     "Value": "https://eastus.api.cognitive.microsoft.com/",
     "Description": "Endpoint for Azure Speech service (region: eastus)",
-    "Category": "Azure AI Resource Configuration"
+    "Category": "Azure AI Resource Configuration",
+    "Placeholder": true
   },
   {
     "Id": 21,
     "Name": "Speech Service API Key",
     "Value": "",
     "Description": "API key for Speech service access",
-    "Category": "Azure AI Resource Configuration"
+    "Category": "Azure AI Resource Configuration",
+    "Placeholder": true
   },
   {
     "Id": 22,
@@ -158,9 +162,9 @@
   {
     "Id": 24,
     "Name": "DEV_Name",
-    "Value": "lab1user310",
+    "Value": "",
     "Description": "for example: lab1user310",
     "Category": "Azure Foundry",
-    "Placeholder": true
+    "Placeholder": false
   }
 ]
