@@ -4,7 +4,20 @@
 
 - Go to `infra` folder, check `entra-lab-provision-exec.ps1` script and run it. make sure to uncomment lines as required.
 
-- open `apps\setting-api` in VS Code, update the password value in `login.json` and deploy manually from VS Code. the app is hosted in insight demo tenant called `aiaaa-s2-setting`
+- open `apps\setting-api` in VS Code, update the password value in `login.json`, also fill in the api keys inside `setting.json` 
+
+```
+Azure OpenAI API Key
+AZURE_OPENAI_API_KEY
+MONGODB_CONNECTION_STRING
+GPT-4o API Key
+Dall-e 3 API Key
+Computer Vision API Key
+Translator Service API Key
+Speech Service API Key
+```
+
+- deploy `apps\setting-api` manually from VS Code. the app is hosted in insight demo tenant called `aiaaa-s2-setting`. 
 
 ## Deprovisioning Resources
 
