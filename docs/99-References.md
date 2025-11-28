@@ -8,6 +8,10 @@ The lab and tutorials have been adapted from the following Microsoft repositorie
 Special thanks to the original developers for their content and labs.
 :::
 
+### AI Agents for Beginners - A Course
+
+https://github.com/microsoft/ai-agents-for-beginners
+
 ### Azure OpenAI Cosmos DB hackathon
 
 https://github.com/AzureCosmosDB/Azure-OpenAI-Node.js-Developer-Guide
