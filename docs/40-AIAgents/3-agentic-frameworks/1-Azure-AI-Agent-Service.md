@@ -22,7 +22,7 @@ python game_agent_v3_aiagent.py
 ```
 ![AI Agent](images/aiagent.png)
 
-- navigate to Azure AI Foundry portal, you should see the agent created in the portal.
+- navigate to Microsoft Foundry portal, you should see the agent created in the portal.
 
 - you can also interact with the agent in the portal playground.
 
@@ -33,7 +33,7 @@ Azure AI Agent Service has the following core concepts:
 
 ### Agent
 
-Azure AI Agent Service integrates with Azure AI Foundry. Within AI Foundry, an AI Agent acts as a "smart" microservice that can be used to answer questions (RAG), perform actions, or completely automate workflows. It achieves this by combining the power of generative AI models with tools that allow it to access and interact with real-world data sources. Here's an example of an agent:
+Azure AI Agent Service integrates with Microsoft Foundry. Within AI Foundry, an AI Agent acts as a "smart" microservice that can be used to answer questions (RAG), perform actions, or completely automate workflows. It achieves this by combining the power of generative AI models with tools that allow it to access and interact with real-world data sources. Here's an example of an agent:
 
     ```python
     agent = project_client.agents.create_agent(

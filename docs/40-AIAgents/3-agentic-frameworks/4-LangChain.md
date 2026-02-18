@@ -19,6 +19,6 @@ cd labs/40-AIAgents
 python game_agent_v3_langchain.py
 ```
 
-![Azure AI Foundry Project](./images/langchain.png)
+![Microsoft Foundry Project](./images/langchain.png)
 
 

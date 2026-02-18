@@ -141,7 +141,7 @@ As we learned earlier in agentic frameworks provide us with pre-built building b
 
 Here are some examples of how you can implement the Tool Use Design Pattern using different agentic frameworks:
 
-### Azure AI Agent Service
+### Foundry Agent Service
 
 <a href="https://learn.microsoft.com/azure/ai-services/agents/overview" target="_blank">Azure AI Agent Service</a> is a newer agentic framework that is designed to empower developers to securely build, deploy, and scale high-quality, and extensible AI agents without needing to manage the underlying compute and storage resources. It is particularly useful for enterprise applications since it is a fully managed service with enterprise grade security.
 

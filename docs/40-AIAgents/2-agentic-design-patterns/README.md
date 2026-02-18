@@ -88,7 +88,7 @@ cd labs/40-AIAgents
 pip install -r requirements.txt
 ```
 
-- open `.env` file, update the `AZURE_FOUNDRY_PROJECT_ENDPOINT` value to your Azure AI Foundry project endpoint. You can find it in the Azure AI Foundry portal, under `Overview` page.
+- open `.env` file, update the `AZURE_FOUNDRY_PROJECT_ENDPOINT` value to your Microsoft Foundry project endpoint. You can find it in the Microsoft Foundry portal, under `Overview` page.
 
 ```
 AZURE_FOUNDRY_PROJECT_ENDPOINT=https://aiapps-agents-aiservices-793ad4.services.ai.azure.com/models
@@ -104,7 +104,7 @@ python game_agent_v2_llm.py
 ```
 ![alt text](images\image-7.png)
 
-- navigate to Azure AI Foundry portal, you should see the agent created in the portal.
+- navigate to Microsoft Foundry portal, you should see the agent created in the portal.
 
 ![alt text](images\image-9.png)
 

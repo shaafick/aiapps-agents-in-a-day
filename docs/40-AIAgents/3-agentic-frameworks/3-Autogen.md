@@ -27,7 +27,7 @@ cd labs/40-AIAgents
 python game_agent_v3_autogen.py
 ```
 
-![Azure AI Foundry Project](./images/autogen.png)
+![Microsoft Foundry Project](./images/autogen.png)
 
 ## Agents
 

@@ -8,7 +8,7 @@ Let's start to create our first agent in Foundry
 
 ## Access Azure Portal
 
-Let's start creating Azure AI Foundry resource in Azure Portal.
+Let's start creating Microsoft Foundry resource in Azure Portal.
 
 - Then go to https://portal.azure.com/ in the browser
 
@@ -21,7 +21,7 @@ Let's start creating Azure AI Foundry resource in Azure Portal.
 
 ## Sign in to Azure CLI
 
-We will use bicep template to deploy the Azure AI Foundry and its related resources via Azure Cli. 
+We will use bicep template to deploy the Microsoft Foundry and its related resources via Azure Cli. 
 
 - Use your lab login to sign into Azure Cli. `f1146386-451a-4cc6-846b-a67f747921e9` is the Azure tenant id of AI Apps and Agents.
 
@@ -55,7 +55,7 @@ az login --tenant f1146386-451a-4cc6-846b-a67f747921e9 --use-device-code
 If you get this error `Found multiple accounts with the same username 'lab1user310@aiapps.top'`, use `az account clear` to clear the cached account info and try again.
 :::
 
-## Deploy Azure AI Foundry Resource
+## Deploy Microsoft Foundry Resource
 
 - navigate to `infra` folder, open `lab-deploy.bicep` file.
 
@@ -86,21 +86,21 @@ az deployment group create --resource-group rg-lab1user310 --template-file ./fou
 
 ![alt text](images\image-6.png)
 
-- once the deployment is completed, navigate to Azure Portal, you should see Azure AI Foundry resource created inside.
+- once the deployment is completed, navigate to Azure Portal, you should see Microsoft Foundry resource created inside.
 
-### Explore Azure AI Foundry
+### Explore Microsoft Foundry
 
 - We have provisioned an Foundry resource in earlier step. Open the following link in your browser: [https://ai.azure.com/](https://ai.azure.com/).
 
-- Azure AI Foundry portal should look like below:
+- Microsoft Foundry portal should look like below:
 
-![Azure AI Foundry Project](./images/azure-ai-foundry_v1.png)
+![Microsoft Foundry Project](./images/azure-ai-foundry_v1.png)
 
 - In the pane on the left for your project, in the **My assets** section, select the **Models + endpoints** page.
 
 - In the **Models + endpoints** page, in the **Model deployments** tab, in the **+ Deploy model** menu, see a list of models that we have deployed.
 
-## Azure AI Foundry Agent Service
+## Microsoft Foundry Agent Service
 
 Now that you have deployed a model, you can create an agent. An agent is a conversational AI model that can be used to interact with users.
 
@@ -147,7 +147,7 @@ Now that you have deployed a model, you can create an agent. An agent is a conve
 
 ## Test the agent
 
-After creating the agent, you can test it to see how it responds to user queries in Azure AI Foundry portal playground.
+After creating the agent, you can test it to see how it responds to user queries in Microsoft Foundry portal playground.
 
 - At the top of the **Setup** pane for your agent, select **Try in playground**.
 

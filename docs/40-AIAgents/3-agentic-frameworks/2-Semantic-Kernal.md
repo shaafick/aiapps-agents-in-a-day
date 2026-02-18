@@ -19,10 +19,10 @@ cd labs/40-AIAgents
 python game_agent_v3_sk.py
 ```
 
-![Azure AI Foundry Project](./images/semantic_kernel.png)
+![Microsoft Foundry Project](./images/semantic_kernel.png)
 
 
-- because the semantic kernal agent does not use a managed service, so you can't see it in the Azure AI Foundry portal.
+- because the semantic kernal agent does not use a managed service, so you can't see it in the Microsoft Foundry portal.
 
 
 ## AI Connectors
