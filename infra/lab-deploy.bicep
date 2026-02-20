@@ -5,6 +5,9 @@ param location string = 'eastus'
 @description('Application name prefix')
 param appName string = 'aiapps-agents'
 
+@description('MongoDB administrator username')
+param mongoDbUserName string = 'aiaaaadmin'
+
 // Variables
 var resourcePrefix = '${appName}-s2'
 var logAnalyticsName = '${resourcePrefix}-la'
@@ -16,8 +19,9 @@ var acrName = replace('${resourcePrefix}acr', '-', '')
 var cosmosDbAccountName = '${resourcePrefix}-cosmos'
 var searchServiceName = '${resourcePrefix}-search'
 var mongoClusterName = '${resourcePrefix}-mongo'
-var mongoDbUserName = 'aiaaaadmin'
-var mongoDbPassword = 'aiaaaP@ssword123'
+
+// Auto-generate MongoDB password using unique string based on resource group and subscription
+var mongoDbPassword = 'Mongo-${uniqueString(resourceGroup().id, subscription().subscriptionId)}-${substring(newGuid(), 0, 8)}!'
 
 var staticWebAppName = '${resourcePrefix}-swa'
 
@@ -164,6 +168,49 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
     provisioningState: 'Succeeded'
     publicNetworkAccess: 'Enabled'
   }
+}
+
+// Store MongoDB password in Key Vault
+resource mongoPasswordSecret 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
+  parent: keyVault
+  name: 'mongodb-password'
+  properties: {
+    value: mongoDbPassword
+    contentType: 'text/plain'
+    attributes: {
+      enabled: true
+    }
+  }
+}
+
+// Store MongoDB username in Key Vault
+resource mongoUsernameSecret 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
+  parent: keyVault
+  name: 'mongodb-username'
+  properties: {
+    value: mongoDbUserName
+    contentType: 'text/plain'
+    attributes: {
+      enabled: true
+    }
+  }
+}
+
+// Store MongoDB connection string in Key Vault
+resource mongoConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
+  parent: keyVault
+  name: 'mongodb-connectionstring'
+  properties: {
+    value: mongoCluster.listConnectionStrings().connectionStrings[0].connectionString
+    contentType: 'text/plain'
+    attributes: {
+      enabled: true
+    }
+  }
+  dependsOn: [
+    mongoFirewallRulesAllowAzure
+    mongoFirewallRulesAllowAll
+  ]
 }
 
 // Azure Container Registry
@@ -738,4 +785,3 @@ resource aiFoundryProject 'Microsoft.MachineLearningServices/workspaces@2024-04-
     publicNetworkAccess: 'Enabled'
   }
 }
-
