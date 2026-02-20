@@ -6,7 +6,7 @@ from azure.identity import DefaultAzureCredential
 load_dotenv()
 
 class GameAgent:
-    """Azure AI Foundry Agent service for RPS Tournament"""
+    """Microsoft Foundry Agent service for RPS Tournament"""
     
     def __init__(self, project_endpoint=None, model_deployment_name=None, player_name=None):
         self.project_endpoint = project_endpoint or os.getenv('AZURE_FOUNDRY_PROJECT_ENDPOINT')
@@ -70,7 +70,7 @@ class GameAgent:
         self.thread = self.project_client.agents.threads.create()
     
     def _call_azure_ai_agent(self, message):
-        """Call Azure AI Foundry Agent service"""
+        """Call Microsoft Foundry Agent service"""
         self.project_client.agents.messages.create(
             thread_id=self.thread.id,
             role="user",
@@ -91,7 +91,7 @@ class GameAgent:
         return "No response"
     
     def answer_question(self, question):
-        """Generate an answer to the question using Azure AI Foundry Agent service"""
+        """Generate an answer to the question using Microsoft Foundry Agent service"""
         if not self.agent:
             self._setup_agent()
         return self._call_azure_ai_agent(question)

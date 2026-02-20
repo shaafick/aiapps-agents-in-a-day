@@ -36,10 +36,12 @@ This is a fast-moving landscape, but there are some things that are common acros
 
 ## AI Agent Frameworks
 
-- **Azure AI Agent Service**: Is a platform and deployment service in Azure Foundry for agents. It offers building connectivity to services support by Azure Found like Azure OpenAI, Azure AI Search, Bing Search and code execution.
-- **Semantic Kernel**: Is a production-ready agent library for building enterprise agentic applications. Focuses on event-driven, distributed agentic applications, enabling multiple LLMs and SLMs, tools, and single/multi-agent design patterns.
-- **AutoGen**: Is an experimentation framework focused on leading-edge research on multi-agent systems. It is the best place to experiment and prototype sophisticated multi-agent systems.
-- **LangChain**: Is a widely adopted open-source framework for building applications powered by language models. It provides a suite of tools and abstractions to facilitate the development of AI-driven applications. 
+- **[Azure AI Agent Service](./1-Azure-AI-Agent-Service.md)**: Is a platform and deployment service in Azure Foundry for agents. It offers building connectivity to services support by Azure Found like Azure OpenAI, Azure AI Search, Bing Search and code execution.
+- **[Semantic Kernel](./2-Semantic-Kernal.md)**: Is a production-ready agent library for building enterprise agentic applications. Focuses on event-driven, distributed agentic applications, enabling multiple LLMs and SLMs, tools, and single/multi-agent design patterns.
+- **[Microsoft Agent Framework](./4-Microsoft-Agent-Framework.md)**: Is a lightweight framework for building AI agents with Azure OpenAI. Provides flexible, local-first agent development with full control over conversation management and deployment architecture.
+- **[AutoGen](./3-Autogen.md)**: Is an experimentation framework focused on leading-edge research on multi-agent systems. It is the best place to experiment and prototype sophisticated multi-agent systems.
+- **[GitHub Copilot SDK](./5-GitHub-Copilot-SDK.md)**: Enables building custom AI agents using BYOK (Bring Your Own Key) with Azure OpenAI. Provides Copilot patterns with full control over credentials, billing, and model configuration for enterprise scenarios.
+- **[LangChain](./5-LangChain.md)**: Is a widely adopted open-source framework for building applications powered by language models. It provides a suite of tools and abstractions to facilitate the development of AI-driven applications. 
 
 There are many ways to compare these frameworks, we can look at some key differences in terms of their design, capabilities, and target use cases. It does sound like there is a lot of overlap between these frameworks, but there are some key differences in terms of their design, capabilities, and target use cases.
 
@@ -50,6 +52,8 @@ Let's summarize the key differences in a table:
 | LangChain | Understanding and generating human-like text content | Agents, Modular Components, Collaboration | Natural language understanding, content generation |
 | AutoGen | Event-driven, distributed agentic applications | Agents, Personas, Functions, Data | Code generation, data analysis tasks |
 | Semantic Kernel | Understanding and generating human-like text content | Agents, Modular Components, Collaboration | Natural language understanding, content generation |
+| Microsoft Agent Framework | Lightweight local/hybrid agent development | Conversation Management, Direct Azure OpenAI Integration | Simple agents, edge deployments, full control scenarios |
+| GitHub Copilot SDK | BYOK agent development with Copilot patterns | BYOK Credentials, Custom Deployments, Enterprise Control | Custom Copilot extensions, enterprise security, cost management |
 | Azure AI Agent Service | Flexible models, enterprise security, Code generation, Tool calling | Modularity, Collaboration, Process Orchestration | Secure, scalable, and flexible AI agent deployment |
 
 

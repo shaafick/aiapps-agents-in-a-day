@@ -1,35 +1,32 @@
 
 # Agentic RAG
 
-This lesson provides a comprehensive overview of Agentic Retrieval-Augmented Generation (Agentic RAG), an emerging AI paradigm where large language models (LLMs) autonomously plan their next steps while pulling information from external sources. Unlike static retrieval-then-read patterns, Agentic RAG involves iterative calls to the LLM, interspersed with tool or function calls and structured outputs. The system evaluates results, refines queries, invokes additional tools if needed, and continues this cycle until a satisfactory solution is achieved.
+This lesson provides a comprehensive overview of Agentic Retrieval-Augmented Generation (Agentic RAG), a paradigm where large language models autonomously plan and execute multi-step reasoning processes while pulling information from external sources.
 
 ## What is Agentic RAG?
 
-Agentic Retrieval-Augmented Generation (Agentic RAG) is an emerging AI paradigm where large language models (LLMs) autonomously plan their next steps while pulling information from external sources. Unlike static retrieval-then-read patterns, Agentic RAG involves iterative calls to the LLM, interspersed with tool or function calls and structured outputs. The system evaluates results, refines queries, invokes additional tools if needed, and continues this cycle until a satisfactory solution is achieved. This iterative “maker-checker” style improves correctness, handles malformed queries, and ensures high-quality results.
+Agentic Retrieval-Augmented Generation (Agentic RAG) is a paradigm in AI development where LLMs pull information from external data sources and autonomously plan their next steps. Unlike static retrieval-then-read patterns or carefully scripted prompt sequences, Agentic RAG involves a loop of iterative calls to the LLM, interspersed with tool or function calls and structured outputs. At every turn, the system evaluates the results it has obtained, decides whether to refine its queries, invokes additional tools if needed, and continues this cycle until it achieves a satisfactory solution.
 
-The system actively owns its reasoning process, rewriting failed queries, choosing different retrieval methods, and integrating multiple tools—such as vector search in Azure AI Search, SQL databases, or custom APIs—before finalizing its answer. The distinguishing quality of an agentic system is its ability to own its reasoning process. Traditional RAG implementations rely on pre-defined paths, but an agentic system autonomously determines the sequence of steps based on the quality of the information it finds.
+This iterative "maker-checker" style of operation improves correctness, handles malformed queries to structured databases (e.g. NL2SQL), and ensures balanced, high-quality results. Rather than relying solely on carefully engineered prompt chains, the system actively owns its reasoning process. It can rewrite queries that fail, choose different retrieval methods, and integrate multiple tools—such as vector search in Azure AI Search, SQL databases, or custom APIs—before finalizing its answer. 
 
-## Defining Agentic Retrieval-Augmented Generation (Agentic RAG)
-
-Agentic Retrieval-Augmented Generation (Agentic RAG) is an emerging paradigm in AI development where LLMs not only pull information from external data sources but also autonomously plan their next steps. Unlike static retrieval-then-read patterns or carefully scripted prompt sequences, Agentic RAG involves a loop of iterative calls to the LLM, interspersed with tool or function calls and structured outputs. At every turn, the system evaluates the results it has obtained, decides whether to refine its queries, invokes additional tools if needed, and continues this cycle until it achieves a satisfactory solution.
-
-This iterative “maker-checker” style of operation is designed to improve correctness, handle malformed queries to structured databases (e.g. NL2SQL), and ensure balanced, high-quality results. Rather than relying solely on carefully engineered prompt chains, the system actively owns its reasoning process. It can rewrite queries that fail, choose different retrieval methods, and integrate multiple tools—such as vector search in Azure AI Search, SQL databases, or custom APIs—before finalizing its answer. This removes the need for overly complex orchestration frameworks. Instead, a relatively simple loop of “LLM call → tool use → LLM call → …” can yield sophisticated and well-grounded outputs.
+The distinguishing quality of an agentic system is its ability to own its reasoning process. Traditional RAG implementations depend on humans pre-defining a path for the model, but an agentic system autonomously determines the sequence of steps based on the quality of the information it finds. This removes the need for overly complex orchestration frameworks. Instead, a relatively simple loop of "LLM call → tool use → LLM call → …" can yield sophisticated and well-grounded outputs.
 
 ![Agentic RAG Core Loop](./images/agentic-rag-core-loop.png)
 
 ## Owning the Reasoning Process
 
-The distinguishing quality that makes a system “agentic” is its ability to own its reasoning process. Traditional RAG implementations often depend on humans pre-defining a path for the model: a chain-of-thought that outlines what to retrieve and when.
-But when a system is truly agentic, it internally decides how to approach the problem. It’s not just executing a script; it’s autonomously determining the sequence of steps based on the quality of the information it finds.
-For example, if it’s asked to answer a complex RPS tournament question and select an optimal move, it doesn’t rely solely on a prompt that spells out the entire research and decision-making workflow. Instead, the agentic model independently decides to:
+The distinguishing quality that makes a system "agentic" is its ability to own its reasoning process. Traditional RAG implementations depend on humans pre-defining a path for the model. In contrast, an agentic system internally decides how to approach the problem, autonomously determining the sequence of steps based on the quality of the information it finds.
 
-1. Search its knowledge base for the specific question topic using vector search
-2. Retrieve related contextual information using Azure AI Search to enhance accuracy 
-3. Cross-reference multiple sources to validate the answer's correctness
-4. Analyze opponent move patterns from tournament history using Azure SQL Database
-5. Synthesize all findings to provide both an accurate answer and strategic move recommendation
-6. Evaluate the confidence level and iterate if needed for tournament-critical decisions
-All of these steps—refining queries, choosing sources, iterating until “happy” with the answer—are decided by the model, not pre-scripted by a human.
+For example, when answering a complex RPS tournament question and selecting an optimal move, the agentic model independently:
+
+1. Searches its knowledge base for the specific question topic using vector search
+2. Retrieves related contextual information using Azure AI Search to enhance accuracy 
+3. Cross-references multiple sources to validate the answer's correctness
+4. Analyzes opponent move patterns from tournament history using Azure SQL Database
+5. Synthesizes all findings to provide both an accurate answer and strategic move recommendation
+6. Evaluates the confidence level and iterates if needed for tournament-critical decisions
+
+These steps are decided by the model, not pre-scripted by a human.
 
 ## Iterative Loops, Tool Integration, and Memory
 
@@ -140,4 +137,4 @@ python game_agent_v4_rag.py
 
 ## Conclusion
 
-Agentic RAG represents a natural evolution in how AI systems handle complex, data-intensive tasks. By adopting a looped interaction pattern, autonomously selecting tools, and refining queries until achieving a high-quality result, the system moves beyond static prompt-following into a more adaptive, context-aware decision-maker. While still bounded by human-defined infrastructures and ethical guidelines, these agentic capabilities enable richer, more dynamic, and ultimately more useful AI interactions for both enterprises and end-users.
+Agentic RAG represents an evolution in how AI systems handle complex, data-intensive tasks. By autonomously selecting tools and refining queries until achieving high-quality results, the system moves beyond static prompt-following into a more adaptive, context-aware decision-maker. While bounded by human-defined infrastructures and ethical guidelines, these agentic capabilities enable richer, more dynamic, and more useful AI interactions.

@@ -143,15 +143,15 @@ Here are some examples of how you can implement the Tool Use Design Pattern usin
 
 ### Foundry Agent Service
 
-<a href="https://learn.microsoft.com/azure/ai-services/agents/overview" target="_blank">Azure AI Agent Service</a> is a newer agentic framework that is designed to empower developers to securely build, deploy, and scale high-quality, and extensible AI agents without needing to manage the underlying compute and storage resources. It is particularly useful for enterprise applications since it is a fully managed service with enterprise grade security.
+<a href="https://learn.microsoft.com/en-au/azure/ai-foundry/agents/overview?view=foundry-classic" target="_blank">Foundry Agent Service</a> is a production-ready platform designed to empower developers to securely build, deploy, and scale high-quality, extensible AI agents. It abstracts away infrastructure complexity by providing server-side orchestration, tool management, and conversation handling. It is particularly useful for enterprise applications since it offers enterprise-grade security, governance, and the flexibility to bring your own Azure resources to meet compliance needs.
 
-When compared to developing with the LLM API directly, Azure AI Agent Service provides some advantages, including:
+When compared to developing with the LLM API directly, Foundry Agent Service provides some advantages, including:
 
 - Automatic tool calling – no need to parse a tool call, invoke the tool, and handle the response; all of this is now done server-side
 - Securely managed data – instead of managing your own conversation state, you can rely on threads to store all the information you need
 - Out-of-the-box tools – Tools that you can use to interact with your data sources, such as Bing, Azure AI Search, and Azure Functions.
 
-The tools available in Azure AI Agent Service can be divided into two categories:
+The tools available in Foundry Agent Service can be divided into two categories:
 
 1. Knowledge Tools:
     - <a href="https://learn.microsoft.com/azure/ai-services/agents/how-to/tools/bing-grounding?tabs=python&pivots=overview" target="_blank">Grounding with Bing Search</a>
@@ -168,7 +168,7 @@ The Agent Service allows us to be able to use these tools together as a `toolset
 
 Imagine you are a sales agent at a company called Contoso. You want to develop a conversational agent that can answer questions about your sales data.
 
-The following image illustrates how you could use Azure AI Agent Service to analyze your sales data:
+The following image illustrates how you could use Foundry Agent Service to analyze your sales data:
 
 ![Agentic Service In Action](./images/agent-service-in-action.jpg)
 

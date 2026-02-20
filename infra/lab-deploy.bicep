@@ -650,10 +650,10 @@ resource translatorService 'Microsoft.CognitiveServices/accounts@2021-04-30' = {
 
 
 // -----------------------
-// Azure AI Foundry Hub
+// Microsoft Foundry Hub
 // -----------------------
 
-// Azure AI Foundry Hub Workspace
+// Microsoft Foundry Hub Workspace
 resource aiFoundryHub 'Microsoft.MachineLearningServices/workspaces@2024-04-01-preview' = {
   name: aiFoundryWorkspaceName
   location: location
@@ -724,7 +724,7 @@ resource aoaiConnection 'Microsoft.MachineLearningServices/workspaces/connection
   }
 }
 
-// Azure AI Foundry Project Workspace
+// Microsoft Foundry Project Workspace
 resource aiFoundryProject 'Microsoft.MachineLearningServices/workspaces@2024-04-01-preview' = {
   name: aiFoundryProjectName
   location: location

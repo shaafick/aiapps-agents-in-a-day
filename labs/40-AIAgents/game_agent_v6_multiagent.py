@@ -139,7 +139,7 @@ class GameAgent:
         self.thread = self.project_client.agents.threads.create()
     
     def _call_azure_ai_agent(self, message):
-        """Call Azure AI Foundry Agent service"""
+        """Call Microsoft Foundry Agent service"""
         self.project_client.agents.messages.create(
             thread_id=self.thread.id,
             role="user",
@@ -176,7 +176,7 @@ class GameAgent:
     
     
     def answer_question(self, question):
-        """Generate an answer to the question using Azure AI Foundry Agent service"""
+        """Generate an answer to the question using Microsoft Foundry Agent service"""
         if not self.agent:
             self._setup_agent()
         return self._call_azure_ai_agent(question)

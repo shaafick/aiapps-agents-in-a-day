@@ -1,11 +1,11 @@
 
 # Azure AI Agent Service
 
-Azure AI Agent Service is a more recent addition, introduced at Microsoft Ignite 2024. It allows for the development and deployment of AI agents with more flexible models, such as directly calling open-source LLMs like Llama 3, Mistral, and Cohere.
+Azure AI Agent Service allows for the development and deployment of AI agents with flexible models, such as directly calling open-source LLMs like Llama 3, Mistral, and Cohere.
 
 Azure AI Agent Service provides stronger enterprise security mechanisms and data storage methods, making it suitable for enterprise applications. 
 
-It works out-of-the-box with multi-agent orchestration frameworks like AutoGen and Semantic Kernel. Using Semantic Kernel Python, we can create an Azure AI Agent with a user-defined plugin:
+It works out-of-the-box with multi-agent orchestration frameworks like AutoGen, Semantic Kernel and Microsoft Agent Framework. Using Semantic Kernel Python, we can create an Azure AI Agent with a user-defined plugin:
 
 ## Create AI Agent Service Agent
 
@@ -71,7 +71,7 @@ The thread is another important concept. It represents a conversation or interac
 
 ### Integrates with other AI frameworks
 
- Azure AI Agent service can interact with other frameworks like AutoGen and Semantic Kernel, which means you can build part of your app in one of these frameworks and for example using the Agent service as an orchestrator or you can build everything in the Agent service.
+Azure AI Agent Service works seamlessly with AutoGen, Semantic Kernel, and Microsoft Agent Framework, enabling flexible architecture options: use it as an orchestrator, combine it with other frameworks, or build your entire application within it.
 
 **Use Cases**: Azure AI Agent Service is designed for enterprise applications that require secure, scalable, and flexible AI agent deployment.
 
