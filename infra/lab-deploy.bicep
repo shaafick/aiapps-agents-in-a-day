@@ -8,6 +8,10 @@ param appName string = 'aiapps-agents'
 @description('MongoDB administrator username')
 param mongoDbUserName string = 'aiaaaadmin'
 
+@secure()
+@description('MongoDB administrator password')
+param mongoDbPassword string = ''
+
 // Variables
 var resourcePrefix = '${appName}-s2'
 var logAnalyticsName = '${resourcePrefix}-la'
@@ -19,10 +23,6 @@ var acrName = replace('${resourcePrefix}acr', '-', '')
 var cosmosDbAccountName = '${resourcePrefix}-cosmos'
 var searchServiceName = '${resourcePrefix}-search'
 var mongoClusterName = '${resourcePrefix}-mongo'
-
-// Auto-generate MongoDB password using unique string based on resource group and subscription
-var mongoDbPassword = 'Mongo-${uniqueString(resourceGroup().id, subscription().subscriptionId)}-${substring(newGuid(), 0, 8)}!'
-
 var staticWebAppName = '${resourcePrefix}-swa'
 
 // Web app service names
