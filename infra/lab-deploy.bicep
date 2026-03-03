@@ -5,13 +5,6 @@ param location string = 'eastus'
 @description('Application name prefix')
 param appName string = 'aiapps-agents'
 
-@description('MongoDB administrator username')
-param mongoDbUserName string = 'aiaaaadmin'
-
-@secure()
-@description('MongoDB administrator password')
-param mongoDbPassword string = ''
-
 // Variables
 var resourcePrefix = '${appName}-s2'
 var logAnalyticsName = '${resourcePrefix}-la'
@@ -23,6 +16,9 @@ var acrName = replace('${resourcePrefix}acr', '-', '')
 var cosmosDbAccountName = '${resourcePrefix}-cosmos'
 var searchServiceName = '${resourcePrefix}-search'
 var mongoClusterName = '${resourcePrefix}-mongo'
+var mongoDbUserName = 'aiaaaadmin'
+var mongoDbPassword = '' // TODO: update in deployment
+
 var staticWebAppName = '${resourcePrefix}-swa'
 
 // Web app service names
@@ -47,13 +43,13 @@ var openAiSettings = {
   maxConversationTokens: '100'
   maxCompletionTokens: '500'
   gptModel: {
-    name: 'gpt-4o'
-    version: '2024-05-13'
+    name: 'gpt-4.1' 
+    version: '2025-04-14'
     deployment: {
-      name: 'gpt-4o'
+      name: 'gpt-4.1' 
     }
     sku: {
-      name: 'Standard'
+      name: 'GlobalStandard'
       capacity: 300
     }
   }
@@ -65,7 +61,7 @@ var openAiSettings = {
     }
     sku: {
       name: 'Standard'
-      capacity: 300
+      capacity: 25 // normally 300
     }
   }
   dalleModel: {
@@ -80,8 +76,6 @@ var openAiSettings = {
     }
   }
 }
-
-
 
 // Log Analytics Workspace (required for Application Insights)
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
@@ -170,49 +164,6 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
   }
 }
 
-// Store MongoDB password in Key Vault
-resource mongoPasswordSecret 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
-  parent: keyVault
-  name: 'mongodb-password'
-  properties: {
-    value: mongoDbPassword
-    contentType: 'text/plain'
-    attributes: {
-      enabled: true
-    }
-  }
-}
-
-// Store MongoDB username in Key Vault
-resource mongoUsernameSecret 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
-  parent: keyVault
-  name: 'mongodb-username'
-  properties: {
-    value: mongoDbUserName
-    contentType: 'text/plain'
-    attributes: {
-      enabled: true
-    }
-  }
-}
-
-// Store MongoDB connection string in Key Vault
-resource mongoConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
-  parent: keyVault
-  name: 'mongodb-connectionstring'
-  properties: {
-    value: mongoCluster.listConnectionStrings().connectionStrings[0].connectionString
-    contentType: 'text/plain'
-    attributes: {
-      enabled: true
-    }
-  }
-  dependsOn: [
-    mongoFirewallRulesAllowAzure
-    mongoFirewallRulesAllowAll
-  ]
-}
-
 // Azure Container Registry
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-07-01' = {
   name: acrName
@@ -260,7 +211,7 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-07-01' =
 // Cosmos DB Account
 resource cosmosDbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
   name: cosmosDbAccountName
-  location: location
+  location: 'eastus2'
   kind: 'GlobalDocumentDB'
   properties: {
     enableFreeTier: false
@@ -270,7 +221,7 @@ resource cosmosDbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
     }
     locations: [
       {
-        locationName: location
+        locationName: 'eastus2'
         failoverPriority: 0
         isZoneRedundant: false
       }
@@ -577,7 +528,7 @@ resource aiServiceGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/dep
       format: 'OpenAI'
       name: openAiSettings.gptModel.name
       version: openAiSettings.gptModel.version
-    }    
+    }
   }
 }
 
@@ -586,7 +537,7 @@ resource openAiAccount 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: openAiSettings.name
   location: location
   sku: {
-    name: openAiSettings.sku    
+    name: openAiSettings.sku
   }
   kind: 'OpenAI'
   properties: {
@@ -597,7 +548,7 @@ resource openAiAccount 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
 
 resource openAiEmbeddingsModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
   parent: openAiAccount
-  name: openAiSettings.embeddingsModel.deployment.name  
+  name: openAiSettings.embeddingsModel.deployment.name
   sku: {
     name: openAiSettings.embeddingsModel.sku.name
     capacity: openAiSettings.embeddingsModel.sku.capacity
@@ -626,7 +577,7 @@ resource openAiGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/deploy
       format: 'OpenAI'
       name: openAiSettings.gptModel.name
       version: openAiSettings.gptModel.version
-    }    
+    }
   }
 }
 

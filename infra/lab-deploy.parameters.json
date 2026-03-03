@@ -3,13 +3,10 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "appName": {
-      "value": "testaiaaa"
+      "value": "aiaaa"
     },
     "location": { 
         "value": "eastus"
-    },
-    "mongoDbPassword": {
-      "value": "tbd"
     }
   }
 }

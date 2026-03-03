@@ -16,7 +16,7 @@ export async function eventInfo(
 
     const data = {
       capabilities: {
-        "openai-chat": ["gpt-4o"],
+        "openai-chat": ["gpt-4.1"],
         "openai-dalle3": ["dalle3"]
       },
       event_code: eventCode,
