@@ -206,3 +206,9 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+#AI tools
+.specify
+.github/agents
+.github/prompts
+specs
