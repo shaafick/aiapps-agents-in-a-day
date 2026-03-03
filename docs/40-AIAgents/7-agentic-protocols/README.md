@@ -2,6 +2,10 @@
 
 As the use of AI agents grows, so does the need for protocols that ensure standardization, security, and support open innovation. In this lesson, we will cover 3 protocols looking to meet this need - Model Context Protocol (MCP), Agent to Agent (A2A) and Natural Language Web (NLWeb).
 
+:::tip Related Content
+This section covers open protocols for standardized agent communication. For multi-agent orchestration patterns and design within a single system, see [Section 6: Multi-Agent Orchestration](../6-multi-agent/README.md).
+:::
+
 ## Model Context Protocol
 
 The **Model Context Protocol (MCP)** is an open standard that provides standardized way for applications to provide context and tools to LLMs. This enables a "universal adaptor" to different data sources and tools that AI Agents can connect to in a consistent way.
@@ -166,6 +170,189 @@ Let's expand on our RPS tournament scenario, but this time using A2A to coordina
 4. **Delegated Task Execution**: The Tournament Manager sends specific tasks to these specialized agents (e.g., "Validate all player answers for this question," "Analyze optimal moves for current game state," "Track player performance metrics"). Each of these specialized agents, running their own LLMs and utilizing their own tools (which could be MCP servers themselves), performs its specific part of the tournament management.
 
 5. **Consolidated Response**: Once all downstream agents complete their tasks, the Tournament Manager compiles the results (answer validations, strategic recommendations, performance reports) and sends a comprehensive response back to the tournament coordinator with complete round results and insights.
+
+### Create A2A Logo Service
+
+Now let's build a practical A2A implementation where we create two agents that communicate via the A2A protocol.
+
+- Navigate to `labs/40-AIAgents` folder
+
+```bash
+cd labs/40-AIAgents
+```
+
+- Ensure you have the required packages installed. These should already be installed from previous labs, but if needed:
+
+```bash
+pip install agent-framework agent-framework-azure-ai fastapi uvicorn httpx
+```
+
+- Start the logo detection A2A service. This service will act as a specialized agent that can detect logos in images:
+
+```bash
+python game_agent_v7_a2a_logo.py
+```
+
+You should see output confirming the service started:
+
+```
+✓ Logo Detection Agent started on http://localhost:8088
+  Agent card: http://localhost:8088/.well-known/agent-card
+  Ready to accept A2A requests
+```
+
+![A2A Logo Service](./images/a2a-logo-service.png)
+
+This service exposes two key A2A protocol endpoints:
+- **Agent Card Discovery:** `http://localhost:8088/.well-known/agent-card` - Allows other agents to discover capabilities
+- **Message Stream:** `/v1/message:stream` - Handles A2A communication
+
+**Keep this terminal running** - the logo service must be active for the next step.
+
+### Connect Game Agent to A2A Logo Service
+
+Now we'll create a client agent that discovers and uses the remote logo agent via the A2A protocol.
+
+- Open a **new terminal window** and navigate to `labs/40-AIAgents` folder
+
+```bash
+cd labs/40-AIAgents
+```
+
+- Run the game agent client that will connect to the logo service:
+
+```bash
+python game_agent_v7_a2a_rps.py
+```
+
+The agent will perform the following sequence:
+
+1. **Discover remote agent:** Uses `A2ACardResolver` to retrieve the logo agent's capabilities from its Agent Card
+2. **Create A2A proxy:** Creates an `A2AAgent` proxy object to communicate with the remote logo agent
+3. **Integrate as tool:** Converts the remote agent into a local tool using `.as_tool()` method
+4. **Run test queries:** Executes three test questions to demonstrate different tool usage
+
+You should see output showing:
+
+```
+✓ Discovered remote agent: Logo Detection Agent
+✓ Connected to A2A logo agent
+✓ Integrated remote agent as local tool
+
+Testing multi-tool agent...
+
+Question 1: What is 15 * 23?
+Answer: 345 (uses local calculator tool)
+
+Question 2: What is this logo? https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.png
+Answer: Python (uses remote A2A logo detection agent)
+
+Question 3: If I play Rock and my opponent plays Scissors, who wins?
+Answer: You win! Rock beats Scissors (uses local RPS rules tool)
+```
+
+![A2A Client Output](./images/a2a-client-output.png)
+
+Notice how the agent seamlessly uses a mix of **local tools** (calculator, RPS rules) and **remote tools** (logo detection via A2A protocol).
+
+### Understanding the A2A Implementation
+
+The A2A protocol implementation consists of two components:
+
+**1. Logo Service ([game_agent_v7_a2a_logo.py](labs/40-AIAgents/game_agent_v7_a2a_logo.py)):**
+
+This acts as an A2A server that other agents can connect to:
+
+- **FastAPI Server:** Provides HTTP endpoints for the A2A protocol
+- **Agent Card Endpoint:** Exposes agent capabilities for discovery
+- **Streaming Endpoint:** Handles A2A protocol message exchange
+- **Logo Detection Agent:** Uses Azure OpenAI with vision capabilities to analyze images
+
+**2. Game Agent Client ([game_agent_v7_a2a_rps.py](labs/40-AIAgents/game_agent_v7_a2a_rps.py)):**
+
+This acts as an A2A client that discovers and uses remote agents:
+
+```python
+# Step 1: Discover the remote agent's capabilities
+async with httpx.AsyncClient(timeout=60.0) as http_client:
+    resolver = A2ACardResolver(
+        httpx_client=http_client, 
+        base_url=self.logo_service_url
+    )
+    agent_card = await resolver.get_agent_card()
+    print(f"✓ Discovered remote agent: {agent_card.name}")
+
+# Step 2: Create A2A proxy to communicate with remote agent
+self.logo_agent_proxy = A2AAgent(
+    httpx_client=http_client,
+    agent_card=agent_card
+)
+
+# Step 3: Convert remote agent into a local tool
+logo_tool = self.logo_agent_proxy.as_tool(
+    name="detect_logo",
+    description="Detect and identify logos in images from URLs"
+)
+
+# Step 4: Add to agent's tool list alongside local tools
+tools = [calculate_function, rps_rules_function, logo_tool]
+```
+
+### Key Differences: A2A vs MCP
+
+Understanding when to use A2A versus MCP:
+
+| Aspect | MCP | A2A |
+|--------|-----|-----|
+| **Purpose** | Connect agents to tools and data sources | Connect agents to other agents |
+| **LLM Usage** | Single LLM in the host application | Each agent uses its own LLM |
+| **Communication** | Agent → Tool (one-way execution) | Agent ↔ Agent (bidirectional conversation) |
+| **Context** | Limited context passed to tools | Full conversation context shared between agents |
+| **Authentication** | External (per server implementation) | Built into the protocol |
+| **Use Case** | Accessing databases, APIs, services | Delegating complex tasks to specialized agents |
+
+**When to use A2A:**
+- You need agents across different organizations to collaborate
+- Each agent requires a different LLM or specialized model
+- Tasks require back-and-forth reasoning between agents
+- You want agent-level authentication and security
+
+**When to use MCP:**
+- You need to connect an agent to tools and data sources
+- You want a single LLM to orchestrate tool usage
+- You're building integrations within a single application
+- You need standardized access to various resources
+
+### Troubleshooting A2A
+
+**Logo service not running:**
+```
+Error: Connection refused to localhost:8088
+```
+**Solution:** Ensure the logo service is running in a separate terminal with `python game_agent_v7_a2a_logo.py`
+
+**Port 8088 already in use:**
+```
+Error: Address already in use
+```
+**Solution:** Find and kill the process using port 8088:
+```bash
+lsof -ti:8088 | xargs kill
+```
+
+**Azure credential errors:**
+```
+Error: DefaultAzureCredential failed to retrieve a token
+```
+**Solution:** Verify your `.env` file contains correct Azure configuration:
+- `AZURE_FOUNDRY_PROJECT_ENDPOINT`
+- `AZURE_FOUNDRY_MODEL_DEPLOYMENT_NAME`
+
+**Connection timeout:**
+```
+Error: Request timeout after 60s
+```
+**Solution:** Check that both agents can access the Azure OpenAI endpoint and have valid credentials.
 
 ## Natural Language Web (NLWeb)
 

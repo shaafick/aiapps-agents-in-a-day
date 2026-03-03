@@ -31,7 +31,7 @@ You will also learn how to use the vector index to retrieve the relevant documen
 
    // set up the Azure OpenAI client
    const embeddingsDeploymentName = "embeddings";
-   const completionsDeploymentName = "gpt-4o";
+   const completionsDeploymentName = "gpt-4.1";
    const aoaiClient = new OpenAIClient(
      "https://" +
        process.env.AZURE_OPENAI_API_INSTANCE_NAME +

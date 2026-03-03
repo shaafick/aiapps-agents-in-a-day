@@ -72,7 +72,7 @@ Start by identifying common store operations that can be automated. Let's write 
         new AzureKeyCredential("<AZURE_OPENAI_API_KEY>")
       );
 
-      const deploymentId = "gpt-4o";
+      const deploymentId = "gpt-4.1";
       console.log("The chatbot is ready. Type 'exit' to quit.");
 
       const getLightStatus = {
@@ -166,7 +166,7 @@ Start by identifying common store operations that can be automated. Let's write 
         }
 
         const chatResponse = await client.getChatCompletions(
-          "gpt-4o",
+          "gpt-4.1",
           [
             {
               role: "system",

@@ -3,6 +3,10 @@
 
 As soon as you start working on a project that involves multiple agents, you will need to consider the multi-agent design pattern. However, it might not be immediately clear when to switch to multi-agents and what the advantages are.
 
+:::tip Related Content
+This section covers multi-agent orchestration patterns within a single system. For cross-organizational agent communication using open protocols like A2A, see [Section 7: Agentic Protocols](../7-agentic-protocols/README.md).
+:::
+
 ## Scenarios Where Multi-Agents Are Applicable
 
 So what scenarios are a good use case for using multi-agents? The answer is that there are many scenarios where employing multiple agents is beneficial especially in the following cases:

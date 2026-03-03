@@ -57,7 +57,7 @@ If you get this error `Found multiple accounts with the same username 'lab1user3
 
 ## Deploy Microsoft Foundry Resource
 
-- navigate to `infra` folder, open `lab-deploy.bicep` file.
+- navigate to `infra` folder.
 
 - open `foundry-deploy.parameters.json` file and edit `location` property to specified Azure region based on the provided sheet (e.g. `eastus2`). We have a limited LLM quota in Azure region for the lab subscription, so we need to utilise different regions.
 
@@ -108,7 +108,7 @@ Now that you have deployed a model, you can create an agent. An agent is a conve
 
 - Click **+ Create agent** to create a new agent. Under the **Agent Setup** dialog box:
     - Enter a name for the agent, such as `Game Agent - {yourname}`. Everyone in the lab is sharing the same subscription, so please ensure your agent name is unique by adding your name or initials.
-    - Ensure that the `gpt-4o` model deployment you created previously is selected
+    - Ensure that the `gpt-4.1` model deployment you created previously is selected
     - Set the **Instructions** as per the prompt you want the agent to follow. Here is an example:
     ```
     You are a Rock Paper Scissors agent. Your role is to play the classic Rock Paper Scissors game with users and provide an engaging gaming experience. Follow the instructions below to ensure clear and fun gameplay:

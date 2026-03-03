@@ -37,7 +37,7 @@ Azure AI Agent Service integrates with Microsoft Foundry. Within AI Foundry, an 
 
     ```python
     agent = project_client.agents.create_agent(
-        model="gpt-4o-mini",
+        model="gpt-4.1-mini",
         name="my-agent",
         instructions="You are helpful agent",
         tools=code_interpreter.definitions,
