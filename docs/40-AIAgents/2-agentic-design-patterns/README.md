@@ -104,7 +104,7 @@ python game_agent_v2_llm.py
 ```
 ![alt text](images\image-7.png)
 
-- navigate to Microsoft Foundry portal, you should see the agent created in the portal.
+- navigate to Microsoft Foundry portal, you should see the agent created in the portal. Please note that these will load in Classic Microsoft Foundry, but you can try New Foundry if you wish!
 
 ![alt text](images\image-9.png)
 

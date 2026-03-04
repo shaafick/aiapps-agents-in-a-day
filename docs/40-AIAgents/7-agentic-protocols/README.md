@@ -201,8 +201,6 @@ You should see output confirming the service started:
   Ready to accept A2A requests
 ```
 
-![A2A Logo Service](./images/a2a-logo-service.png)
-
 This service exposes two key A2A protocol endpoints:
 - **Agent Card Discovery:** `http://localhost:8088/.well-known/agent-card` - Allows other agents to discover capabilities
 - **Message Stream:** `/v1/message:stream` - Handles A2A communication
@@ -235,11 +233,8 @@ The agent will perform the following sequence:
 You should see output showing:
 
 ```
-✓ Discovered remote agent: Logo Detection Agent
-✓ Connected to A2A logo agent
-✓ Integrated remote agent as local tool
 
-Testing multi-tool agent...
+Running test questions...
 
 Question 1: What is 15 * 23?
 Answer: 345 (uses local calculator tool)
@@ -250,8 +245,6 @@ Answer: Python (uses remote A2A logo detection agent)
 Question 3: If I play Rock and my opponent plays Scissors, who wins?
 Answer: You win! Rock beats Scissors (uses local RPS rules tool)
 ```
-
-![A2A Client Output](./images/a2a-client-output.png)
 
 Notice how the agent seamlessly uses a mix of **local tools** (calculator, RPS rules) and **remote tools** (logo detection via A2A protocol).
 
