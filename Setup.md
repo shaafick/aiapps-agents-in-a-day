@@ -13,7 +13,7 @@ Azure OpenAI API Key
 AZURE_OPENAI_API_KEY
 MONGODB_CONNECTION_STRING
 GPT-4o API Key
-Dall-e 3 API Key
+Dall-e 3 API Key // DEPRECIATED
 Computer Vision API Key
 Translator Service API Key
 Speech Service API Key
