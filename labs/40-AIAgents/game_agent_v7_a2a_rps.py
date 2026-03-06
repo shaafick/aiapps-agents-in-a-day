@@ -9,6 +9,8 @@ Prerequisites:
 Usage:
     1. Start logo service: python game_agent_v7_a2a_logo.py
     2. Run this client: python game_agent_v7_a2a_rps.py"""
+import ast
+import operator
 import os
 import asyncio
 import httpx
@@ -74,8 +76,25 @@ class GameAgent:
         
         def calculate(expression: str) -> str:
             """Calculate mathematical expressions"""
+            allowed_ops = {
+                ast.Add: operator.add,
+                ast.Sub: operator.sub,
+                ast.Mult: operator.mul,
+                ast.Div: operator.truediv,
+                ast.Pow: operator.pow,
+                ast.USub: operator.neg,
+            }
+            def _eval(node):
+                if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
+                    return node.value
+                if isinstance(node, ast.BinOp) and type(node.op) in allowed_ops:
+                    return allowed_ops[type(node.op)](_eval(node.left), _eval(node.right))
+                if isinstance(node, ast.UnaryOp) and type(node.op) in allowed_ops:
+                    return allowed_ops[type(node.op)](_eval(node.operand))
+                raise ValueError(f"Unsupported expression")
             try:
-                return str(eval(expression))
+                tree = ast.parse(expression, mode="eval")
+                return str(_eval(tree.body))
             except Exception as e:
                 return f"Error: {str(e)}"
         
