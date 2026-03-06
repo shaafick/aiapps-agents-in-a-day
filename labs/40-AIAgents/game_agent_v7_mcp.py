@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 from azure.ai.projects import AIProjectClient
+from azure.ai.projects.models import PromptAgentDefinition
+from azure.ai.agents import AgentsClient
 from azure.identity import DefaultAzureCredential
 from azure.ai.agents.models import FunctionTool, FileSearchTool, FilePurpose
 from azure.ai.agents.models import ConnectedAgentTool, MessageRole
@@ -25,9 +27,16 @@ class GameAgent:
         self.player_name = player_name or os.getenv('DEV_Name', 'default-player')
         self.player_name = self.player_name + "_v7"
         
+        # Project client for agent management
         self.project_client = AIProjectClient(
             endpoint=self.project_endpoint,
             credential=DefaultAzureCredential()
+        )
+        
+        # Agents client for runtime operations
+        self.agents_client = AgentsClient(
+            self.project_endpoint,
+            DefaultAzureCredential()
         )
         
         self.agent_name = f"agent_{self.player_name}"
@@ -54,7 +63,7 @@ class GameAgent:
     def _find_existing_agent(self):
         """Find existing agent by name"""
      
-        agents = self.project_client.agents.list_agents()
+        agents = self.agents_client.list_agents()
         for agent in agents:
             if agent.name == self.agent_name:
                 return agent
@@ -64,10 +73,10 @@ class GameAgent:
     def cleanup_old_agents(self):
         """Clean up old agents with the same name (optional maintenance method)"""
         try:
-            agents = self.project_client.agents.list_agents()
+            agents = self.agents_client.list_agents()
             for agent in agents:
                 if agent.name == self.agent_name and agent.id != (self.agent.id if self.agent else None):
-                    self.project_client.agents.delete(agent.id)
+                    self.agents_client.delete_agent(agent.id)
         except Exception:
             pass
     
@@ -79,13 +88,13 @@ class GameAgent:
         uploaded_files = []
         for file_path in file_paths:
             if os.path.exists(file_path):
-                uploaded_file = self.project_client.agents.files.upload_and_poll(
+                uploaded_file = self.agents_client.files.upload_and_poll(
                     file_path=file_path, purpose=FilePurpose.AGENTS
                 )
                 uploaded_files.append(uploaded_file)
                 print(f"Uploaded file: {file_path} (ID: {uploaded_file.id})")
             
-        self.vector_store = self.project_client.agents.vector_stores.create_and_poll(
+        self.vector_store = self.agents_client.vector_stores.create_and_poll(
             data_sources=[], 
             name=vector_store_name,
             expires_after={
@@ -96,7 +105,7 @@ class GameAgent:
         print(f"Created vector store: {self.vector_store.id}")
         
         file_ids = [f.id for f in uploaded_files]
-        vector_store_file_batch = self.project_client.agents.vector_store_file_batches.create_and_poll(
+        vector_store_file_batch = self.agents_client.vector_store_file_batches.create_and_poll(
             vector_store_id=self.vector_store.id, 
             file_ids=file_ids
         )
@@ -118,16 +127,16 @@ class GameAgent:
         existing_agent = self._find_existing_agent()
         
         if existing_agent:
-            self.project_client.agents.delete_agent(existing_agent.id)
+            self.agents_client.delete_agent(existing_agent.id)
             print(f"Deleted existing agent: {self.agent_name}")
         
         tools = self._setup_tools()
         # tool_resources = self.file_search_tool.resources
             
-        self.agent_stock = self.project_client.agents.create_agent(
+        self.agent_stock = self.agents_client.create_agent(
             model=self.model_deployment_name,
             name=self.agent_stock_name,
-            instructions="Your job is to get the stock price of a company. If you don't know the realtime stock price, return the last known stock price.",
+            instructions="Your job is to get the stock price of a company. If you don't know the realtime stock price, return the last known stock price."
         )
 
         connected_agent = ConnectedAgentTool(
@@ -135,62 +144,50 @@ class GameAgent:
         )
         tools.extend(connected_agent.definitions)
         
-        self.agent = self.project_client.agents.create_agent(
+        self.agent = self.agents_client.create_agent(
             model=self.model_deployment_name,
             name=self.agent_name,
             instructions=f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games. You have access to file search capabilities to help answer questions from uploaded documents. Keep answer short and precise, dont need to explain.",
-            tools=tools,
+            tools=tools
             # tool_resources=tool_resources
         )
         print(f"Created new agent: {self.agent_name}")
         
-        self.thread = self.project_client.agents.threads.create()
+        self.thread = self.agents_client.threads.create()
     
     def _call_azure_ai_agent(self, message):
         """Call Microsoft Foundry Agent service"""
-        self.project_client.agents.messages.create(
+        self.agents_client.messages.create(
             thread_id=self.thread.id,
             role="user",
             content=message
         )
         
-        run = self.project_client.agents.runs.create(
+        run = self.agents_client.runs.create(
             thread_id=self.thread.id,
             agent_id=self.agent.id,
             tool_resources=self.mcp_tool.resources
         )
         print(f"Created run, ID: {run.id}")
         
-        while run.status in ["queued", "in_progress", "requires_action"]:
+        max_iterations = 60  # Maximum 60 seconds
+        iterations = 0
+        while run.status in ["queued", "in_progress", "requires_action"] and iterations < max_iterations:
             time.sleep(1)
-            run = self.project_client.agents.runs.get(thread_id=self.thread.id, run_id=run.id)
-            print(f"Created run, ID: {run.id}")
+            iterations += 1
+            run = self.agents_client.runs.get(thread_id=self.thread.id, run_id=run.id)
+            if iterations % 5 == 0:  # Print status every 5 seconds
+                print(f"Run status: {run.status} (iteration {iterations})")
             
             if run.status == "requires_action":
                 required_action = run.required_action
                 
-                # Handle MCP tool approval
+                # Handle MCP tool approval (if supported in this version)
                 if isinstance(required_action, SubmitToolApprovalAction):
-                    # Get the MCP tool calls that require approval
-                    mcp_tool_calls = required_action.tool_calls
-                    tool_approvals = []
-                    
-                    for tool_call in mcp_tool_calls:
-                        if isinstance(tool_call, RequiredMcpToolCall):
-                            # Approve the MCP tool call
-                            approval = ToolApproval(
-                                tool_call_id=tool_call.id,
-                                approve=True
-                            )
-                            tool_approvals.append(approval)
-                    
-                    # Submit the approvals
-                    if tool_approvals:
-                        self.project_client.agents.runs.submit_tool_approval(
-                            thread_id=self.thread.id, 
-                            run_id=run.id, 
-                            tool_approvals=tool_approvals
-                        )
+                    # MCP tool approval not supported in version 1.0.0
+                    # Skip or handle differently
+                    print("MCP tool approval required but not supported in this version")
+                    break
                 
                 # Handle regular tool outputs (for non-MCP tools like math_tool_function)
                 elif hasattr(required_action, 'submit_tool_outputs'):
@@ -204,18 +201,21 @@ class GameAgent:
                             tool_outputs.append({"tool_call_id": tool_call.id, "output": output})
                     
                     if tool_outputs:
-                        self.project_client.agents.runs.submit_tool_outputs(
+                        self.agents_client.runs.submit_tool_outputs(
                             thread_id=self.thread.id, 
                             run_id=run.id, 
                             tool_outputs=tool_outputs
                         )
+        
+        if iterations >= max_iterations:
+            print(f"Run timed out after {max_iterations} seconds")
         
         print(f"Run completed with status: {run.status}")
         if run.status == "failed":
             print(f"Run failed: {run.last_error}")
 
         # Display run steps and tool calls
-        run_steps = self.project_client.agents.run_steps.list(thread_id=self.thread.id, run_id=run.id)
+        run_steps = self.agents_client.run_steps.list(thread_id=self.thread.id, run_id=run.id)
 
         # Loop through each step
         for step in run_steps:
@@ -249,7 +249,7 @@ class GameAgent:
             print()  # add an extra newline between steps
 
             
-        messages = self.project_client.agents.messages.list(thread_id=self.thread.id)
+        messages = self.agents_client.messages.list(thread_id=self.thread.id)
         
         for message in messages:
             print(f"{message.role}: {message.content}")
@@ -302,6 +302,9 @@ class GameAgent:
             server_url=mcp_server_url,
             allowed_tools=[],  # Optional: specify allowed tools
         )
+        
+        # Set approval mode to "never" to auto-approve MCP tool calls
+        self.mcp_tool.set_approval_mode("never")
         
         # search_api_code = "search_azure_rest_api_code"
         # mcp_tool.allow_tool(search_api_code)
