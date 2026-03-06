@@ -6,7 +6,7 @@ Semantic Kernel is an enterprise-ready AI Orchestration SDK. It consists of AI a
 Let's first cover some core components:
 
 
-## Create Semantic Kernal Agent
+## Create Semantic Kernel Agent
 
 - navigate to `labs/40-AIAgents` folder, open `game_agent_v3_sk.py` file.
 
@@ -22,7 +22,7 @@ python game_agent_v3_sk.py
 ![Microsoft Foundry Project](./images/semantic_kernel.png)
 
 
-- because the semantic kernal agent does not use a managed service, so you can't see it in the Microsoft Foundry portal.
+- because the semantic kernel agent does not use a managed service, so you can't see it in the Microsoft Foundry portal.
 
 
 ## AI Connectors
