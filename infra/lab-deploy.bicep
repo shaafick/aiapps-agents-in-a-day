@@ -50,7 +50,18 @@ var openAiSettings = {
     }
     sku: {
       name: 'GlobalStandard'
-      capacity: 300
+      capacity: 100
+    }
+  }
+  gpt4oVisionModel: {
+    name: 'gpt-4o'
+    version: '2024-05-13'
+    deployment: {
+      name: 'gpt-4o'
+    }
+    sku: {
+      name: 'GlobalStandard'
+      capacity: 100
     }
   }
   embeddingsModel: {
@@ -62,17 +73,6 @@ var openAiSettings = {
     sku: {
       name: 'Standard'
       capacity: 25 // normally 300
-    }
-  }
-  dalleModel: {
-    name: 'dall-e-3'
-    version: '3.0'
-    deployment: {
-      name: 'dalle3'
-    }
-    sku: {
-      name: 'Standard'
-      capacity: 1
     }
   }
 }
@@ -562,7 +562,7 @@ resource openAiEmbeddingsModelDeployment 'Microsoft.CognitiveServices/accounts/d
   }
 }
 
-resource openAiGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
+resource openAiGpt41ModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
   parent: openAiAccount
   name: openAiSettings.gptModel.deployment.name
   dependsOn: [
@@ -581,23 +581,22 @@ resource openAiGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/deploy
   }
 }
 
-
-resource openAiDalleModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
+resource openAiGpt4oVisionModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
   parent: openAiAccount
-  name: openAiSettings.dalleModel.deployment.name
+  name: openAiSettings.gpt4oVisionModel.deployment.name
   dependsOn: [
     openAiEmbeddingsModelDeployment
-    openAiGpt4oModelDeployment
+    openAiGpt41ModelDeployment
   ]
   sku: {
-    name: openAiSettings.dalleModel.sku.name
-    capacity: openAiSettings.dalleModel.sku.capacity
+    name: openAiSettings.gpt4oVisionModel.sku.name
+    capacity: openAiSettings.gpt4oVisionModel.sku.capacity
   }
   properties: {
     model: {
       format: 'OpenAI'
-      name: openAiSettings.dalleModel.name
-      version: openAiSettings.dalleModel.version
+      name: openAiSettings.gpt4oVisionModel.name
+      version: openAiSettings.gpt4oVisionModel.version
     }    
   }
 }

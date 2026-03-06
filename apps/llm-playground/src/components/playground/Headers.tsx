@@ -86,9 +86,9 @@ export const Header = () => {
               {hasCapability(eventData, "openai-chat") && (
                 <Tab value="chat">Chat</Tab>
               )}
-              {hasCapability(eventData, "openai-dalle3") && (
+              {/* {hasCapability(eventData, "openai-dalle3") && (
                 <Tab value="images">Image</Tab>
-              )}
+              )} */}
             </>
           )}
         </TabList>
