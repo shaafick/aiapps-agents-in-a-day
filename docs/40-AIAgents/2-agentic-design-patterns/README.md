@@ -74,7 +74,7 @@ Imagine you are designing a Rock Paper Scissors Agent, here is how you could thi
 
 ## Create AI Agent Service Agent via Code
 
-The SDK talks to Foundry Agent Service via managed identity to ensure the security of the service. You should have already sign in to Azure in the terminial windows in earlier lab. 
+The SDK talks to Foundry Agent Service via managed identity to ensure the security of the service. You should have already sign in to Azure in the terminal windows in earlier lab. 
 
 - navigate to `labs/40-AIAgents` folder, open `game_agent_v2_llm.py` file.
 
