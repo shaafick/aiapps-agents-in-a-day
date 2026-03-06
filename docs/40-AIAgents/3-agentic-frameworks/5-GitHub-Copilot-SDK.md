@@ -1,12 +1,12 @@
 # GitHub Copilot SDK
 
-GitHub Copilot SDK is an event-driven framework for building AI agents using BYOK (Bring Your Own Key) with direct API key authentication. Unlike Microsoft Agent Framework which uses Azure CLI credentials, Copilot SDK is designed for **API key-based deployments** where you need direct control over authentication tokens and want event-driven, reactive agent patterns.
+GitHub Copilot SDK is an event-driven framework for building AI agents. It supports both GitHub Copilot credentials and BYOK (Bring Your Own Key) provider credentials. For GitHub Copilot credentials, the SDK can use a logged-in Copilot user session, OAuth user tokens, or supported GitHub token environment variables. For BYOK, callers supply provider API keys or static bearer tokens directly.
 
-Copilot SDK excels in scenarios requiring **event-based messaging**, **multi-provider flexibility**, and **explicit credential management**. It's ideal for environments where Azure CLI authentication isn't available or where you need fine-grained control over API keys, bearer tokens, and custom authentication flows.
+Copilot SDK excels in scenarios requiring **event-based messaging**, **multi-provider flexibility**, and **explicit credential management**. It's ideal for environments where automatic CLI or managed-identity auth is not available or where you need fine-grained control over API keys, bearer tokens, and custom authentication flows.
 
-**Package**: `copilot`
+**Package**: `github-copilot-sdk`
 
-**Use Cases**: Event-driven agent workflows, API key-based authentication, multi-provider agents (OpenAI, Azure, Anthropic, Ollama), custom authentication patterns, environments without Azure CLI access.
+**Use Cases**: Event-driven agent workflows, GitHub Copilot credential-based apps, BYOK provider integrations (OpenAI, Azure, Anthropic, Ollama), custom authentication patterns, environments without Azure CLI access.
 
 **Why GitHub Copilot SDK?**
 - **Event-Driven Architecture**: Reactive messaging patterns with `session.on()` event handlers
@@ -112,35 +112,48 @@ Sessions maintain stateful conversations with automatic history tracking:
 
 ## Authentication Patterns
 
-Copilot SDK supports multiple authentication methods:
+Copilot SDK supports two primary auth models:
+
+**1) GitHub Copilot credentials**
+
+- **Logged-in user credentials (default)**: `CopilotClient()` can use stored credentials from `copilot` CLI sign-in.
+- **OAuth GitHub App token**: pass `github_token` / `githubToken` to authenticate on behalf of a user.
+- **Environment variable tokens** (priority in docs): `COPILOT_GITHUB_TOKEN`, then `GH_TOKEN`, then `GITHUB_TOKEN`.
+
+These modes use GitHub Copilot authentication and typically require a Copilot subscription.
+
+**2) BYOK provider credentials**
+
+For BYOK sessions, supply explicit provider credentials in the provider config. Typical options include API keys and bearer tokens:
 
   **API Keys**:
   ```python
   provider: {
-      "api_key": os.environ["AZURE_OPENAI_API_KEY"]
+    "api_key": os.environ["AZURE_OPENAI_API_KEY"]
   }
   ```
 
-  **Bearer Tokens** (for custom auth):
+  **Bearer Tokens** (custom flows):
   ```python
   provider: {
-      "bearer_token": os.environ["MY_BEARER_TOKEN"]
+    "bearer_token": os.environ["MY_BEARER_TOKEN"]
   }
   ```
 
-  **Important Limitation**: Bearer tokens are **static only**. The SDK does not refresh tokens automatically. For short-lived tokens (like Azure Entra ID), you must create new sessions with refreshed tokens manually.
+  **Important Limitation (BYOK)**: Credentials passed to BYOK provider configs are treated as static values; the SDK does not automatically refresh short-lived tokens (for example, tokens obtained via Azure Entra ID or managed identity). If you rely on short-lived tokens you must acquire/refresh them in your application code and recreate or update sessions accordingly.
 
 ## Learn More
 
 **Official Documentation**:
 - [GitHub Copilot SDK - BYOK Guide](https://github.com/github/copilot-sdk/blob/main/docs/auth/byok.md)
+- [GitHub Copilot SDK - Authentication Overview](https://github.com/github/copilot-sdk/blob/main/docs/auth/index.md)
 - [Provider Configuration Reference](https://github.com/github/copilot-sdk/blob/main/docs/auth/byok.md#provider-configuration-reference)
 - [Getting Started](https://github.com/github/copilot-sdk/blob/main/docs/getting-started.md)
 - [GitHub Repository](https://github.com/github/copilot-sdk)
 
 **Installation**:
 ```bash
-pip install copilot
+pip install github-copilot-sdk
 ```
 
 **Environment Variables**:
@@ -148,9 +161,7 @@ pip install copilot
 - `AZURE_OPENAI_API_KEY` - API key (BYOK - not Azure CLI)
 - `AZURE_FOUNDRY_MODEL_DEPLOYMENT_NAME` - Model deployment name
 
-**Key Differences from Microsoft Agent Framework**:
-- ❌ No Azure Entra ID or managed identity support
-- ❌ No Azure CLI authentication
-- ✅ Direct API key control
-- ✅ Event-driven architecture
-- ✅ Multi-provider flexibility (OpenAI, Azure, Anthropic, Ollama)
+**GitHub Copilot Token Environment Variables**:
+- `COPILOT_GITHUB_TOKEN` - Recommended explicit token variable for Copilot SDK auth
+- `GH_TOKEN` - GitHub CLI-compatible token variable
+- `GITHUB_TOKEN` - GitHub Actions-compatible token variable

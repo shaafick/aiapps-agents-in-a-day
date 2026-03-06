@@ -2,7 +2,7 @@
 
 Microsoft Agent Framework is an official SDK from Microsoft for building production-ready AI agents with standardized patterns across multiple AI providers. It provides enterprise-grade agent development with built-in support for Azure OpenAI Responses API, tool integration, session management, and streaming capabilities.
 
-Agent Framework is designed for **cloud-native enterprise deployments** where security, compliance, and scalability are paramount. It uses Azure CLI authentication with support for managed identities and Entra ID, making it ideal for organizations that need secure, auditable AI agent deployments integrated with existing Azure infrastructure.
+Agent Framework is designed for **cloud-native enterprise deployments** where security, compliance, and scalability are paramount. Documentation examples show `AzureCliCredential` for local development, while production and managed-identity scenarios should use `DefaultAzureCredential` or `ManagedIdentityCredential` from `azure-identity` to integrate with Entra ID and managed identities.
 
 **Package**: `agent-framework`
 
@@ -48,16 +48,16 @@ Game Agent: Test complete
 
 Agent Framework abstracts AI providers through a unified interface. The Azure OpenAI provider uses `AzureOpenAIResponsesClient` to connect to Azure's Responses API:
 
-  ```python
-  from agent_framework.azure import AzureOpenAIResponsesClient
-  from azure.identity import AzureCliCredential
+    ```python
+    from agent_framework.azure import AzureOpenAIResponsesClient
+    from azure.identity import AzureCliCredential, DefaultAzureCredential
 
-  # Enterprise authentication via Azure CLI
-  client = AzureOpenAIResponsesClient(
+    # Local development: Azure CLI. Production: DefaultAzureCredential or ManagedIdentityCredential.
+    client = AzureOpenAIResponsesClient(
       azure_endpoint=os.getenv('AZURE_OPENAI_API_ENDPOINT'),
       deployment_name=os.getenv('AZURE_FOUNDRY_MODEL_DEPLOYMENT_NAME'),
-      credential=AzureCliCredential()  # Supports managed identities
-  )
+      credential=AzureCliCredential()
+    )
   
   agent = client.as_agent(
       name="MyAgent",
@@ -65,7 +65,7 @@ Agent Framework abstracts AI providers through a unified interface. The Azure Op
   )
   ```
 
-  The Responses API provides comprehensive tool support including code interpreter, file search, web search, and hosted MCP servers. Azure CLI credential supports both interactive `az login` and production managed identities.
+  The Responses API provides comprehensive tool support including code interpreter, file search, web search, and hosted MCP servers. Use `AzureCliCredential()` for local development (requires `az login`). For production and managed identity scenarios prefer `DefaultAzureCredential()` or `ManagedIdentityCredential()` which integrate with Entra ID and managed identities.
 
 ## Agents
 
@@ -130,4 +130,4 @@ pip install azure-identity
 **Environment Variables**:
 - `AZURE_OPENAI_API_ENDPOINT` - Your Azure Foundry endpoint
 - `AZURE_FOUNDRY_MODEL_DEPLOYMENT_NAME` - Model deployment name
-- Authentication: `az login` (supports managed identities in production)
+- Authentication: use `az login` for local development; in production use Managed Identity or `DefaultAzureCredential` for managed-identity/Entra ID scenarios
