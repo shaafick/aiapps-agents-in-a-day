@@ -28,7 +28,7 @@ class GameAgent:
         self.endpoint = os.getenv('AZURE_OPENAI_API_ENDPOINT')
         self.deployment_name = os.getenv('AZURE_OPENAI_API_DEPLOYMENT_NAME')
         self.player_name = player_name or os.getenv('DEV_Name', 'default-player')
-        self.player_name = self.player_name + "_v6"
+        self.player_name = self.player_name + "_v7"
         self.logo_service_url = logo_service_url
         
         self.agent = None
