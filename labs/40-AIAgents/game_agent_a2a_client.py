@@ -19,6 +19,8 @@ Usage:
 Note: This implementation expects the logo service on port 8001 instead of 8088.
 """
 
+import ast
+import operator
 import os
 import asyncio
 import httpx
@@ -83,11 +85,25 @@ class GameAgentA2A:
         
         # Define math tool
         def calculate(expression: str) -> str:
-            """Calculate mathematical expressions"""
-            try:
-                return str(eval(expression))
-            except Exception as e:
-                return f"Error: {str(e)}"
+            allowed_ops = {
+                ast.Add: operator.add,
+                ast.Sub: operator.sub,
+                ast.Mult: operator.mul,
+                ast.Div: operator.truediv,
+                ast.Pow: operator.pow,
+                ast.Mod: operator.mod,
+                ast.USub: operator.neg,
+            }
+
+            def eval_node(node):
+                if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
+                    return node.value
+                if isinstance(node, ast.BinOp) and type(node.op) in allowed_ops:
+                    return allowed_ops[type(node.op)](eval_node(node.left), eval_node(node.right))
+                if isinstance(node, ast.UnaryOp) and type(node.op) in allowed_ops:
+                    return allowed_ops[type(node.op)](eval_node(node.operand))
+
+            return str(eval_node(ast.parse(expression, mode='eval').body))
         
         # Build tools list
         tools = [calculate]
