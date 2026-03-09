@@ -2,18 +2,18 @@
   "questions": [
     {
       "id": "q1",
-      "question": "What is the capital of Australia?",
-      "answer": "Canberra",
+      "question": "What is the capital of New Zealand?",
+      "answer": "Wellington",
       "answerRule": "FuzzyMatch", 
       "type": "Text",
-      "description": "Geography question about Australian capital",
+      "description": "Geography question about New Zealand capital",
       "tags": [],
       "difficultyLevel": 1
     },
     {
       "id": "q2",
-      "question": "Who had the idea to create Rock-Paper-Scissors Agent according to the game rulebook?",
-      "answer": "Daniel",
+      "question": "What does RAG stand for?",
+      "answer": "Retrieval Augmented Generation",
       "answerRule": "FuzzyMatch", 
       "type": "Text",
       "description": "RAG question to retrieve info from game rulebook",

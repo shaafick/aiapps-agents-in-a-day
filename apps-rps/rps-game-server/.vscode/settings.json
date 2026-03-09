@@ -1,6 +1,7 @@
 {
     "appService.preDeployTask": "publish-release",
-    "appService.deploySubpath": "bin\\Release\\net8.0\\publish",
-    "appService.showBuildDuringDeployPrompt": false,
-    "appService.defaultWebAppToDeploy": "/subscriptions/9df3a442-42f1-40dd-8547-958c3e01597a/resourceGroups/rg-aiapps-agents/providers/Microsoft.Web/sites/aiaaa-s2-game-server"
+    "appService.deploySubpath": "bin/Release/net8.0/publish",
+    "appService.showBuildDuringDeployPrompt": true,
+    "appService.defaultWebAppToDeploy": "/subscriptions/9df3a442-42f1-40dd-8547-958c3e01597a/resourceGroups/rg-aiapps-agents/providers/Microsoft.Web/sites/aiaaa-s2-game-server",
+    "appService.startupCommand": "dotnet /home/site/wwwroot/RpsGameServer.dll"
 }
