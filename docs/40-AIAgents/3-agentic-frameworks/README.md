@@ -36,14 +36,21 @@ This is a fast-moving landscape, but there are some things that are common acros
 
 ## AI Agent Frameworks
 
-- **[Azure AI Agent Service](./1-Azure-AI-Agent-Service.md)**: Is a platform and deployment service in Azure Foundry for agents. It offers building connectivity to services support by Azure Found like Azure OpenAI, Azure AI Search, Bing Search and code execution.
-- **[Semantic Kernel](./2-Semantic-Kernal.md)**: Is a production-ready agent library for building enterprise agentic applications. Focuses on event-driven, distributed agentic applications, enabling multiple LLMs and SLMs, tools, and single/multi-agent design patterns.
-- **[Microsoft Agent Framework](./4-Microsoft-Agent-Framework.md)**: Is a lightweight framework for building AI agents with Azure OpenAI. Provides flexible, local-first agent development with full control over conversation management and deployment architecture.
-- **[AutoGen](./3-Autogen.md)**: Is an experimentation framework focused on leading-edge research on multi-agent systems. It is the best place to experiment and prototype sophisticated multi-agent systems.
-- **[GitHub Copilot SDK](./5-GitHub-Copilot-SDK.md)**: Enables building custom AI agents using BYOK (Bring Your Own Key) with Azure OpenAI. Provides Copilot patterns with full control over credentials, billing, and model configuration for enterprise scenarios.
-- **[LangChain](./5-LangChain.md)**: Is a widely adopted open-source framework for building applications powered by language models. It provides a suite of tools and abstractions to facilitate the development of AI-driven applications. 
+ - **[Azure AI Agent Service](./1-Azure-AI-Agent-Service.md)**: A Microsoft platform for agent deployment and orchestration with integrations into the Azure ecosystem. Use the linked page for details on how it integrates with Azure services.
+	 - Official docs (Azure AI overview): https://learn.microsoft.com/azure/ai-services/
+ - **[Semantic Kernel](./2-Semantic-Kernel.md)**: A Microsoft SDK for building agentic applications, focused on prompt orchestration, memory, plugins and extensibility. It is well-suited for production-ready agents that require SDK-level control.
+	 - Official docs: https://learn.microsoft.com/semantic-kernel/
+ - **[AutoGen](./3-Autogen.md)**: An experimentation and research-oriented framework (GitHub project) for multi-agent orchestration and advanced multi-agent patterns. Good for prototyping and research; treat some parts as experimental.
+	 - Official repo: https://github.com/microsoft/autogen
+ - **[Microsoft Agent Framework](./4-Microsoft-Agent-Framework.md)**: The repository's lightweight framework and guidance for local-first agents (ties to Azure OpenAI in examples). Use the local doc for implementation details.
+ - **[Microsoft Agent Framework](./4-Microsoft-Agent-Framework.md)**: The repository's lightweight framework and guidance for local-first agents (ties to Azure OpenAI in examples). Use the local doc for implementation details.
+	 - Official docs: https://learn.microsoft.com/agent-framework/overview/
+ - **[GitHub Copilot SDK](./5-GitHub-Copilot-SDK.md)**: Tooling and SDKs to build Copilot-style integrations; supports enterprise BYOK patterns for Copilot workflows. This is oriented to Copilot-style extensions rather than a general LLM framework.
+	 - Official repo/docs: https://github.com/github/copilot-sdk
+ - **[LangChain](./5-LangChain.md)**: A widely adopted open-source framework providing chains, agents, connectors and integrations (large community and rich Python/JS ecosystems). Best when you want rapid prototyping with many pre-built connectors.
+	 - Official docs: https://python.langchain.com/en/latest/
 
-There are many ways to compare these frameworks, we can look at some key differences in terms of their design, capabilities, and target use cases. It does sound like there is a lot of overlap between these frameworks, but there are some key differences in terms of their design, capabilities, and target use cases.
+There are many ways to compare these frameworks. They overlap in capabilities, but differ in origin, primary language/SDK, and typical deployment targets. The short notes below add nuance and soften absolute recommendations.
 
 Let's summarize the key differences in a table:
 
@@ -83,3 +90,28 @@ Common use cases:
 The answer is yes, you can integrate your existing Azure ecosystem tools directly with Azure AI Agent Service especially, this because it has been built to work seamlessly with other Azure services. You could for example integrate Bing, Azure AI Search, and Azure Functions. There's also deep integration with Microsoft Foundry.
 
 For AutoGen and Semantic Kernel, you can also integrate with Azure services, but it may require you to call the Azure services from your code. Another way to integrate is to use the Azure SDKs to interact with Azure services from your agents. Additionally, like was mentioned, you can use Azure AI Agent Service as an orchestrator for your agents built in AutoGen or Semantic Kernel which would give easy access to the Azure ecosystem.
+
+**Microsoft Agent Framework — research notes**
+
+- Agent Framework is a Microsoft-authored successor that combines concepts from Semantic Kernel and AutoGen; it is designed to provide unified, production-ready agent abstractions and explicit multi-agent workflows. (source: Microsoft docs)
+- Status: public preview; expect API and features to evolve — validate production readiness and licensing for your scenario. (source: Microsoft docs)
+- Key features:
+	- Multi-agent orchestration patterns (sequential, concurrent, group chat, handoff, magentic lead/worker patterns).
+	- Session-based state management and long-running/human-in-the-loop support.
+	- Workflow/graph-based execution to express explicit multi-agent execution paths.
+	- Provider-agnostic chat client abstractions (`IChatClient` / `ChatClientAgent`) supporting OpenAI, Azure OpenAI, Foundry, and other providers.
+	- Enterprise features: OpenTelemetry observability, Microsoft Entra (Azure AD) integration for security, and responsible AI controls.
+	- Standards interoperability: support for A2A/MCP and other agent-to-agent protocols where applicable.
+- Language/SDK support: packages and examples exist for Python and .NET (C#); installation is via `agent-framework` packages (preview builds). See migration guides for Semantic Kernel and AutoGen.
+- Foundry integration: can create persistent Foundry/Foundry Agent Service-backed agents with service-managed chat history and deployment-managed resources; requires Foundry project configuration. (see Azure Foundry docs)
+- Migration & guides: Microsoft provides migration guides from Semantic Kernel and AutoGen to Agent Framework — consult them when porting existing agents.
+- Cautions: preview status means some components are experimental; data flow to third-party agents/services should be reviewed for compliance and governance.
+
+Links (primary Microsoft sources):
+- Agent Framework overview: https://learn.microsoft.com/agent-framework/overview/
+- Migration guide (from Semantic Kernel): https://learn.microsoft.com/agent-framework/migration-guide/from-semantic-kernel/
+- Migration guide (from AutoGen): https://learn.microsoft.com/agent-framework/migration-guide/from-autogen/
+- Azure AI / Foundry agent docs: https://learn.microsoft.com/en-us/azure/ai-foundry/agents/overview
+- .NET AI ecosystem reference (Agent Framework section): https://learn.microsoft.com/dotnet/ai/dotnet-ai-ecosystem#microsoft-agent-framework
+
+If you want, I can also update the per-framework pages (e.g., `4-Microsoft-Agent-Framework.md`) with matching notes and code examples from the official docs.

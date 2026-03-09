@@ -16,6 +16,26 @@ Agent Framework is designed for **cloud-native enterprise deployments** where se
 - **Cloud-Native**: Built for Azure deployments (App Service, Functions, Container Apps)
 - **Async-First**: Modern Python async architecture for scalability
 
+## When to choose Microsoft Agent Framework
+
+Microsoft Agent Framework is best when you need code-first control of orchestration patterns and provider abstraction inside your application.
+
+- Use it when you want custom orchestration logic, middleware, and workflow behavior implemented directly in app code.
+- Use it when you want to keep a consistent agent programming model across multiple providers.
+- Use it when your team is optimizing for fast iteration in application logic while still using enterprise authentication patterns.
+
+### Valuable in practice
+
+- **Multi-provider applications**: Route workloads between providers while keeping one agent development model.
+- **Custom orchestration services**: Build app-specific handoff, validation, and routing logic around agent interactions.
+- **Rapid product iteration**: Update agent behavior in code quickly without changing managed service resources.
+
+### Choosing between frameworks in real projects
+
+- Prefer **Azure AI Agent Service** when service-managed runtime, centralized operations, and server-side lifecycle are the top priority.
+- Prefer **Microsoft Agent Framework** when app-layer orchestration flexibility and provider portability are the top priority.
+- In many enterprise scenarios, teams combine both: Agent Framework for app orchestration and Foundry Agent Service for managed runtime capabilities.
+
 Let's cover some core components:
 
 ## Create Microsoft Agent Framework Agent

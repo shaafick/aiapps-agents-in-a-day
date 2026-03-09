@@ -7,6 +7,20 @@ Azure AI Agent Service provides stronger enterprise security mechanisms and data
 
 It works out-of-the-box with multi-agent orchestration frameworks like AutoGen, Semantic Kernel and Microsoft Agent Framework. Using Semantic Kernel Python, we can create an Azure AI Agent with a user-defined plugin:
 
+## When to choose Azure AI Agent Service
+
+Azure AI Agent Service is best when you want a managed, service-hosted runtime in Foundry with enterprise operations built in.
+
+- Use it when you need centralized agent lifecycle management in the Foundry portal.
+- Use it when you want service-managed threads, runs, and message history for long-running or auditable workflows.
+- Use it when your team needs governance features such as RBAC, enterprise integrations, and operational observability.
+
+### Valuable in practice
+
+- **Regulated enterprise assistants**: Customer support or operations copilots that require auditable, server-managed conversation history.
+- **Platform team managed agents**: Shared agents that multiple app teams can consume while a central team controls deployment and policy.
+- **Tool-heavy enterprise workflows**: Agents that need tight integration with Azure resources and managed tool execution.
+
 ## Create AI Agent Service Agent
 
 - navigate to `labs/40-AIAgents` folder, open `game_agent_v3_aiagent.py` file.
