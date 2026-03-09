@@ -74,12 +74,6 @@ Vectorizing or embedding text is the process of converting text into a numerical
 
    ![Console output displays a large numerical vector.](images/text_embedding_output.png "Vector representation of text")
 
-:::info
-Please try a different input string and see if the length of the vector array changes.
-
-It seems that no matter how long the input string is, the return of creating embeddings with "text-embedding-ada-3" is always a vector of length 1536. Why is that?
-:::
-
 ## Vectorize and store the embeddings for each document
 
 Now that the `generateEmbeddings` function is working, the next step is to use it to generate embeddings for each document and store the embeddings in a new field (contentVector) within the same document. The process of creating a vector embedding field on each document only needs to be done once. However, if a document changes, the vector embedding field will need to be updated with an updated vector.

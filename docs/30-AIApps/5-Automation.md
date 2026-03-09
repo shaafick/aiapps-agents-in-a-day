@@ -56,7 +56,7 @@ Start by identifying common store operations that can be automated. Let's write 
     <summary>Your solution will be better than our sample answer!</summary>
 
     The basic solution is provided below. Feel free to expand on it to make it more interesting!
-    Go to `labs/30-AIApps` in terminal, run `npm install`, then run `node 6-Automation.js` to see it in action.
+    Go to `labs/30-AIApps` in terminal, run `npm install`, then run `node automation.js` to see it in action.
     
     ```
     const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
