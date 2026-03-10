@@ -90,28 +90,3 @@ Common use cases:
 The answer is yes, you can integrate your existing Azure ecosystem tools directly with Azure AI Agent Service especially, this because it has been built to work seamlessly with other Azure services. You could for example integrate Bing, Azure AI Search, and Azure Functions. There's also deep integration with Microsoft Foundry.
 
 For AutoGen and Semantic Kernel, you can also integrate with Azure services, but it may require you to call the Azure services from your code. Another way to integrate is to use the Azure SDKs to interact with Azure services from your agents. Additionally, like was mentioned, you can use Azure AI Agent Service as an orchestrator for your agents built in AutoGen or Semantic Kernel which would give easy access to the Azure ecosystem.
-
-**Microsoft Agent Framework — research notes**
-
-- Agent Framework is a Microsoft-authored successor that combines concepts from Semantic Kernel and AutoGen; it is designed to provide unified, production-ready agent abstractions and explicit multi-agent workflows. (source: Microsoft docs)
-- Status: public preview; expect API and features to evolve — validate production readiness and licensing for your scenario. (source: Microsoft docs)
-- Key features:
-	- Multi-agent orchestration patterns (sequential, concurrent, group chat, handoff, magentic lead/worker patterns).
-	- Session-based state management and long-running/human-in-the-loop support.
-	- Workflow/graph-based execution to express explicit multi-agent execution paths.
-	- Provider-agnostic chat client abstractions (`IChatClient` / `ChatClientAgent`) supporting OpenAI, Azure OpenAI, Foundry, and other providers.
-	- Enterprise features: OpenTelemetry observability, Microsoft Entra (Azure AD) integration for security, and responsible AI controls.
-	- Standards interoperability: support for A2A/MCP and other agent-to-agent protocols where applicable.
-- Language/SDK support: packages and examples exist for Python and .NET (C#); installation is via `agent-framework` packages (preview builds). See migration guides for Semantic Kernel and AutoGen.
-- Foundry integration: can create persistent Foundry/Foundry Agent Service-backed agents with service-managed chat history and deployment-managed resources; requires Foundry project configuration. (see Azure Foundry docs)
-- Migration & guides: Microsoft provides migration guides from Semantic Kernel and AutoGen to Agent Framework — consult them when porting existing agents.
-- Cautions: preview status means some components are experimental; data flow to third-party agents/services should be reviewed for compliance and governance.
-
-Links (primary Microsoft sources):
-- Agent Framework overview: https://learn.microsoft.com/agent-framework/overview/
-- Migration guide (from Semantic Kernel): https://learn.microsoft.com/agent-framework/migration-guide/from-semantic-kernel/
-- Migration guide (from AutoGen): https://learn.microsoft.com/agent-framework/migration-guide/from-autogen/
-- Azure AI / Foundry agent docs: https://learn.microsoft.com/en-us/azure/ai-foundry/agents/overview
-- .NET AI ecosystem reference (Agent Framework section): https://learn.microsoft.com/dotnet/ai/dotnet-ai-ecosystem#microsoft-agent-framework
-
-If you want, I can also update the per-framework pages (e.g., `4-Microsoft-Agent-Framework.md`) with matching notes and code examples from the official docs.

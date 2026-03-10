@@ -143,28 +143,29 @@ Here are some examples of how you can implement the Tool Use Design Pattern usin
 
 ### Foundry Agent Service
 
-<a href="https://learn.microsoft.com/en-au/azure/ai-foundry/agents/overview?view=foundry-classic" target="_blank">Foundry Agent Service</a> is a production-ready platform designed to empower developers to securely build, deploy, and scale high-quality, extensible AI agents. It abstracts away infrastructure complexity by providing server-side orchestration, tool management, and conversation handling. It is particularly useful for enterprise applications since it offers enterprise-grade security, governance, and the flexibility to bring your own Azure resources to meet compliance needs.
+<a href="https://learn.microsoft.com/azure/ai-foundry/agents/overview?view=foundry" target="_blank">Foundry Agent Service</a> is a production-ready managed runtime for building, deploying, and operating AI agents. It abstracts infrastructure complexity by handling conversation runtime components (agents, threads, messages, and runs), tool orchestration, and enterprise controls in a single service.
 
-When compared to developing with the LLM API directly, Foundry Agent Service provides some advantages, including:
+When compared to developing directly with LLM APIs, Foundry Agent Service provides advantages such as:
 
-- Automatic tool calling – no need to parse a tool call, invoke the tool, and handle the response; all of this is now done server-side
-- Securely managed data – instead of managing your own conversation state, you can rely on threads to store all the information you need
-- Out-of-the-box tools – Tools that you can use to interact with your data sources, such as Bing, Azure AI Search, and Azure Functions.
+- Server-side tool orchestration and retries for supported tools.
+- Managed conversation state with threads, messages, and runs.
+- Built-in observability and tracing integrations.
+- Security and governance controls including guardrails, RBAC, and support for bring-your-own resources.
 
 The tools available in Foundry Agent Service can be divided into two categories:
 
 1. Knowledge Tools:
-    - <a href="https://learn.microsoft.com/azure/ai-services/agents/how-to/tools/bing-grounding?tabs=python&pivots=overview" target="_blank">Grounding with Bing Search</a>
-    - <a href="https://learn.microsoft.com/azure/ai-services/agents/how-to/tools/file-search?tabs=python&pivots=overview" target="_blank">File Search</a>
-    - <a href="https://learn.microsoft.com/azure/ai-services/agents/how-to/tools/azure-ai-search?tabs=azurecli%2Cpython&pivots=overview-azure-ai-search" target="_blank">Azure AI Search</a>
+    - <a href="https://learn.microsoft.com/azure/ai-foundry/agents/how-to/tools/bing-grounding?pivots=python" target="_blank">Grounding with Bing Search</a>
+    - <a href="https://learn.microsoft.com/azure/ai-foundry/agents/how-to/tools/file-search?pivots=python" target="_blank">File Search</a>
+    - <a href="https://learn.microsoft.com/azure/ai-foundry/agents/how-to/tools/azure-ai-search?pivots=python" target="_blank">Azure AI Search</a>
 
 2. Action Tools:
-    - <a href="https://learn.microsoft.com/azure/ai-services/agents/how-to/tools/function-calling?tabs=python&pivots=overview" target="_blank">Function Calling</a>
-    - <a href="https://learn.microsoft.com/azure/ai-services/agents/how-to/tools/code-interpreter?tabs=python&pivots=overview" target="_blank">Code Interpreter</a>
-    - <a href="https://learn.microsoft.com/azure/ai-services/agents/how-to/tools/openapi-spec?tabs=python&pivots=overview" target="_blank">OpenAI defined tools</a>
-    - <a href="https://learn.microsoft.com/azure/ai-services/agents/how-to/tools/azure-functions?pivots=overview" target="_blank">Azure Functions</a>
+    - <a href="https://learn.microsoft.com/azure/ai-foundry/agents/how-to/tools/function-calling?pivots=python" target="_blank">Function Calling</a>
+    - <a href="https://learn.microsoft.com/azure/ai-foundry/agents/how-to/tools/code-interpreter?pivots=python" target="_blank">Code Interpreter</a>
+    - <a href="https://learn.microsoft.com/azure/ai-foundry/agents/how-to/tools/openapi-spec?pivots=python" target="_blank">OpenAPI-defined tools</a>
+    - <a href="https://learn.microsoft.com/azure/ai-foundry/agents/how-to/tools/azure-functions?pivots=python" target="_blank">Azure Functions</a>
 
-The Agent Service allows us to be able to use these tools together as a `toolset`. It also utilizes `threads` which keep track of the history of messages from a particular conversation.
+Agent Service lets you combine these tools in the same agent and use thread-based state to maintain multi-turn conversations.
 
 Imagine you are a sales agent at a company called Contoso. You want to develop a conversational agent that can answer questions about your sales data.
 
@@ -172,10 +173,28 @@ The following image illustrates how you could use Foundry Agent Service to analy
 
 ![Agentic Service In Action](./images/agent-service-in-action.jpg)
 
-To use any of these tools with the service we can create a client and define a tool or toolset. To implement this practically we can use the following Python code. The LLM will be able to look at the toolset and decide whether to use the user created function, `math calc`, or the pre-built Code Interpreter depending on the user request.
+To use tools with the service, create an agent with tool definitions and then handle run execution for the thread. The following snippet matches the lab implementation pattern in `game_agent_v5_tool.py`.
 
-```python 
-add math calc example lab here for agent service
+```python
+tools = self._setup_tools()
+self.agent = self.project_client.agents.create_agent(
+    model=self.model_deployment_name,
+    name=self.agent_name,
+    instructions="You are a helpful assistant.",
+    tools=tools
+)
+
+run = self.project_client.agents.runs.create(
+    thread_id=self.thread.id,
+    agent_id=self.agent.id
+)
+
+if run.status == "requires_action":
+    self.project_client.agents.runs.submit_tool_outputs(
+        thread_id=self.thread.id,
+        run_id=run.id,
+        tool_outputs=tool_outputs
+    )
 ```
 
 #### Improve AI Agent Service Agent to have math calculation tools
@@ -193,12 +212,12 @@ python game_agent_v5_tool.py
 ```
 ![Agentic tools In Action](./images/tool.png)
 
-- the agent can know use a proper math calculation tool to answer the question rather than asking LLM to do so! spoiler alert: LLM is not always good at complex math calculation.
+- the agent can now use a dedicated math calculation tool to answer the question rather than relying only on base model reasoning.
 
 
 ### Semantic Kernel
 
-<a href="https://learn.microsoft.com/azure/ai-services/agents/overview" target="_blank">Semantic Kernel</a> is an open-source AI framework for .NET, Python, and Java developers working with Large Language Models (LLMs). It simplifies the process of using function calling by automatically describing your functions and their parameters to the model through a process called <a href="https://learn.microsoft.com/semantic-kernel/concepts/ai-services/chat-completion/function-calling/?pivots=programming-language-python#1-serializing-the-functions" target="_blank">serializing</a>. It also handles the back-and-forth communication between the model and your code. Another advantage of using an agentic framework like Semantic Kernel, is that it allows you to access pre-built tools like <a href="https://github.com/microsoft/semantic-kernel/blob/main/python/samples/getting_started_with_agents/openai_assistant/step4_assistant_tool_file_search.py" target="_blank">File Search</a> and <a href="https://github.com/microsoft/semantic-kernel/blob/main/python/samples/getting_started_with_agents/openai_assistant/step3_assistant_tool_code_interpreter.py" target="_blank">Code Interpreter</a>.
+<a href="https://learn.microsoft.com/semantic-kernel/overview/" target="_blank">Semantic Kernel</a> is an open-source AI framework for .NET, Python, and Java developers working with Large Language Models (LLMs). It simplifies the process of using function calling by automatically describing your functions and their parameters to the model through a process called <a href="https://learn.microsoft.com/semantic-kernel/concepts/ai-services/chat-completion/function-calling/?pivots=programming-language-python#1-serializing-the-functions" target="_blank">serializing</a>. It also handles the back-and-forth communication between the model and your code. Another advantage of using an agentic framework like Semantic Kernel, is that it allows you to access pre-built tools like <a href="https://github.com/microsoft/semantic-kernel/blob/main/python/samples/getting_started_with_agents/openai_assistant/step4_assistant_tool_file_search.py" target="_blank">File Search</a> and <a href="https://github.com/microsoft/semantic-kernel/blob/main/python/samples/getting_started_with_agents/openai_assistant/step3_assistant_tool_code_interpreter.py" target="_blank">Code Interpreter</a>.
 
 The following diagram illustrates the process of function calling with Semantic Kernel:
 

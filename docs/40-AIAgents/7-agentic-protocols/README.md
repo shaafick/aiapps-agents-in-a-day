@@ -64,6 +64,20 @@ Imagine a player wants to get tournament assistance using an AI agent powered by
 cd apps-rps/rps-game-mcp
 ```
 
+- create and activate a virtual environment.
+
+```bash
+python -m venv .maf
+```
+```bash
+# Windows
+source .maf/Scripts/activate
+```
+```bash
+# macOs/linux
+source .maf/bin/activate
+```
+
 - install python packages. all required packages are listed in `requirements.txt` file. they are for all the labs in this module.
 
 ```python

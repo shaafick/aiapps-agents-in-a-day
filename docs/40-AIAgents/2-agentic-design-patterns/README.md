@@ -81,6 +81,20 @@ The SDK talks to Foundry Agent Service via managed identity to ensure the securi
 ```python
 cd labs/40-AIAgents
 ```
+- create and activate a virtual environment.
+
+```bash
+python -m venv .venv
+```
+```bash
+# Windows
+source .venv/Scripts/activate
+```
+```bash
+# macOs/linux
+source .venv/bin/activate
+```
+
 
 - install python packages. all required packages are listed in `requirements.txt` file. they are for all the labs in this module.
 

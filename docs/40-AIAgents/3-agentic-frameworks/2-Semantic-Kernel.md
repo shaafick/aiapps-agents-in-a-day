@@ -13,6 +13,8 @@ Let's first cover some core components:
 ```python
 cd labs/40-AIAgents
 ```
+- check the AZURE_OPENAI_API_ENDPOINT value in the `.env` file. If needed it can be found at here: https://aiaaa-s2-setting.azurewebsites.net/Home/Settings
+
 - run the agent and see the console output.
 
 ```python
@@ -22,7 +24,7 @@ python game_agent_v3_sk.py
 ![Microsoft Foundry Project](./images/semantic_kernel.png)
 
 
-- because the semantic kernel agent does not use a managed service, so you can't see it in the Microsoft Foundry portal.
+- because the semantic kernel agent does not use a managed service, you won't see it in the Microsoft Foundry portal.
 
 
 ## AI Connectors

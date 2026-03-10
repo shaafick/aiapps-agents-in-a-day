@@ -1,167 +1,174 @@
 # GitHub Copilot SDK
 
-GitHub Copilot SDK is an event-driven framework for building AI agents. It supports both GitHub Copilot credentials and BYOK (Bring Your Own Key) provider credentials. For GitHub Copilot credentials, the SDK can use a logged-in Copilot user session, OAuth user tokens, or supported GitHub token environment variables. For BYOK, callers supply provider API keys or static bearer tokens directly.
+GitHub Copilot SDK is an event-capable framework for building AI agents with either GitHub Copilot credentials or BYOK (Bring Your Own Key) provider credentials.
 
-Copilot SDK excels in scenarios requiring **event-based messaging**, **multi-provider flexibility**, and **explicit credential management**. It's ideal for environments where automatic CLI or managed-identity auth is not available or where you need fine-grained control over API keys, bearer tokens, and custom authentication flows.
+For this lab, the default path is BYOK with Azure Foundry endpoint and API key, using the sample at `labs/40-AIAgents/game_agent_v3_copilot.py`.
 
-**Package**: `github-copilot-sdk`
+**Package**: `github-copilot-sdk`  
+**Import module**: `copilot`
 
-**Use Cases**: Event-driven agent workflows, GitHub Copilot credential-based apps, BYOK provider integrations (OpenAI, Azure, Anthropic, Ollama), custom authentication patterns, environments without Azure CLI access.
+## Default Lab Path
 
-**Why GitHub Copilot SDK?**
-- **Event-Driven Architecture**: Reactive messaging patterns with `session.on()` event handlers
-- **Direct API Control**: Use API keys and bearer tokens without CLI dependencies
-- **Multi-Provider Flexibility**: Unified interface for OpenAI, Azure, Anthropic, Ollama, custom endpoints
-- **Wire API Options**: Supports both "completions" and "responses" API formats
-- **Custom Authentication**: Full control over authentication tokens and credential management
-- **No CLI Dependencies**: Works in environments without Azure CLI or GitHub CLI
+Use this section for the workshop flow. It matches `labs/40-AIAgents/game_agent_v3_copilot.py`.
 
-Let's cover some core components:
+### 1) Go to the lab folder
 
-Let's cover some core components:
-
-## Create GitHub Copilot Agent
-
-- navigate to `labs/40-AIAgents` folder, open `game_agent_v3_copilot.py` file.
-
-```python
+```bash
 cd labs/40-AIAgents
 ```
 
-- run the agent and see the console output.
+### 2) Install and imports
 
-```python
-python game_agent_v3_copilot.py
+Package/import mapping for this lab:
+
+- Install package: `github-copilot-sdk`
+- Import module: `copilot`
+
+Recommended path (matches lab dependencies):
+
+```bash
+pip install -r requirements.txt
 ```
 
-Expected output:
+Fallback path (Copilot SDK only):
 
+```bash
+pip install github-copilot-sdk python-dotenv
 ```
-GitHub Copilot SDK (BYOK) agent initialized: default-player
-Testing agent: default-player
+
+### 3) Configure environment variables
+
+The sample requires these variables:
+
+| Variable | Required | Used by sample |
+| --- | --- | --- |
+| `AZURE_FOUNDRY_PROJECT_ENDPOINT` | Yes | Endpoint passed to provider `base_url` |
+| `AZURE_FOUNDRY_API_KEY` | Yes | BYOK `api_key` for provider |
+| `AZURE_FOUNDRY_MODEL_DEPLOYMENT_NAME` | Optional | Model name, defaults to `gpt-4o` |
+| `DEV_Name` | Optional | Player name, defaults to `default-player` |
+
+If your environment uses `AZURE_OPENAI_API_ENDPOINT` and `AZURE_OPENAI_API_KEY`, map them into the sample variable names before running.
+
+### 4) Run the sample
+
+```bash
+python3 game_agent_v3_copilot.py
+```
+
+Expected shape of output:
+
+```text
 Q: What is 15 + 27?
 A: 42
-Game Agent: Test complete
 ```
 
-- GitHub Copilot SDK uses API keys (BYOK) from Azure Foundry with event-based messaging patterns.
+## Provider Configuration (Lab Default)
 
-## Provider Configuration
+The sample uses `SessionConfig` and an Azure provider:
 
-Copilot SDK uses provider configurations to connect to AI services with explicit API credentials:
+```python
+from copilot import CopilotClient, SessionConfig, MessageOptions, PermissionHandler
 
-  ```python
-  from copilot import CopilotClient
-  import os
+client = CopilotClient()
+await client.start()
 
-  client = CopilotClient()
-  await client.start()
-  
-  # BYOK with Azure Foundry
-  session = await client.create_session({
-      "model": "gpt-5",
-      "provider": {
-          "type": "openai",  # For Azure Foundry with /openai/v1/ endpoint
-          "base_url": "https://your-resource.openai.azure.com/openai/v1/",
-          "api_key": os.environ["AZURE_OPENAI_API_KEY"],
-          "wire_api": "responses",  # Use "responses" for GPT-5, "completions" for older
-      },
-  })
-  ```
+session = await client.create_session(
+    SessionConfig(
+        model="gpt-4o",
+        provider={
+            "type": "azure",
+            "base_url": "https://<foundry-project-endpoint>",
+            "api_key": "<AZURE_FOUNDRY_API_KEY>",
+            "azure": {"api_version": "2024-10-21"},
+        },
+        on_permission_request=PermissionHandler.approve_all,
+    )
+)
 
-  Providers support multiple types: `"openai"` for OpenAI-compatible endpoints, `"azure"` for native Azure endpoints, `"anthropic"` for Claude models. The `wire_api` setting chooses between Chat Completions API (`"completions"`) and Responses API (`"responses"`).
-
-## Event-Based Messaging
-
-Copilot SDK uses reactive event handlers instead of direct method calls:
-
-  ```python
-  done = asyncio.Event()
-  response_text = ""
-  
-  def on_event(event):
-      nonlocal response_text
-      if event.type.value == "assistant.message":
-          response_text = event.data.content
-      elif event.type.value == "session.idle":
-          done.set()
-  
-  session.on(on_event)
-  await session.send({"prompt": "What is 15 + 27?"})
-  await done.wait()
-  ```
-
-  This event-driven pattern enables reactive agent architectures where responses are handled asynchronously through callbacks rather than blocking method calls.
+response = await session.send_and_wait(MessageOptions(prompt="What is 15 + 27?"))
+print(response.data.content)
+```
 
 ## Sessions
 
-Sessions maintain stateful conversations with automatic history tracking:
+The session persists conversation context across turns:
 
-  ```python
-  # First message
-  await session.send({"prompt": "My name is Alice."})
-  await done.wait()
-  
-  # Second message - session remembers context
-  await session.send({"prompt": "What is my name?"})
-  await done.wait()
-  # Response will reference "Alice"
-  ```
-
-  Unlike request-response patterns, sessions handle conversation state automatically across multiple interactions.
+```python
+await session.send_and_wait(MessageOptions(prompt="My name is Alice."))
+result = await session.send_and_wait(MessageOptions(prompt="What is my name?"))
+print(result.data.content)
+```
 
 ## Authentication Patterns
 
-Copilot SDK supports two primary auth models:
+Copilot SDK supports two broad auth approaches.
 
-**1) GitHub Copilot credentials**
+### 1) GitHub Copilot credentials
 
-- **Logged-in user credentials (default)**: `CopilotClient()` can use stored credentials from `copilot` CLI sign-in.
-- **OAuth GitHub App token**: pass `github_token` / `githubToken` to authenticate on behalf of a user.
-- **Environment variable tokens** (priority in docs): `COPILOT_GITHUB_TOKEN`, then `GH_TOKEN`, then `GITHUB_TOKEN`.
+Use Copilot-authenticated flows via logged-in user state, OAuth token, or token environment variables (`COPILOT_GITHUB_TOKEN`, `GH_TOKEN`, `GITHUB_TOKEN`).
 
-These modes use GitHub Copilot authentication and typically require a Copilot subscription.
+### 2) BYOK provider credentials (Lab default)
 
-**2) BYOK provider credentials**
+Use provider credentials directly in session config, typically API keys:
 
-For BYOK sessions, supply explicit provider credentials in the provider config. Typical options include API keys and bearer tokens:
+```python
+provider = {
+    "type": "azure",
+    "base_url": "https://<endpoint>",
+    "api_key": "<api-key>",
+}
+```
 
-  **API Keys**:
-  ```python
-  provider: {
-    "api_key": os.environ["AZURE_OPENAI_API_KEY"]
-  }
-  ```
+Important limitation for BYOK: credentials are treated as static values. If you use short-lived bearer tokens, your app must refresh them and recreate or update sessions.
 
-  **Bearer Tokens** (custom flows):
-  ```python
-  provider: {
-    "bearer_token": os.environ["MY_BEARER_TOKEN"]
-  }
-  ```
+## Optional Advanced Patterns
 
-  **Important Limitation (BYOK)**: Credentials passed to BYOK provider configs are treated as static values; the SDK does not automatically refresh short-lived tokens (for example, tokens obtained via Azure Entra ID or managed identity). If you rely on short-lived tokens you must acquire/refresh them in your application code and recreate or update sessions accordingly.
+These are optional and not required for this lab.
+
+### Event callback flow (optional)
+
+Use this when you need reactive event handling instead of `send_and_wait`.
+
+```python
+done = asyncio.Event()
+response_text = ""
+
+
+def on_event(event):
+    nonlocal response_text
+    if event.type.value == "assistant.message":
+        response_text = event.data.content
+    elif event.type.value == "session.idle":
+        done.set()
+
+
+session.on(on_event)
+await session.send({"prompt": "What is 15 + 27?"})
+await done.wait()
+```
+
+### OpenAI-compatible provider shape (optional)
+
+Use this when your endpoint is configured for OpenAI-compatible routing.
+
+```python
+session = await client.create_session(
+    {
+        "model": "gpt-5",
+        "provider": {
+            "type": "openai",
+            "base_url": "https://<resource>.openai.azure.com/openai/v1/",
+            "api_key": "<AZURE_OPENAI_API_KEY>",
+            "wire_api": "responses",
+        },
+    }
+)
+```
 
 ## Learn More
 
-**Official Documentation**:
 - [GitHub Copilot SDK - BYOK Guide](https://github.com/github/copilot-sdk/blob/main/docs/auth/byok.md)
 - [GitHub Copilot SDK - Authentication Overview](https://github.com/github/copilot-sdk/blob/main/docs/auth/index.md)
 - [Provider Configuration Reference](https://github.com/github/copilot-sdk/blob/main/docs/auth/byok.md#provider-configuration-reference)
 - [Getting Started](https://github.com/github/copilot-sdk/blob/main/docs/getting-started.md)
 - [GitHub Repository](https://github.com/github/copilot-sdk)
-
-**Installation**:
-```bash
-pip install github-copilot-sdk
-```
-
-**Environment Variables**:
-- `AZURE_OPENAI_API_ENDPOINT` - Azure Foundry endpoint (must end with `/openai/v1/`)
-- `AZURE_OPENAI_API_KEY` - API key (BYOK - not Azure CLI)
-- `AZURE_FOUNDRY_MODEL_DEPLOYMENT_NAME` - Model deployment name
-
-**GitHub Copilot Token Environment Variables**:
-- `COPILOT_GITHUB_TOKEN` - Recommended explicit token variable for Copilot SDK auth
-- `GH_TOKEN` - GitHub CLI-compatible token variable
-- `GITHUB_TOKEN` - GitHub Actions-compatible token variable

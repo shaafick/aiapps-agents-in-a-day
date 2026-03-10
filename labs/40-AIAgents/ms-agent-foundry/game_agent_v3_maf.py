@@ -15,6 +15,7 @@ SpanAttributes.LLM_TOKEN_TYPE = "gen_ai.token.type"
 
 from agent_framework.azure import AzureOpenAIResponsesClient
 from azure.identity import DefaultAzureCredential
+from random import choice
 
 load_dotenv(override=True)
 
@@ -62,11 +63,19 @@ async def main():
         name="GameAgent",
         instructions=INSTRUCTIONS
     )
+
+    # INSERT-TOOLS-HERE
+
+    # INSERT-SESSION-CONTINUITY-HERE
+
+    # INSERT-NEW-SESSION-TOOL-HERE
+    # Add a tool-driven game restart flow here instead of slash commands.
     
     session = agent.create_session()
     
     while True:
         user_input = input("You: ").strip()
+
         if user_input.lower() in ("exit", "quit"):
             print("Goodbye!")
             break
@@ -78,6 +87,9 @@ async def main():
             response = await agent.run(user_input, session=session)
             print(f"Agent: {response}")
             print()
+
+            # INSERT-NEW-SESSION-RESTART-HOOK-HERE
+            # If restart was requested by a tool call, create a new session here.
             
         except Exception as e:
             print(f"Error: {e}")

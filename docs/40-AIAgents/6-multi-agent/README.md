@@ -9,7 +9,7 @@ This section covers multi-agent orchestration patterns within a single system. F
 
 ## Scenarios Where Multi-Agents Are Applicable
 
-So what scenarios are a good use case for using multi-agents? The answer is that there are many scenarios where employing multiple agents is beneficial especially in the following cases:
+So what scenarios are a good use case for using multi-agents?
 
 - **Large workloads**: Large workloads can be divided into smaller tasks and assigned to different agents, allowing for parallel processing and faster completion. An example of this is in the case of a large data processing task.
 - **Complex tasks**: Complex tasks, like large workloads, can be broken down into smaller subtasks and assigned to different agents, each specializing in a specific aspect of the task. A good example of this is in the case of autonomous vehicles where different agents manage navigation, obstacle detection, and communication with other vehicles.
