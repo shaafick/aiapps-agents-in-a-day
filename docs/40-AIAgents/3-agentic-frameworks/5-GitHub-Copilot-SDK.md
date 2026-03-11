@@ -17,23 +17,12 @@ Use this section for the workshop flow. It matches `labs/40-AIAgents/game_agent_
 cd labs/40-AIAgents
 ```
 
-### 2) Install and imports
-
-Package/import mapping for this lab:
-
-- Install package: `github-copilot-sdk`
-- Import module: `copilot`
+### 2) Install dependencies
 
 Recommended path (matches lab dependencies):
 
 ```bash
 pip install -r requirements.txt
-```
-
-Fallback path (Copilot SDK only):
-
-```bash
-pip install github-copilot-sdk python-dotenv
 ```
 
 ### 3) Configure environment variables

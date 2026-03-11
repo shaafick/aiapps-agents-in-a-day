@@ -4,6 +4,36 @@ Microsoft Agent Framework is an SDK for building production-ready AI agents in a
 
 For this lab, the sample in `labs/40-AIAgents/ms-agent-foundry/game_agent_v3_maf.py` runs a console agent against Azure OpenAI Responses through Agent Framework using Entra ID credentials.
 
+## What It Is (and Is Not)
+
+Microsoft Agent Framework is an application framework. It is not a hosted runtime by itself.
+
+- It is: a code-first way to build agent behavior inside your app.
+- It is not: a replacement for your app architecture, APIs, or data design.
+- It is not: the same thing as Azure AI Foundry Agent Service.
+
+Think of Agent Framework as the agent layer in your codebase that standardizes how your app talks to models, manages conversation state, and calls tools.
+
+## Why Teams Use It
+
+Teams typically adopt Agent Framework when they need:
+
+- Consistent patterns across providers (Azure OpenAI, OpenAI, and others).
+- Explicit control over tool invocation and session continuity.
+- Easier migration between simple chat, tool-enabled agents, and workflow orchestration.
+- A path from prototype to production without rewriting the agent abstraction.
+
+## Mental Model
+
+Use this simple model when reading Agent Framework code:
+
+- `Client`: How your app connects to a model API.
+- `Agent`: The behavior layer (instructions, tools, middleware, options).
+- `Session`: Conversation state that gives multi-turn continuity.
+- `Run`: A single invocation that can use model reasoning and tools.
+
+In short: client + agent configuration + session + run loop.
+
 ## Framework vs Service
 
 - **Microsoft Agent Framework**: SDK and orchestration patterns in your app code.
@@ -11,7 +41,34 @@ For this lab, the sample in `labs/40-AIAgents/ms-agent-foundry/game_agent_v3_maf
 
 Use Agent Framework when you want code-level control over behavior and integration. Use Foundry Agent Service when you want more service-managed lifecycle and operations.
 
-## Current Sample Behavior
+Practical decision rule:
+
+- Choose **Agent Framework** if your app team owns behavior in source code and wants full integration control.
+- Choose **Foundry Agent Service** if your team prefers managed lifecycle/operations and less runtime plumbing in app code.
+
+## Core Concepts to Understand
+
+### 1. Providers and Clients
+
+Provider clients (for example `AzureOpenAIResponsesClient`) encapsulate API-specific details while exposing a common agent creation pattern.
+
+### 2. Agent Definition
+
+`client.as_agent(...)` defines agent identity, instructions, tools, and execution defaults. This is the central place where agent behavior is shaped.
+
+### 3. Session Continuity
+
+`agent.create_session()` gives you a session object that carries conversation context across turns. Reusing the same session is what makes follow-up questions coherent.
+
+### 4. Tools
+
+Tools are deterministic functions your agent can call. The model decides when to call them, but your app owns their implementation and side effects.
+
+### 5. Orchestration
+
+Your app still owns orchestration: input loop, policy checks, persistence, retries, and UX. Agent Framework standardizes the agent layer, not the full app stack.
+
+## How the Sample Maps to Concepts
 
 The current `game_agent_v3_maf.py` sample does the following:
 
@@ -20,6 +77,15 @@ The current `game_agent_v3_maf.py` sample does the following:
 - Creates one session with `agent.create_session()` and reuses it for the full chat loop.
 - Sends every non-empty user message with `await agent.run(user_input, session=session)`.
 - Exits on `exit` or `quit`.
+
+This is the minimum production-relevant pattern: one configured agent, one persistent session, repeated `run(...)` calls.
+
+## Common Misunderstandings
+
+- "The model remembers everything by default": Session continuity depends on passing the same session object.
+- "Tools execute themselves": Tools are app functions; your app defines their logic and trust boundaries.
+- "Framework and Foundry service are interchangeable": They solve adjacent but different concerns (code abstraction vs managed runtime).
+- "Agent code replaces normal backend design": You still need API contracts, auth, data access rules, and observability.
 
 ## Create Microsoft Agent Framework Agent
 
@@ -39,7 +105,7 @@ python -m venv .maf
 source .maf/Scripts/activate
 ```
 ```bash
-# macOs/linux
+# macOS/linux
 source .maf/bin/activate
 ```
 

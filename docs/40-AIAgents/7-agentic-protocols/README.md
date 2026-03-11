@@ -67,15 +67,15 @@ cd apps-rps/rps-game-mcp
 - create and activate a virtual environment.
 
 ```bash
-python -m venv .maf
+python -m venv .venv
 ```
 ```bash
 # Windows
-source .maf/Scripts/activate
+source .venv/Scripts/activate
 ```
 ```bash
 # macOs/linux
-source .maf/bin/activate
+source .venv/bin/activate
 ```
 
 - install python packages. all required packages are listed in `requirements.txt` file. they are for all the labs in this module.
@@ -105,6 +105,26 @@ python mcp-client.py
 
 ![alt text](./images/mcp-client.png)
 
+### Connect local MCP to Microsoft Agent Framework.
+
+- Keep a terminal running with the `mcp-server.py` file and open another terminal to navigate to `labs/40-AIAgents/ms-agent-foundry` and activate the virtual environment set up earlier.
+
+```bash
+cd labs/40-AIAgents/ms-agent-foundry
+```
+```bash
+# Windows
+source .maf/Scripts/activate
+```
+```bash
+# macOs/linux
+source .maf/bin/activate
+```
+
+- review the file - for localised development the code can now call the MCP tool for additional testing.
+
+![alt text](./images/maf-mcp-local-testing.png)
+
 ### Connect AI Agent to MCP server
 
 - navigate to `labs/40-AIAgents` folder, open `game_agent_v7_mcp.py` file.
@@ -113,12 +133,12 @@ python mcp-client.py
 cd labs/40-AIAgents
 ```
 
-- The agent can connect to the MCP server and use the tools exposed by the server by using below code block. MCP support for agent service is currently in preview, we will not run below code for now.
+- The agent can connect to Hosted MCP servers and use the tools exposed by the server to complete actions. 
 
 ```python
     # Initialize agent MCP tool
-    mcp_server_url = os.environ.get("MCP_SERVER_URL", "http://127.0.0.1:3111/mcp")
-    mcp_server_label = os.environ.get("MCP_SERVER_LABEL", "weather")
+    mcp_server_url = os.environ.get("MCP_SERVER_URL", "https://gitmcp.io/Azure/azure-rest-api-specs")
+    mcp_server_label = os.environ.get("MCP_SERVER_LABEL", "azure")
 
     self.mcp_tool = McpTool(
         server_label=mcp_server_label,
@@ -129,6 +149,11 @@ cd labs/40-AIAgents
     tools.extend(self.mcp_tool.definitions)
 ```
 
+- this MCP server allows you to get details for the Azure REST api specs. Run `python game_agent_v7_mcp.py` to see the agent leverage the MCP tools.
+
+```python
+python game_agent_v7_mcp.py
+```
 
 ## Agent-to-Agent Protocol (A2A)
 
