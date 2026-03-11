@@ -206,9 +206,31 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.maf
+.a2a
 
 #AI tools
 .specify
 .github/agents
 .github/prompts
 specs
+
+# publish packages
+apps-rps/**/bin/
+apps-rps/**/obj/
+apps-rps/**/publish/
+apps-rps/**/bin/*/publish/
+apps-rps/**/bin/**/publish/
+apps-rps/**/bin/Debug/
+apps-rps/**/bin/Release/
+apps-rps/**/bin/**/Debug/
+apps-rps/**/bin/**/Release/
+apps-rps/**/*.dll
+apps-rps/**/*.pdb
+apps-rps/**/*.exe
+apps-rps/**/*.runtimeconfig.json
+apps-rps/**/*.deps.json
+apps-rps/rps-game-server/publish/
+apps-rps/rps-game-server/wwwroot/dist/
+apps-rps/rps-game-server/deployments/
+apps-rps/rps-game-server/LogFiles/

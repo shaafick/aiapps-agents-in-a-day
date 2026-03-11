@@ -1,6 +1,6 @@
 {
 	"servers": {
-		"my-mcp-server-b0e97015": {
+		"rps-mcp": {
 			"url": "http://127.0.0.1:3111/mcp",
 			"type": "http"
 		},
