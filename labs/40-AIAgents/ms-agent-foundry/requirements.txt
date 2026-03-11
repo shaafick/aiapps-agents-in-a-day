@@ -1,0 +1,7 @@
+uvicorn>=0.24.0
+fastapi>=0.104.0
+dotenv
+agent-framework
+typing
+pydantic
+choice
