@@ -41,7 +41,7 @@ class GameAgent:
     
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         if self.session:
-            await self.session.disconnect()
+            await self.session.destroy()
         if self.client:
             await self.client.stop()
     
