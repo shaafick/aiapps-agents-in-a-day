@@ -1,0 +1,64 @@
+# Rock-Paper-Scissors Tournament Rulebook
+
+## Game Rules
+- Rock beats Scissors (crushes)
+- Paper beats Rock (covers)
+- Scissors beats Paper (cuts)
+- Same moves result in a tie
+
+## Tournament Format
+- 5 rounds total
+- Each round has a question + RPS move
+- Correct answer: +10 points
+- RPS win: +20 points
+- RPS tie: +10 points
+- RPS loss: +0 points
+
+
+## Random Odd Facts About Rock-Paper-Scissors
+
+### Historical Facts
+- The game originated in China during the Han Dynasty (206 BC - 220 AD) and was called "shoushiling"
+- It wasn't called "Rock-Paper-Scissors" until the 1930s in America - before that it was "Rochambeau"
+- The Japanese version "Jan-Ken-Pon" has been played since at least the 17th century
+- The World Rock Paper Scissors Society was founded in 1918 and holds annual championships
+
+### Statistical Oddities
+- Novice players throw Rock 35.4% of the time, Paper 33.3%, and Scissors 31.3%
+- Men are 2.5 times more likely to open with Rock than women
+- In competitive play, Paper is thrown least frequently at only 29.6% of the time
+- Professional players can achieve win rates of up to 65% by reading opponent patterns
+
+### Scientific Studies
+- Researchers have found that people subconsciously mirror their opponent's previous move
+- The game has been used to study game theory, probability, and human psychology
+- A computer program called "Iocaine Powder" won the First International RoShamBo Programming Competition by predicting human patterns
+- Scientists discovered that most people have unconscious "tells" when choosing their next move
+
+### Cultural Variations
+- In Indonesia, the game includes "Elephant, Human, Ant" where Elephant beats Human, Human beats Ant, and Ant beats Elephant
+- Some variations have up to 101 different hand gestures (Rock-Paper-Scissors-Spock-Lizard is just the beginning!)
+- In France, it's called "Pierre-Feuille-Ciseaux" and sometimes includes a well that can beat rock
+- The game is used in Japan to settle legal disputes when judges can't reach a consensus
+
+### Mind Games & Strategy
+- The "Gambler's Fallacy" causes players to expect variety, making them avoid repeating moves even when random
+- Experienced players often use psychological tactics like deliberately losing early rounds to establish patterns
+- The optimal strategy in pure random play is exactly 1/3 for each move, but humans are terrible at being random
+- Professional players study "opening books" like chess players, memorizing optimal sequences for different opponent types
+
+### Bizarre World Records
+- The longest recorded game lasted 4 hours and 32 minutes (with best-of-3 rounds)
+- The largest simultaneous game involved 2,950 participants in Japan
+- There's a professional league in Japan where top players earn six-figure salaries
+- The fastest game on record was decided in 0.23 seconds
+
+### Tournament Psychology
+- Players who lose the first round are 7% more likely to switch their strategy completely
+- Announcing your move beforehand ("I'm going Rock!") actually works 23% of the time because opponents think you're bluffing
+- Professional players can predict opponent moves with 58% accuracy by watching micro-expressions
+- The phenomenon called "RPS momentum" shows that players on winning streaks become more predictable
+
+## Rock-Paper-Scissors Agent Idea
+- It was a sunny morning. Daniel had a cup of coffee and had this idea.
+
