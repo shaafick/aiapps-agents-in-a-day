@@ -1,6 +1,6 @@
 # Agentic Protocols
 
-As the use of AI agents grows, so does the need for protocols that ensure standardization, security, and support open innovation. In this lesson, we will cover 3 protocols looking to meet this need - Model Context Protocol (MCP), Agent to Agent (A2A) and Natural Language Web (NLWeb).
+As the use of AI agents grows, so does the need for protocols that ensure standardization, security, and support open innovation. In this lesson we will cover three protocols that aim to meet this need: Model Context Protocol (MCP), Agent-to-Agent (A2A), and Natural Language Web (NLWeb).
 
 :::tip Related Content
 This section covers open protocols for standardized agent communication. For multi-agent orchestration patterns and design within a single system, see [Section 6: Multi-Agent Orchestration](../6-multi-agent/README.md).
@@ -8,7 +8,7 @@ This section covers open protocols for standardized agent communication. For mul
 
 ## Model Context Protocol
 
-The **Model Context Protocol (MCP)** is an open standard that provides standardized way for applications to provide context and tools to LLMs. This enables a "universal adaptor" to different data sources and tools that AI Agents can connect to in a consistent way.
+The **Model Context Protocol (MCP)** is an open standard that provides a standardized way for applications to provide context and tools to LLMs. This enables a "universal adapter" to different data sources and tools that AI agents can connect to in a consistent way.
 
 Let’s look at the components of MCP, the benefits compared to direct API usage, and an example of how AI agents might use an MCP server.
 
@@ -58,13 +58,13 @@ Imagine a player wants to get tournament assistance using an AI agent powered by
 
 ### Create Game MCP server
 
-- open a new teminial windows and navigate to `apps-rps/rps-game-mcp` folder.
+- Open a new terminal window and navigate to `apps-rps/rps-game-mcp`.
 
-```python
+```bash
 cd apps-rps/rps-game-mcp
 ```
 
-- create and activate a virtual environment.
+- Create and activate a virtual environment.
 
 ```bash
 python -m venv .venv
@@ -74,36 +74,36 @@ python -m venv .venv
 source .venv/Scripts/activate
 ```
 ```bash
-# macOs/linux
+# macOS / Linux
 source .venv/bin/activate
 ```
 
-- install python packages. all required packages are listed in `requirements.txt` file. they are for all the labs in this module.
+- Install Python packages. All required packages are listed in `requirements.txt`; they are used by the labs in this module.
 
-```python
+```bash
 pip install -r requirements.txt
 ```
 
-- run the MCP server and see the console output.
+- Run the MCP server and observe the console output.
 
-```python
+```bash
 python mcp-server.py
 ```
 ![alt text](./images/mcp-server.png)
 
-- open a new terminial windows and also navigate to `apps-rps/rps-game-mcp` folder.
+- Open a new terminal window and navigate to `apps-rps/rps-game-mcp`.
 
-```python
+```bash
 cd apps-rps/rps-game-mcp
 ```
 
-- run the MCP client and see the console output. the client will connect to the server and get the list of tools exposed by the server.
+- Run the MCP client and observe the console output. The client connects to the server and retrieves the list of exposed tools.
 
-```python
+```bash
 python mcp-client.py
 ```
 
-![alt text](./images/mcp-client.png)
+![mcp client console output](./images/mcp-client.png)
 
 ### Connect local MCP to Microsoft Agent Framework.
 
@@ -117,7 +117,7 @@ cd labs/40-AIAgents/ms-agent-foundry
 source .maf/Scripts/activate
 ```
 ```bash
-# macOs/linux
+# macOS / Linux
 source .maf/bin/activate
 ```
 
@@ -127,13 +127,13 @@ source .maf/bin/activate
 
 ### Connect AI Agent to MCP server
 
-- navigate to `labs/40-AIAgents` folder, open `game_agent_v7_mcp.py` file.
+- Navigate to `labs/40-AIAgents` and open `game_agent_v7_mcp.py`.
 
-```python
+```bash
 cd labs/40-AIAgents
 ```
 
-- The agent can connect to Hosted MCP servers and use the tools exposed by the server to complete actions. 
+- The agent can connect to hosted MCP servers and use the tools exposed by the server to complete actions.
 
 ```python
     # Initialize agent MCP tool
@@ -149,15 +149,15 @@ cd labs/40-AIAgents
     tools.extend(self.mcp_tool.definitions)
 ```
 
-- this MCP server allows you to get details for the Azure REST api specs. Run `python game_agent_v7_mcp.py` to see the agent leverage the MCP tools.
+- This MCP server allows you to get details for the Azure REST API specs. Run `python game_agent_v7_mcp.py` to see the agent leverage the MCP tools.
 
-```python
+```bash
 python game_agent_v7_mcp.py
 ```
 
 ## Agent-to-Agent Protocol (A2A)
 
-While MCP focuses on connecting LLMs to tools, the **Agent-to-Agent (A2A) protocol** takes it a step further by enabling communication and collaboration between different AI agents.  A2A connects AI agents across different organizations, environments and tech stacks to complete a shared task.
+While MCP focuses on connecting LLMs to tools, the **Agent-to-Agent (A2A) protocol** takes it a step further by enabling communication and collaboration between different AI agents. A2A can connect AI agents across different organizations, environments and tech stacks to complete a shared task.
 
 We’ll examine the components and benefits of A2A, along with an example of how it could be applied in our travel application.
 
@@ -237,17 +237,17 @@ python -m venv .a2a
 source .a2a/Scripts/activate
 ```
 ```bash
-# macOs/linux
+# macOS / Linux
 source .a2a/bin/activate
 ```
 
 - Install required dependencies
 
-```python
+```bash
 pip install -r requirements.txt
 ```
 
-- Run the `main.py` script. This will will start 2 agents, one which communicates directly with you via the terminal and another agent which has tools available for querying.
+- Run the `main.py` script. This will start two agents: one that communicates directly with you via the terminal, and another that exposes tools for querying.
 
 ```bash
 python main.py

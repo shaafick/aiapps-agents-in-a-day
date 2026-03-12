@@ -74,11 +74,11 @@ Imagine you are designing a Rock Paper Scissors Agent, here is how you could thi
 
 ## Create AI Agent Service Agent via Code
 
-The SDK talks to Foundry Agent Service via managed identity to ensure the security of the service. You should have already sign in to Azure in the terminal windows in earlier lab. 
+The SDK talks to Foundry Agent Service via managed identity to ensure the security of the service. You should have already signed in to Azure in earlier terminal windows.
 
-- navigate to `labs/40-AIAgents` folder, open `game_agent_v2_llm.py` file.
+- Navigate to `labs/40-AIAgents` and open `game_agent_v2_llm.py`.
 
-```python
+```bash
 cd labs/40-AIAgents
 ```
 - create and activate a virtual environment.
@@ -91,14 +91,14 @@ python -m venv .venv
 source .venv/Scripts/activate
 ```
 ```bash
-# macOs/linux
+# macOS / Linux
 source .venv/bin/activate
 ```
 
 
-- install python packages. all required packages are listed in `requirements.txt` file. they are for all the labs in this module.
+- Install Python packages. All required packages are listed in `requirements.txt`; they are used by the labs in this module.
 
-```python
+```bash
 pip install -r requirements.txt
 ```
 
@@ -109,19 +109,19 @@ AZURE_FOUNDRY_PROJECT_ENDPOINT=https://aiapps-agents-aiservices-793ad4.services.
 AZURE_FOUNDRY_MODEL_DEPLOYMENT_NAME=gpt-4o
 ```
 
-![alt text](images\image-6.png)
+![Foundry portal screenshot](images/image-6.png)
 
 - run the agent and see the console output.
 
-```python
+```bash
 python game_agent_v2_llm.py
 ```
-![alt text](images\image-7.png)
+![Agent Response](images/image-7.png)
 
 - navigate to Microsoft Foundry portal, you should see the agent created in the portal. Please note that these will load in Classic Microsoft Foundry, but you can try New Foundry if you wish!
 
-![alt text](images\image-9.png)
+![Foundry portal agent created](images/image-9.png)
 
 - you can also interact with the agent in the portal playground.
 
-![alt text](images\image-8.png)
+![Foundry portal playground](images/image-8.png)
