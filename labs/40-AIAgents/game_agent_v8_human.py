@@ -18,7 +18,7 @@ load_dotenv()
 
 
 class GameAgent:
-    """Azure AI Foundry Agent service for RPS Tournament with Human-in-the-Loop"""
+    """Microsoft Foundry Agent service for RPS Tournament with Human-in-the-Loop"""
     
     def __init__(self, project_endpoint=None, model_deployment_name=None, player_name=None):
         self.project_endpoint = project_endpoint or os.getenv('AZURE_FOUNDRY_PROJECT_ENDPOINT')
@@ -106,7 +106,7 @@ class GameAgent:
                 print("Please enter 'y/yes' to approve or 'n/no' to reject.")
     
     def _call_azure_ai_agent(self, message):
-        """Call Azure AI Foundry Agent service with human-in-the-loop approval"""
+        """Call Microsoft Foundry Agent service with human-in-the-loop approval"""
         self.project_client.agents.messages.create(
             thread_id=self.thread.id,
             role="user",
@@ -131,7 +131,7 @@ class GameAgent:
                 if hasattr(run.required_action, '__dict__'):
                     print(f"🔍 DEBUG: run.required_action dict: {vars(run.required_action)}")
                 
-                # Azure AI Foundry currently uses submit_tool_outputs for tool execution
+                # Microsoft Foundry currently uses submit_tool_outputs for tool execution
                 # We'll implement human approval by intercepting the tool calls before execution
                 if hasattr(run.required_action, 'submit_tool_outputs'):
                     print("🔄 Processing tool calls with human approval...")
@@ -180,7 +180,7 @@ class GameAgent:
         return "No response"
     
     def answer_question(self, question):
-        """Generate an answer to the question using Azure AI Foundry Agent service"""
+        """Generate an answer to the question using Microsoft Foundry Agent service"""
         if not self.agent:
             self._setup_agent()
         return self._call_azure_ai_agent(question)

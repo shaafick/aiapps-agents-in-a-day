@@ -31,7 +31,7 @@ Once the **API Key** is entered, the playground application should update to sho
 
 Let's take a minute to familiarize ourselves with the different regions of this app.
 
-![AI Tour Playground Regions](images/aitour-playground-regions-v1.png)
+![AI Tour Playground Regions](images/aitour-playground-regions-v2.png)
 
 - Region 1️⃣ | Once authorized, shows the event profile.
 - Region 2️⃣ | User prompt - used to enter text questions for AI
@@ -39,7 +39,6 @@ Let's take a minute to familiarize ourselves with the different regions of this 
 - Region 4️⃣ | Configuration - tunable parameters, execution stats
 - Region 5️⃣ | System message - sets assistant persona, base context
 - Region 6️⃣ | Function calling - save custom functions to set context
-- Region 7️⃣ | Image generation - access the DALL-E model playground
 
 ## Tips
 

@@ -133,7 +133,7 @@ Store tournament state in Azure Storage or Cosmos DB.
 # These topics to be covered in the lab:
 
 Azure Resource Types
-Azure AI Foundry (Model Catalog, Playground, Agent Service)
+Microsoft Foundry (Model Catalog, Playground, Agent Service)
 Azure OpenAI (LLMs for chat, planning, coding, summarization)
 Azure AI Search (RAG, intelligent data layer)
 Azure Functions (serverless tool integration)

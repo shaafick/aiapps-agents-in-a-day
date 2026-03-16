@@ -14,9 +14,6 @@ const Layout = () => {
                     </Link>
                     <nav>
                         <ul className={styles.headerNavList}>
-                            <li className={styles.headerNavLeftMargin}>
-                                <a href="/design" >Design</a>
-                            </li>
                             <li>
                                 <a href="/translation" >Translation</a>
                             </li>

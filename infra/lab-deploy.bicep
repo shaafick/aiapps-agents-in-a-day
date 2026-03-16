@@ -17,7 +17,7 @@ var cosmosDbAccountName = '${resourcePrefix}-cosmos'
 var searchServiceName = '${resourcePrefix}-search'
 var mongoClusterName = '${resourcePrefix}-mongo'
 var mongoDbUserName = 'aiaaaadmin'
-var mongoDbPassword = 'aiaaaP@ssword123'
+var mongoDbPassword = '' // TODO: update in deployment
 
 var staticWebAppName = '${resourcePrefix}-swa'
 
@@ -43,14 +43,25 @@ var openAiSettings = {
   maxConversationTokens: '100'
   maxCompletionTokens: '500'
   gptModel: {
+    name: 'gpt-4.1' 
+    version: '2025-04-14'
+    deployment: {
+      name: 'gpt-4.1' 
+    }
+    sku: {
+      name: 'GlobalStandard'
+      capacity: 100
+    }
+  }
+  gpt4oVisionModel: {
     name: 'gpt-4o'
     version: '2024-05-13'
     deployment: {
       name: 'gpt-4o'
     }
     sku: {
-      name: 'Standard'
-      capacity: 300
+      name: 'GlobalStandard'
+      capacity: 100
     }
   }
   embeddingsModel: {
@@ -61,23 +72,10 @@ var openAiSettings = {
     }
     sku: {
       name: 'Standard'
-      capacity: 300
-    }
-  }
-  dalleModel: {
-    name: 'dall-e-3'
-    version: '3.0'
-    deployment: {
-      name: 'dalle3'
-    }
-    sku: {
-      name: 'Standard'
-      capacity: 1
+      capacity: 25 // normally 300
     }
   }
 }
-
-
 
 // Log Analytics Workspace (required for Application Insights)
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
@@ -213,7 +211,7 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-07-01' =
 // Cosmos DB Account
 resource cosmosDbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
   name: cosmosDbAccountName
-  location: location
+  location: 'eastus2'
   kind: 'GlobalDocumentDB'
   properties: {
     enableFreeTier: false
@@ -223,7 +221,7 @@ resource cosmosDbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
     }
     locations: [
       {
-        locationName: location
+        locationName: 'eastus2'
         failoverPriority: 0
         isZoneRedundant: false
       }
@@ -530,7 +528,7 @@ resource aiServiceGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/dep
       format: 'OpenAI'
       name: openAiSettings.gptModel.name
       version: openAiSettings.gptModel.version
-    }    
+    }
   }
 }
 
@@ -539,7 +537,7 @@ resource openAiAccount 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: openAiSettings.name
   location: location
   sku: {
-    name: openAiSettings.sku    
+    name: openAiSettings.sku
   }
   kind: 'OpenAI'
   properties: {
@@ -550,7 +548,7 @@ resource openAiAccount 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
 
 resource openAiEmbeddingsModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
   parent: openAiAccount
-  name: openAiSettings.embeddingsModel.deployment.name  
+  name: openAiSettings.embeddingsModel.deployment.name
   sku: {
     name: openAiSettings.embeddingsModel.sku.name
     capacity: openAiSettings.embeddingsModel.sku.capacity
@@ -564,7 +562,7 @@ resource openAiEmbeddingsModelDeployment 'Microsoft.CognitiveServices/accounts/d
   }
 }
 
-resource openAiGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
+resource openAiGpt41ModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
   parent: openAiAccount
   name: openAiSettings.gptModel.deployment.name
   dependsOn: [
@@ -579,27 +577,26 @@ resource openAiGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/deploy
       format: 'OpenAI'
       name: openAiSettings.gptModel.name
       version: openAiSettings.gptModel.version
-    }    
+    }
   }
 }
 
-
-resource openAiDalleModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
+resource openAiGpt4oVisionModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
   parent: openAiAccount
-  name: openAiSettings.dalleModel.deployment.name
+  name: openAiSettings.gpt4oVisionModel.deployment.name
   dependsOn: [
     openAiEmbeddingsModelDeployment
-    openAiGpt4oModelDeployment
+    openAiGpt41ModelDeployment
   ]
   sku: {
-    name: openAiSettings.dalleModel.sku.name
-    capacity: openAiSettings.dalleModel.sku.capacity
+    name: openAiSettings.gpt4oVisionModel.sku.name
+    capacity: openAiSettings.gpt4oVisionModel.sku.capacity
   }
   properties: {
     model: {
       format: 'OpenAI'
-      name: openAiSettings.dalleModel.name
-      version: openAiSettings.dalleModel.version
+      name: openAiSettings.gpt4oVisionModel.name
+      version: openAiSettings.gpt4oVisionModel.version
     }    
   }
 }
@@ -650,10 +647,10 @@ resource translatorService 'Microsoft.CognitiveServices/accounts@2021-04-30' = {
 
 
 // -----------------------
-// Azure AI Foundry Hub
+// Microsoft Foundry Hub
 // -----------------------
 
-// Azure AI Foundry Hub Workspace
+// Microsoft Foundry Hub Workspace
 resource aiFoundryHub 'Microsoft.MachineLearningServices/workspaces@2024-04-01-preview' = {
   name: aiFoundryWorkspaceName
   location: location
@@ -724,7 +721,7 @@ resource aoaiConnection 'Microsoft.MachineLearningServices/workspaces/connection
   }
 }
 
-// Azure AI Foundry Project Workspace
+// Microsoft Foundry Project Workspace
 resource aiFoundryProject 'Microsoft.MachineLearningServices/workspaces@2024-04-01-preview' = {
   name: aiFoundryProjectName
   location: location
@@ -738,4 +735,3 @@ resource aiFoundryProject 'Microsoft.MachineLearningServices/workspaces@2024-04-
     publicNetworkAccess: 'Enabled'
   }
 }
-

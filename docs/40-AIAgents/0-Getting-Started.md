@@ -67,7 +67,7 @@ We cover more considerations of using AI Agents in the Building Trustworthy AI A
 
 ### Agent Development
 
-The first step in designing an AI Agent system is to define the tools, actions, and behaviors. In this course, we focus on using the **Azure AI Agent Service** to define our Agents. It offers features like:
+The first step in designing an AI Agent system is to define the tools, actions, and behaviors. In this course, we focus on using the **Foundry Agent Service** to define our Agents. It offers features like:
 
 - Selection of Open Models such as OpenAI, Mistral, and Llama
 - Use of Licensed Data through providers such as Tripadvisor

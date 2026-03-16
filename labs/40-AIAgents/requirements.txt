@@ -4,6 +4,10 @@ langchain_community
 langchain-openai
 openai
 dotenv
+python-dotenv
 autogen
 semantic-kernel
 azure-ai-projects==1.0.0
+github-copilot-sdk
+azure-monitor-opentelemetry==1.8.6
+opentelemetry-exporter-otlp-proto-http

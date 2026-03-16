@@ -200,8 +200,9 @@ Clear the contents of the prompt box. Enter the following text, then click `Send
 Write a short summary of the famous cyclist, Harold Bloomsbury. Please include references.
 ```
 
-There has never been a cyclist (nor indeed any person, according to web search) named Harold Bloomsbury. As a result, the model will generate a fictional summary of a fictional person.
-As we've seen, natural language Generative AI models can produce unexpected or unwanted responses to prompts. This can be caused by any number of factors, including:
+There has never been a cyclist (nor indeed any person, according to web search) named Harold Bloomsbury. As a result, the model may generate a fictional summary of a fictional person or state that it cannot provide the response.
+
+This is because natural language Generative AI models can produce unexpected or unwanted responses to prompts. This can be caused by any number of factors, including:
 
 - Insufficient information in the training data
 - Insufficient context in the prompt

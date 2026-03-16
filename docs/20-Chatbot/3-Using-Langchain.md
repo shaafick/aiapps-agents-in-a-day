@@ -104,14 +104,6 @@ In this section, we'll implement the RAG pattern using LangChain. In LangChain, 
 
 We'll also define a reusable RAG chain to control the flow and behavior of the call into the LLM. This chain is defined using the LCEL syntax (LangChain Expression Language).
 
-1. Open the `3b-langchain-rag.js` file in the Visual Studio Code editor.
-
-## RAG with LangChain
-
-In this section, we'll implement the RAG pattern using LangChain. In LangChain, a **retriever** is used to augment the prompt with contextual data. In this case, the already established vector store will be used as the retriever. By default, the prompt is augmented with the `pageContent` field of the retrieved document that customarily contains the text content of the embedded vector. In our case, the document itself serves as the textual content, so we'll have to do some pre-processing to format the text of the product list that is expected in our system prompt (JSON string) - see the `formatDocuments` function below for this implementation.
-
-We'll also define a reusable RAG chain to control the flow and behavior of the call into the LLM. This chain is defined using the LCEL syntax (LangChain Expression Language).
-
 1. Open the `3b-langchain-rag.js` file. Notice it has the basic MongoDB connection setup.
 
 2. Add the following complete code block in the `main` function, beneath the `console.log("Connected to MongoDB");` line of code, 

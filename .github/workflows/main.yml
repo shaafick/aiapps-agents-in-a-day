@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - update
   workflow_dispatch:
     # Review gh actions docs if you want to further define triggers, paths, etc
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on
@@ -20,6 +21,9 @@ jobs:
         with:
           node-version: 18
           cache: yarn
+
+      - name: Install system dependencies for sharp
+        run: sudo apt-get update && sudo apt-get install -y libvips-dev
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile

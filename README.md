@@ -91,7 +91,7 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 
 ## Demo #4: Multi-Agent Solution Walkthrough - 15min
 **Showcase advanced agent collaboration and orchestration:**
-- Demonstrate multi-agent workflows using Azure AI Foundry Services
+- Demonstrate multi-agent workflows using Microsoft Foundry Services
 - Highlight agent collaboration: perception → planning → action loop
 - Explore coordination strategies and communication between agents
 - Present a real-world scenario (Daniel's agentic LEGO demo) to illustrate practical applications
@@ -114,8 +114,8 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 
 
 ## Azure Services to be considered
-- **Azure AI Foundry (Model Catalog, Playground)** – To explore and test models  
-- **Azure AI Foundry – Agent Service** – For orchestrating multi-agent systems  
+- **Microsoft Foundry (Model Catalog, Playground)** – To explore and test models  
+- **Microsoft Foundry – Agent Service** – For orchestrating multi-agent systems  
 - **Azure AI Services** – For integrating vision, speech, etc.  
 - **Azure OpenAI** – LLMs for chat, planning, coding, summarization  
 - **Azure AI Search** – Intelligent data layer for RAG

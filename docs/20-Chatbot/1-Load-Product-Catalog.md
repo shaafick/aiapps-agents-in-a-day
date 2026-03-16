@@ -16,9 +16,9 @@ The product catalog data is provided in a CSV file. You will be writing a custom
 
 1. Open repo in `VS Code` and then open `Terminal` -> `New Terminal`. Navigate to the lab folder `~/labs/20-Chatbot/` within the repository.
 
-   ```bash
-   cd labs/20-Chatbot
-   ```
+```bash
+cd labs/20-Chatbot
+```
 
 :::info
 The `~/labs/20-Chatbot/completed` folder contains the completed solution for this lab. Please use `start` folder to carry out the exercise. You can compare your code with the files in `completed` folder if your code does not run correctly.
@@ -28,9 +28,9 @@ The `~/labs/20-Chatbot/completed` folder contains the completed solution for thi
 
 3. To install the required packages, execute the following command in the terminal window:
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 ## Prepare the data set
 
@@ -40,7 +40,7 @@ The `product` data set is located in the `data/product.csv` file. It has the fol
 
 1. Here is a snapshot of the `product.csv` file:
 
-   ![alt text](images/rag_load_data_image.png)
+   ![Product CSV snapshot](images/rag_load_data_image.png)
 
 2. The `1a-convert.js` file already contains the complete code to convert the CSV file to JSON format and fix data type issues. The file includes proper handling for:
    - Parsing the CSV file format
@@ -49,12 +49,12 @@ The `product` data set is located in the `data/product.csv` file. It has the fol
 
 3. Run the conversion script to generate the `product.json` file:
 
-   ```bash
-   node 1a-convert.js
-   ```
+```bash
+node 1a-convert.js
+```
 
 4. Open the generated `product.json` file to verify the data has been correctly formatted:
-   ![alt text](images/rag_load_data_image-1.png)
+   ![Converted product JSON snapshot](images/rag_load_data_image-1.png)
 
    Notice that the `price` field is now a proper number (not a string) and the tags field has been correctly parsed as a JSON array.
 
@@ -64,7 +64,7 @@ There are multiple options available for performing bulk operations in Cosmos DB
 
 1. Open the `1b-import.js` file. You'll see it already has the basic MongoDB connection setup. Now add the following code block where indicated by the `TODO: Add product data loading code here` comment:
 
-   ```javascript
+```javascript
    // Load product data
    console.log("Loading product data");
    // Initialize the product collection pointer (will automatically be created if it doesn't exist)
@@ -98,7 +98,7 @@ There are multiple options available for performing bulk operations in Cosmos DB
 
 2. Now add the following code for loading customer and sales data where indicated by the `TODO: Add customer and sales data loading code here` comment:
 
-   ```javascript
+```javascript
    // Load customer and sales data
    console.log("Retrieving combined Customer/Sales data");
    const customerCollection = db.collection("customers");
@@ -148,14 +148,14 @@ There are multiple options available for performing bulk operations in Cosmos DB
 
 1. If you are using VS Code locally, please install MongoDb extension, search  `MongoDB for VS code` in `Extensions` tab. If you are using GitHub Codespaces, extension is already installed.
 
-   ![alt text](images/rag_load_data_image-6.png)
+  ![MongoDB extension screenshot](images/rag_load_data_image-6.png)
 
 2. Locate `MongoDb` extension icon in the left navigation bar, it looks like a leaf icon. Once opened, let's add a connection to the database. Please find db connection string on https://aiaaa-s2-setting.azurewebsites.net (MONGODB_CONNECTION_STRING).  Click on `Connect` icon, copy CosmosDb connection string to the top textbox in VS Code. 
 
-   ![alt text](images/rag_load_data_image-2.png)
+  ![MongoDB connection dialog](images/rag_load_data_image-2.png)
 
 3. Click on the first item in the `Connections` tab, and locate your own database. Then you can browse the json records in the `product` and `customer` table by expending it.
 
-   ![alt text](images/rag_load_data_image-7.png)
+  ![Extended MongoDB view](images/rag_load_data_image-7.png)
 
 In this section, we used bulk load operations to load `product`, `customer`, and `sales` data into Cosmos DB. We also had to cleanup the data before loading it into the database. In the next section, we will convert the data into embeddings and perform vector search on the data.

@@ -50,7 +50,7 @@ const client = new OpenAIClient(
 
 ```javascript
 // Block Reference 1
-const chatResponse = client.getChatCompletions("gpt-4o", [
+const chatResponse = client.getChatCompletions("gpt-4.1", [
   { role: "user", content: "What are the different types of road bikes?" },
 ]);
 
@@ -78,7 +78,7 @@ You can set the system message to provide context to the conversation. The syste
 
 ```javascript
 // Block Reference 1
-const chatResponse = client.getChatCompletions("gpt-4o", [
+const chatResponse = client.getChatCompletions("gpt-4.1", [
   {
     role: "system",
     content:
@@ -94,7 +94,7 @@ You can send previous chat history to the model as part of the conversation. Thi
 
 ```javascript
 // Block Reference 1
-const chatResponse = client.getChatCompletions("gpt-4o", [
+const chatResponse = client.getChatCompletions("gpt-4.1", [
   {
     role: "system",
     content:
@@ -160,7 +160,7 @@ const options = {
 
 ```javascript
 // Block Reference 1
-const chatResponse = client.getChatCompletions("gpt-4o", [
+const chatResponse = client.getChatCompletions("gpt-4.1", [
     {
         role: "system",
         content:

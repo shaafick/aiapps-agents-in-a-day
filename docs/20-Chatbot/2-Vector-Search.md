@@ -31,7 +31,7 @@ You will also learn how to use the vector index to retrieve the relevant documen
 
    // set up the Azure OpenAI client
    const embeddingsDeploymentName = "embeddings";
-   const completionsDeploymentName = "gpt-4o";
+   const completionsDeploymentName = "gpt-4.1";
    const aoaiClient = new OpenAIClient(
      "https://" +
        process.env.AZURE_OPENAI_API_INSTANCE_NAME +
@@ -73,12 +73,6 @@ Vectorizing or embedding text is the process of converting text into a numerical
    ```
 
    ![Console output displays a large numerical vector.](images/text_embedding_output.png "Vector representation of text")
-
-:::info
-Please try a different input string and see if the length of the vector array changes.
-
-It seems that no matter how long the input string is, the return of creating embeddings with "text-embedding-ada-3" is always a vector of length 1536. Why is that?
-:::
 
 ## Vectorize and store the embeddings for each document
 

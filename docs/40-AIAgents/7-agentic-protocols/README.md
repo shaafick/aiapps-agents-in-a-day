@@ -1,10 +1,14 @@
 # Agentic Protocols
 
-As the use of AI agents grows, so does the need for protocols that ensure standardization, security, and support open innovation. In this lesson, we will cover 3 protocols looking to meet this need - Model Context Protocol (MCP), Agent to Agent (A2A) and Natural Language Web (NLWeb).
+As the use of AI agents grows, so does the need for protocols that ensure standardization, security, and support open innovation. In this lesson we will cover three protocols that aim to meet this need: Model Context Protocol (MCP), Agent-to-Agent (A2A), and Natural Language Web (NLWeb).
+
+:::tip Related Content
+This section covers open protocols for standardized agent communication. For multi-agent orchestration patterns and design within a single system, see [Section 6: Multi-Agent Orchestration](../6-multi-agent/README.md).
+:::
 
 ## Model Context Protocol
 
-The **Model Context Protocol (MCP)** is an open standard that provides standardized way for applications to provide context and tools to LLMs. This enables a "universal adaptor" to different data sources and tools that AI Agents can connect to in a consistent way.
+The **Model Context Protocol (MCP)** is an open standard that provides a standardized way for applications to provide context and tools to LLMs. This enables a "universal adapter" to different data sources and tools that AI agents can connect to in a consistent way.
 
 Let’s look at the components of MCP, the benefits compared to direct API usage, and an example of how AI agents might use an MCP server.
 
@@ -54,53 +58,87 @@ Imagine a player wants to get tournament assistance using an AI agent powered by
 
 ### Create Game MCP server
 
-- open a new teminial windows and navigate to `apps-rps/rps-game-mcp` folder.
+- Open a new terminal window and navigate to `apps-rps/rps-game-mcp`.
 
-```python
+```bash
 cd apps-rps/rps-game-mcp
 ```
 
-- install python packages. all required packages are listed in `requirements.txt` file. they are for all the labs in this module.
+- Create and activate a virtual environment.
 
-```python
+```bash
+python -m venv .venv
+```
+```bash
+# Windows
+source .venv/Scripts/activate
+```
+```bash
+# macOS / Linux
+source .venv/bin/activate
+```
+
+- Install Python packages. All required packages are listed in `requirements.txt`; they are used by the labs in this module.
+
+```bash
 pip install -r requirements.txt
 ```
 
-- run the MCP server and see the console output.
+- Run the MCP server and observe the console output.
 
-```python
+```bash
 python mcp-server.py
 ```
 ![alt text](./images/mcp-server.png)
 
-- open a new terminial windows and also navigate to `apps-rps/rps-game-mcp` folder.
+- Open a new terminal window and navigate to `apps-rps/rps-game-mcp`.
 
-```python
+```bash
 cd apps-rps/rps-game-mcp
 ```
 
-- run the MCP client and see the console output. the client will connect to the server and get the list of tools exposed by the server.
+- Run the MCP client and observe the console output. The client connects to the server and retrieves the list of exposed tools.
 
-```python
+```bash
 python mcp-client.py
 ```
 
-![alt text](./images/mcp-client.png)
+![mcp client console output](./images/mcp-client.png)
+
+### Connect local MCP to Microsoft Agent Framework.
+
+- Keep a terminal running with the `mcp-server.py` file and open another terminal to navigate to `labs/40-AIAgents/ms-agent-foundry` and activate the virtual environment set up earlier.
+
+```bash
+cd labs/40-AIAgents/ms-agent-foundry
+```
+```bash
+# Windows
+source .maf/Scripts/activate
+```
+```bash
+# macOS / Linux
+source .maf/bin/activate
+```
+
+- review the file - for localised development the code can now call the MCP tool for additional testing.
+
+![alt text](./images/maf-mcp-local-testing.png)
 
 ### Connect AI Agent to MCP server
 
-- navigate to `labs/40-AIAgents` folder, open `game_agent_v7_mcp.py` file.
+- Navigate to `labs/40-AIAgents` and open `game_agent_v7_mcp.py`.
 
-```python
+```bash
 cd labs/40-AIAgents
 ```
 
-- The agent can connect to the MCP server and use the tools exposed by the server by using below code block. MCP support for agent service is currently in preview, we will not run below code for now.
+- The agent can connect to hosted MCP servers and use the tools exposed by the server to complete actions.
 
 ```python
     # Initialize agent MCP tool
-    mcp_server_url = os.environ.get("MCP_SERVER_URL", "http://127.0.0.1:3111/mcp")
-    mcp_server_label = os.environ.get("MCP_SERVER_LABEL", "weather")
+    mcp_server_url = os.environ.get("MCP_SERVER_URL", "https://gitmcp.io/Azure/azure-rest-api-specs")
+    mcp_server_label = os.environ.get("MCP_SERVER_LABEL", "azure")
 
     self.mcp_tool = McpTool(
         server_label=mcp_server_label,
@@ -111,45 +149,57 @@ cd labs/40-AIAgents
     tools.extend(self.mcp_tool.definitions)
 ```
 
+- This MCP server allows you to get details for the Azure REST API specs. Run `python game_agent_v7_mcp.py` to see the agent leverage the MCP tools.
+
+```bash
+python game_agent_v7_mcp.py
+```
 
 ## Agent-to-Agent Protocol (A2A)
 
-While MCP focuses on connecting LLMs to tools, the **Agent-to-Agent (A2A) protocol** takes it a step further by enabling communication and collaboration between different AI agents.  A2A connects AI agents across different organizations, environments and tech stacks to complete a shared task.
+While MCP focuses on connecting LLMs to tools, the **Agent-to-Agent (A2A) protocol** takes it a step further by enabling communication and collaboration between different AI agents. A2A can connect AI agents across different organizations, environments and tech stacks to complete a shared task.
 
 We’ll examine the components and benefits of A2A, along with an example of how it could be applied in our travel application.
 
-### A2A Core Components
+### A2A Core Concepts
 
-A2A focuses on enabling communication between agents and having them work together to complete a subtask of user. Each component of the protocol contributes to this:
+A2A focuses on standardized communication between agents. The core concepts are:
 
 #### Agent Card
 
-Similar to how an MCP server shares a list of tools, an Agent Card has:
-- The Name of the Agent .
-- A **description of the general tasks** it completes.
-- A **list of specific skills** with descriptions to help other agents (or even human users) understand when and why they would want to call that agent.
-- The **current Endpoint URL** of the agent
-- The **version** and **capabilities** of the agent such as streaming responses and push notifications.
+An Agent Card is a discovery document that describes an agent's identity, skills, supported interfaces, capabilities, and authentication requirements.
 
-#### Agent Executor
+#### Task
 
-The Agent Executor is responsible for **passing the context of the user chat to the remote agent**, the remote agent needs this to understand the task that needs to be completed. In an A2A server, an agent uses its own Large Language Model (LLM) to parse incoming requests and execute tasks using its own internal tools.
+A Task is a stateful unit of work with a lifecycle, used for long-running or multi-turn interactions.
+
+#### Message
+
+A Message is a single communication turn between a client and a remote agent, containing user or agent content.
+
+#### Part
+
+A Part is the content container used inside messages and artifacts, supporting text, file references, and structured data.
 
 #### Artifact
 
-Once a remote agent has completed the requested task, its work product is created as an artifact.  An artifact **contains the result of the agent's work**, a **description of what was completed**, and the **text context** that is sent through the protocol. After the artifact is sent, the connection with the remote agent is closed until it is needed again.
+An Artifact is the concrete output of a task, such as text, structured data, or files.
 
-#### Event Queue
+#### Update Delivery Mechanisms
 
-This component is used for **handling updates and passing messages**. It is particularly important in production for agentic systems to prevent the connection between agents from being closed before a task is completed, especially when task completion times can take a longer time.
+Task updates can be delivered through polling (Get Task), streaming (Server-Sent Events), and optional push notifications (webhooks).
+
+#### Notes on Implementation Terms
+
+Terms like Agent Executor, task stores, and event queues are common implementation patterns in SDKs and frameworks, but they are not mandatory protocol primitives.
 
 ### Benefits of A2A
 
 • **Enhanced Collaboration**: It enables agents from different vendors and platforms to interact, share context, and work together, facilitating seamless automation across traditionally disconnected systems.
 
-• **Model Selection Flexibility**: Each A2A agent can decide which LLM it uses to service its requests, allowing for optimized or fine-tuned models per agent, unlike a single LLM connection in some MCP scenarios.
+• **Model Flexibility**: Agents can be implemented with different internal models or runtimes, because A2A is model-agnostic.
 
-• **Built-in Authentication**: Authentication is integrated directly into the A2A protocol, providing a robust security framework for agent interactions.
+• **Security by Standard Web Practices**: Authentication and authorization requirements are declared through the agent card and enforced using standard web security approaches.
 
 ### A2A Example
 
@@ -163,9 +213,147 @@ Let's expand on our RPS tournament scenario, but this time using A2A to coordina
 
 3. **Inter-Agent Communication**: The Tournament Manager then uses the A2A protocol to connect to downstream agents, such as a "Question Specialist Agent," a "Strategy Analysis Agent," and a "Performance Monitor Agent" that could be created by different organizations or use different AI models.
 
-4. **Delegated Task Execution**: The Tournament Manager sends specific tasks to these specialized agents (e.g., "Validate all player answers for this question," "Analyze optimal moves for current game state," "Track player performance metrics"). Each of these specialized agents, running their own LLMs and utilizing their own tools (which could be MCP servers themselves), performs its specific part of the tournament management.
+4. **Delegated Task Execution**: The Tournament Manager sends specific tasks to these specialized agents (e.g., "Validate all player answers for this question," "Analyze optimal moves for current game state," "Track player performance metrics"). Each of these specialized agents could be running on different LLMs and utilizing their own tools (which could be MCP servers themselves), performs its specific part of the tournament management.
 
 5. **Consolidated Response**: Once all downstream agents complete their tasks, the Tournament Manager compiles the results (answer validations, strategic recommendations, performance reports) and sends a comprehensive response back to the tournament coordinator with complete round results and insights.
+
+### Create the A2A Service
+
+Now let's build a practical A2A implementation where we create two agents that communicate via the A2A protocol.
+
+- Navigate to `labs/40-AIAgents/a2a` folder
+
+```bash
+cd labs/40-AIAgents/a2a
+```
+
+- Set up a virtual environment and activate it
+
+```python
+python -m venv .a2a
+```
+```bash
+# Windows
+source .a2a/Scripts/activate
+```
+```bash
+# macOS / Linux
+source .a2a/bin/activate
+```
+
+- Install required dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+- Run the `main.py` script. This will start two agents: one that communicates directly with you via the terminal, and another that exposes tools for querying.
+
+```bash
+python main.py
+```
+
+You should see output confirming the service started:
+
+```
+============================================================
+🚀 Starting Game Agent A2A System
+============================================================
+
+🚀 Starting server subprocesses...
+🚀 Starting game_tools_agent_server on port 8088
+INFO:     Started server process [92972]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://localhost:8088 (Press CTRL+C to quit)
+INFO:     ::1:56072 - "GET /health HTTP/1.1" 200 OK
+✅ game_tools_agent_server is healthy and ready!
+
+============================================================
+✅ All servers are ready!
+============================================================
+
+============================================================
+Rock-Paper-Scissors Game Agent (A2A Demo)
+============================================================
+Connecting to Game Tools Agent via A2A protocol...
+
+INFO:     ::1:56074 - "GET /.well-known/agent-card.json HTTP/1.1" 200 OK
+✓ Discovered remote agent: GameToolsAgent
+  Description: A specialized assistant for Rock-Paper-Scissors tournament. I can help with calculations, game rules, and tournament information.
+  Skills: Calculate, RPS Rules, Tournament Info
+✓ A2A connection established to http://localhost:8088
+
+Game Agent ready! You can ask about:
+  - Calculations (e.g., 'What is 5 + 7?')
+  - RPS rules (e.g., 'Does rock beat scissors?')
+  - Tournament info (e.g., 'What are the tournament rules?')
+
+Type your questions or 'quit' to exit.
+============================================================
+```
+
+### Understand the A2A Implementation
+
+The A2A protocol implementation consists of two components:
+
+**1. Game Tools Agent Server:**
+
+`game_tools_agent/server.py` and `game_tools_agent/agent_executor.py` acts as an A2A server that other agents can connect to:
+
+- **Starlette-based A2A Server:** Uses `A2AStarletteApplication` to expose the standard A2A endpoints.
+- **Agent Card:** Publishes the `GameToolsAgent` card with three advertised skills: `calculate`, `rps_rules`, and `tournament_info`.
+- **Request Handling:** Uses `DefaultRequestHandler` and `InMemoryTaskStore` to manage incoming requests and task state.
+- **Agent Executor:** Routes each incoming text message to direct Python functions for math, RPS rules, or tournament info.
+
+**2. Game Agent Client:**
+
+`game_agent.py` acts as an A2A client that discovers and uses remote agents:
+
+```python
+# Step 1: Connect to the remote A2A agent and discover its card
+self.httpx_client = httpx.AsyncClient(timeout=60.0)
+client_config = ClientConfig(httpx_client=self.httpx_client)
+
+self.agent_client = await ClientFactory.connect(
+    self.tools_service_url,
+    client_config=client_config
+)
+
+self.agent_card = await self.agent_client.get_card()
+print(f"✓ Discovered remote agent: {self.agent_card.name}")
+
+# Step 2: Send a message to the remote agent
+message = Message(
+    messageId=str(uuid.uuid4()),
+    role="user",
+    parts=[TextPart(text=user_message)]
+)
+
+async for event in self.agent_client.send_message(message):
+    ...
+```
+
+### Key Differences: A2A vs MCP
+
+Understanding when to use A2A versus MCP:
+
+| Aspect | MCP | A2A |
+|--------|-----|-----|
+| **Purpose** | Connect agents to tools and data sources | Connect agents to other agents |
+| **Communication** | Agent → Tool (one-way execution) | Agent ↔ Agent (bidirectional conversation) |
+| **Context** | Typically tool input/output context per invocation | Supports multi-turn context through task and context identifiers |
+| **Use Case** | Accessing databases, APIs, services | Delegating complex tasks to specialized agents |
+
+**When to use A2A:**
+- You need agents across different organizations to collaborate
+- Tasks require back-and-forth reasoning between agents
+- You want agent-level authentication and security
+
+**When to use MCP:**
+- You need to connect an agent to tools and data sources
+- You're building integrations within a single application
+- You need standardized access to various resources
 
 ## Natural Language Web (NLWeb)
 

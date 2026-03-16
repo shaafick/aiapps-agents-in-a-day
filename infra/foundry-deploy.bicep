@@ -131,7 +131,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
 
 
 // -----------------------
-// Azure AI Foundry Hub
+// Microsoft Foundry Hub
 // -----------------------
 
 // AI Services (Multi-service account)

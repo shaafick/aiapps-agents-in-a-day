@@ -1,11 +1,25 @@
 
 # Azure AI Agent Service
 
-Azure AI Agent Service is a more recent addition, introduced at Microsoft Ignite 2024. It allows for the development and deployment of AI agents with more flexible models, such as directly calling open-source LLMs like Llama 3, Mistral, and Cohere.
+Azure AI Agent Service allows for the development and deployment of AI agents with flexible models, such as directly calling open-source LLMs like Llama 3, Mistral, and Cohere.
 
 Azure AI Agent Service provides stronger enterprise security mechanisms and data storage methods, making it suitable for enterprise applications. 
 
-It works out-of-the-box with multi-agent orchestration frameworks like AutoGen and Semantic Kernel. Using Semantic Kernel Python, we can create an Azure AI Agent with a user-defined plugin:
+It works out-of-the-box with multi-agent orchestration frameworks like AutoGen, Semantic Kernel and Microsoft Agent Framework. Using Semantic Kernel Python, we can create an Azure AI Agent with a user-defined plugin:
+
+## When to choose Azure AI Agent Service
+
+Azure AI Agent Service is best when you want a managed, service-hosted runtime in Foundry with enterprise operations built in.
+
+- Use it when you need centralized agent lifecycle management in the Foundry portal.
+- Use it when you want service-managed threads, runs, and message history for long-running or auditable workflows.
+- Use it when your team needs governance features such as RBAC, enterprise integrations, and operational observability.
+
+### Valuable in practice
+
+- **Regulated enterprise assistants**: Customer support or operations copilots that require auditable, server-managed conversation history.
+- **Platform team managed agents**: Shared agents that multiple app teams can consume while a central team controls deployment and policy.
+- **Tool-heavy enterprise workflows**: Agents that need tight integration with Azure resources and managed tool execution.
 
 ## Create AI Agent Service Agent
 
@@ -22,7 +36,7 @@ python game_agent_v3_aiagent.py
 ```
 ![AI Agent](images/aiagent.png)
 
-- navigate to Azure AI Foundry portal, you should see the agent created in the portal.
+- navigate to Microsoft Foundry portal, you should see the agent created in the portal.
 
 - you can also interact with the agent in the portal playground.
 
@@ -33,11 +47,11 @@ Azure AI Agent Service has the following core concepts:
 
 ### Agent
 
-Azure AI Agent Service integrates with Azure AI Foundry. Within AI Foundry, an AI Agent acts as a "smart" microservice that can be used to answer questions (RAG), perform actions, or completely automate workflows. It achieves this by combining the power of generative AI models with tools that allow it to access and interact with real-world data sources. Here's an example of an agent:
+Azure AI Agent Service integrates with Microsoft Foundry. Within AI Foundry, an AI Agent acts as a "smart" microservice that can be used to answer questions (RAG), perform actions, or completely automate workflows. It achieves this by combining the power of generative AI models with tools that allow it to access and interact with real-world data sources. Here's an example of an agent:
 
     ```python
     agent = project_client.agents.create_agent(
-        model="gpt-4o-mini",
+        model="gpt-4.1-mini",
         name="my-agent",
         instructions="You are helpful agent",
         tools=code_interpreter.definitions,
@@ -71,7 +85,7 @@ The thread is another important concept. It represents a conversation or interac
 
 ### Integrates with other AI frameworks
 
- Azure AI Agent service can interact with other frameworks like AutoGen and Semantic Kernel, which means you can build part of your app in one of these frameworks and for example using the Agent service as an orchestrator or you can build everything in the Agent service.
+Azure AI Agent Service works seamlessly with AutoGen, Semantic Kernel, and Microsoft Agent Framework, enabling flexible architecture options: use it as an orchestrator, combine it with other frameworks, or build your entire application within it.
 
 **Use Cases**: Azure AI Agent Service is designed for enterprise applications that require secure, scalable, and flexible AI agent deployment.
 

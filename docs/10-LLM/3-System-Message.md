@@ -10,7 +10,7 @@ It is displayed in a different format compared to user messages, helping the mod
 In the **System message** field insert the text below, then click "Update system message".
 
 ```text title="Enter in the system message:"
-I am a Contoso Bike Store assistant.  My name is Alice. I am upbeat and friendly.
+I am a Contoso Bike Store assistant. My name is Alice. I am upbeat and friendly.
 I will introduce myself and always ask them for this information: "Hi, I'm <your name>. How can I help you today?"
 I ask the user for more information if needed. I will provide three suggestions for the user to choose from.
 ```
@@ -67,7 +67,7 @@ Ask it again how it can help you and see how your answer differs.
 
 ## Stick to the subject
 
-Language models can do many different things: that's what's so impressive about them compared with traditional NLP models. However with lots of knowledge comes a whole lot of randomness too. We recommend you create agents that are experts at a set of tasks that are relevant to your use cases rather than try to solve every problem. For example: you are an online holiday agent, do you really want to allow your agent to answer questions about racoons from your users? Is that relevant to your business needs?
+Language models can do many different things: that's what's so impressive about them compared with traditional NLP models. However, with lots of knowledge comes a whole lot of randomness. We recommend you create agents that are experts at a set of tasks that are relevant to your use cases rather than try to solve every problem. For example: you are an online holiday agent. Do you really want to allow your agent to answer questions about raccoons from your users? Is that relevant to your business needs?
 
 Let's try it out. Set the system message as follows:
 
@@ -75,36 +75,36 @@ Let's try it out. Set the system message as follows:
 You are a friendly chatbot giving information about the Contoso Bike Store.
 ```
 
-Save the system message and restart the chat, ask your agent about London, and review the response. Now ask it about racoons: what is the outcome?
+Save the system message and restart the chat, ask your agent about London, and review the response. Now ask it about raccoons: what is the outcome?
 
 ```text title="Enter in the user prompt:"
 Tell me about the mountain bikes in your store
 ```
 
 ```text title="Enter in the user prompt:"
-What can you tell me about racoons for my son's school project
+What can you tell me about raccoons for my son's school project
 ```
 
-It tells you information about racoons. Not ideal for your use case and the same approach could become malicious (we are using a trivial example).
+It tells you information about raccoons. Not ideal for your use case and the same approach could become malicious (we are using a trivial example).
 
-Lets update the system message to be even more clear about what the agent should and should not do.
+Let's update the system message to be even more clear about what the agent should and should not do.
 
 ```text title="Enter in the system message:"
 You are a friendly chatbot giving information about the Contoso Bike Store.
-You only answer questions about bikes and cycling, if asked anything else respectfully decline to answer.
+You only answer questions about bikes and cycling; if asked anything else, respectfully decline to answer.
 ```
 
-Save the system message, clear the chat and ask again the two questions about London and racoons:
+Save the system message, clear the chat, and ask again the two questions about London and raccoons:
 
 ```text title="Enter in the user prompt:"
 What can you tell me about London
 ```
 
 ```text title="Enter in the user prompt:"
-What can you tell me about racoons for my son's school project
+What can you tell me about raccoons for my son's school project
 ```
 
-How does the response differ? What could this combat against when a model is released in the real world?
+How does the response differ? What could this help mitigate when a model is released in the real world?
 
 ## Safety features in Azure AI
 

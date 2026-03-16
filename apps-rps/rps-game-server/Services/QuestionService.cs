@@ -163,10 +163,10 @@ public class QuestionService : IQuestionService
     private async Task LoadDefaultQuestionsAsync()
     {
         _logger.LogInformation("Loading default questions");
-        var defaultQuestions = new List<QuestionAnswer>
+            var defaultQuestions = new List<QuestionAnswer>
         {
             new("What is 2+2?", "4", QuestionType.Text),
-            new("What is the capital of Australia?", "Canberra", QuestionType.Text),
+            new("What is the capital of New Zealand?", "Wellington", QuestionType.Text),
             new("What is the largest planet in our solar system?", "Jupiter", QuestionType.Text),
             new("What year did World War II end?", "1945", QuestionType.Text),
             new("What is the chemical symbol for gold?", "Au", QuestionType.Text)

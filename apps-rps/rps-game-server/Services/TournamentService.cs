@@ -1,5 +1,6 @@
 using RpsGameServer.Models;
 using System.Collections.Concurrent;
+using System.Text.RegularExpressions;
 
 namespace RpsGameServer.Services;
 
@@ -490,20 +491,36 @@ public class TournamentService : ITournamentService
 
     private bool ValidateAnswer(string playerAnswer, string correctAnswer, string? answerRule)
     {
+        static string Normalize(string s)
+        {
+            if (string.IsNullOrWhiteSpace(s))
+                return string.Empty;
+            s = s.Trim().ToLowerInvariant();
+            // Treat hyphens as spaces so "Retrieval-Augmented" and "Retrieval Augmented" match
+            s = s.Replace('-', ' ');
+            // Remove other punctuation
+            s = Regex.Replace(s, "[^\\w\\s]", "");
+            // Collapse multiple spaces
+            s = Regex.Replace(s, "\\s+", " ").Trim();
+            return s;
+        }
+
+        var normPlayer = Normalize(playerAnswer);
+        var normCorrect = Normalize(correctAnswer);
+
         if (string.IsNullOrWhiteSpace(answerRule) || answerRule.Equals("Exact", StringComparison.OrdinalIgnoreCase))
         {
-            // Default exact matching (case-insensitive)
-            return string.Equals(playerAnswer, correctAnswer, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(normPlayer, normCorrect, StringComparison.OrdinalIgnoreCase);
         }
-        
+
         if (answerRule.Equals("FuzzyMatch", StringComparison.OrdinalIgnoreCase))
         {
-            // Fuzzy matching - check if player answer contains the correct answer (case-insensitive)
-            return playerAnswer.Contains(correctAnswer, StringComparison.OrdinalIgnoreCase);
+            // Accept if normalized player answer contains the normalized correct answer (or vice-versa)
+            return normPlayer.Contains(normCorrect, StringComparison.OrdinalIgnoreCase) || normCorrect.Contains(normPlayer, StringComparison.OrdinalIgnoreCase);
         }
-        
-        // Default to exact matching for unknown rules
-        return string.Equals(playerAnswer, correctAnswer, StringComparison.OrdinalIgnoreCase);
+
+        // Default to exact matching on normalized strings for unknown rules
+        return string.Equals(normPlayer, normCorrect, StringComparison.OrdinalIgnoreCase);
     }
 
     private bool DetermineWinner(Move playerMove, Move serverMove)

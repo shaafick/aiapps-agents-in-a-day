@@ -247,7 +247,36 @@ Retrieve below keys from https://aiaaa-s2-setting.azurewebsites.net
 | Resource Name              | Endpoint | Key |
 | ------------- | ------------- | ------------- |
 | GPT-4o | https://aiaaa-s2-openai.openai.azure.com//openai/deployments/gpt-4o/chat/completions?api-version=2024-08-01-preview |  (deploymentName: gpt-4o) |
-| Dall-e 3 | https://aiaaa-s2-openai.openai.azure.com//openai/deployments/dalle3/images/generations?api-version=2024-02-01 |  (deploymentName: dalle3) |
 | Computer Vision | https://aiaaa-s2-cv.cognitiveservices.azure.com/ |  |
 | Translator Service | https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=xx&from=xx |  |
 | Speech Service | https://eastus.api.cognitive.microsoft.com/ |  (region: eastus) |
+
+## Optional: Connect GitHub Copilot & Copilot CLI
+
+:::info
+These steps are **optional** and not required for the core lab, but are recommended for enhanced productivity and automation.
+:::
+
+### A. Connect Your GitHub Copilot License
+
+If you have a GitHub Copilot license, you can connect it to your VS Code environment for advanced code suggestions and AI-powered assistance.
+
+**To sign in to GitHub Copilot in VS Code:**
+
+1. Open VS Code.
+2. Open the Command Palette (`Cmd+Shift+P` or `Ctrl+Shift+P`).
+3. Search for `GitHub: Sign in` and follow the prompts.
+4. Ensure Copilot is enabled in the Extensions sidebar.
+
+For more details, see the [official Copilot sign-in guide](https://docs.github.com/en/copilot/getting-started-with-github-copilot/getting-started-with-github-copilot-in-visual-studio-code#signing-in-to-github-copilot).
+
+### B. Install the Copilot CLI
+
+The Copilot CLI lets you use AI-powered commands in your terminal, such as `/context` which provides details on the codebase.
+
+Please see the [Copilot CLI Installation instructions](https://docs.github.com/en/copilot/how-tos/copilot-cli/set-up-copilot-cli/install-copilot-cli) if you wish to use this tool.
+
+For more information and usage examples, see the [Copilot CLI documentation](https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli-agents/overview).
+
+---
+

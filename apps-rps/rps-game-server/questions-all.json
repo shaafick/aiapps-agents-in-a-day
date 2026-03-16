@@ -11,11 +11,11 @@
     },
     {
       "id": "q2",
-      "question": "What is the capital of Australia?",
-      "answer": "Canberra",
+      "question": "What is the capital of New Zealand?",
+      "answer": "Wellington",
       "type": "Text",
-      "description": "Geography question about Australian capital",
-      "tags": ["geography", "australia", "capital"],
+      "description": "Geography question about New Zealand capital",
+      "tags": ["geography", "new-zealand", "capital"],
       "difficultyLevel": 2
     },
     {

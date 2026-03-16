@@ -15,8 +15,16 @@ on:
       location:
         description: 'Azure region for deployment'
         required: true
-        default: 'East US'
+        default: 'eastus'
         type: string
+      template:
+        description: 'Bicep template to deploy'
+        required: true
+        default: 'lab-deploy'
+        type: choice
+        options:
+          - lab-deploy
+          - foundry-deploy
   push:
     branches:
       - main
@@ -32,47 +40,61 @@ env:
   AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     name: Validate Bicep Templates
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
-      - name: Azure Login
-        uses: azure/login@v1
+      - name: Azure Login via OIDC
+        uses: azure/login@6c251865b4e6290e7b78be643ea2d005bc51f69a # v2.1.1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Setup Azure CLI
-        uses: azure/CLI@v1
-        with:
-          azcliversion: latest
-
-      - name: Validate Bicep template
+      - name: Validate Lab Deploy Bicep template
         run: |
-          az bicep build --file infra/main.bicep
-          echo "Bicep template validation completed successfully"
+          az bicep build --file infra/lab-deploy.bicep --stdout
+          echo "✅ lab-deploy.bicep validation completed successfully"
+
+      - name: Validate Foundry Deploy Bicep template
+        run: |
+          az bicep build --file infra/foundry-deploy.bicep --stdout
+          echo "✅ foundry-deploy.bicep validation completed successfully"
 
   preview:
     runs-on: ubuntu-latest
     name: Preview Infrastructure Changes
     needs: validate
     if: github.event_name == 'pull_request'
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
     strategy:
       matrix:
         environment: [dev]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
-      - name: Azure Login
-        uses: azure/login@v1
+      - name: Azure Login via OIDC
+        uses: azure/login@6c251865b4e6290e7b78be643ea2d005bc51f69a # v2.1.1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Create Resource Group if not exists
         run: |
@@ -80,7 +102,7 @@ jobs:
           LOCATION="${{ github.event.inputs.location || 'East US' }}"
           
           if ! az group show --name $RESOURCE_GROUP >/dev/null 2>&1; then
-            echo "Creating resource group $RESOURCE_GROUP"
+            echo "Creating resource group $RESOURCE_GROUP in $LOCATION"
             az group create --name $RESOURCE_GROUP --location "$LOCATION"
           else
             echo "Resource group $RESOURCE_GROUP already exists"
@@ -89,11 +111,14 @@ jobs:
       - name: Run What-If Analysis
         run: |
           RESOURCE_GROUP="rg-agentic-ai-app-${{ matrix.environment }}"
+          APP_NAME="aiaaa-${{ matrix.environment }}"
+          LOCATION="eastus"
           
+          echo "Running what-if analysis for $APP_NAME in $LOCATION"
           az deployment group what-if \
             --resource-group $RESOURCE_GROUP \
-            --template-file infra/main.bicep \
-            --parameters @infra/parameters.${{ matrix.environment }}.json
+            --template-file infra/lab-deploy.bicep \
+            --parameters location="$LOCATION" appName="$APP_NAME"
 
   deploy-dev:
     runs-on: ubuntu-latest
@@ -101,22 +126,42 @@ jobs:
     needs: validate
     if: (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'dev') || (github.event_name == 'push' && github.ref == 'refs/heads/main')
     environment: development
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
-      - name: Azure Login
-        uses: azure/login@v1
+      - name: Azure Login via OIDC
+        uses: azure/login@6c251865b4e6290e7b78be643ea2d005bc51f69a # v2.1.1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Set deployment variables
+        id: vars
+        run: |
+          LOCATION="${{ github.event.inputs.location || 'eastus' }}"
+          TEMPLATE="${{ github.event.inputs.template || 'lab-deploy' }}"
+          APP_NAME="aiaaa-dev"
+          
+          echo "location=$LOCATION" >> $GITHUB_OUTPUT
+          echo "template=$TEMPLATE" >> $GITHUB_OUTPUT
+          echo "appName=$APP_NAME" >> $GITHUB_OUTPUT
+          
+          echo "📍 Location: $LOCATION"
+          echo "📄 Template: $TEMPLATE"
+          echo "🏷️  App Name: $APP_NAME"
 
       - name: Create Resource Group
         run: |
           RESOURCE_GROUP="rg-agentic-ai-app-dev"
-          LOCATION="${{ github.event.inputs.location || 'East US' }}"
+          LOCATION="${{ steps.vars.outputs.location }}"
           
           if ! az group show --name $RESOURCE_GROUP >/dev/null 2>&1; then
-            echo "Creating resource group $RESOURCE_GROUP"
+            echo "Creating resource group $RESOURCE_GROUP in $LOCATION"
             az group create --name $RESOURCE_GROUP --location "$LOCATION"
           else
             echo "Resource group $RESOURCE_GROUP already exists"
@@ -127,23 +172,33 @@ jobs:
         run: |
           RESOURCE_GROUP="rg-agentic-ai-app-dev"
           DEPLOYMENT_NAME="infra-deployment-$(date +%Y%m%d-%H%M%S)"
+          LOCATION="${{ steps.vars.outputs.location }}"
+          APP_NAME="${{ steps.vars.outputs.appName }}"
+          TEMPLATE="${{ steps.vars.outputs.template }}"
+          
+          echo "🚀 Deploying $TEMPLATE.bicep to $RESOURCE_GROUP"
           
           az deployment group create \
             --resource-group $RESOURCE_GROUP \
-            --template-file infra/main.bicep \
-            --parameters @infra/parameters.dev.json \
+            --template-file "infra/${TEMPLATE}.bicep" \
+            --parameters location="$LOCATION" appName="$APP_NAME" \
             --name $DEPLOYMENT_NAME \
             --verbose
+          
+          echo "deploymentName=$DEPLOYMENT_NAME" >> $GITHUB_OUTPUT
 
       - name: Get Deployment Outputs
         run: |
           RESOURCE_GROUP="rg-agentic-ai-app-dev"
+          DEPLOYMENT_NAME="${{ steps.deploy.outputs.deploymentName }}"
           
-          echo "Deployment completed. Resource outputs:"
+          echo "📦 Deployment completed: $DEPLOYMENT_NAME"
+          echo "Resource outputs:"
           az deployment group show \
             --resource-group $RESOURCE_GROUP \
-            --name $(az deployment group list --resource-group $RESOURCE_GROUP --query "[0].name" -o tsv) \
-            --query "properties.outputs"
+            --name $DEPLOYMENT_NAME \
+            --query "properties.outputs" \
+            || echo "No outputs defined"
 
   deploy-staging:
     runs-on: ubuntu-latest
@@ -151,38 +206,79 @@ jobs:
     needs: validate
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging'
     environment: staging
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
-      - name: Azure Login
-        uses: azure/login@v1
+      - name: Azure Login via OIDC
+        uses: azure/login@6c251865b4e6290e7b78be643ea2d005bc51f69a # v2.1.1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Set deployment variables
+        id: vars
+        run: |
+          LOCATION="${{ github.event.inputs.location || 'eastus' }}"
+          TEMPLATE="${{ github.event.inputs.template || 'lab-deploy' }}"
+          APP_NAME="aiaaa-staging"
+          
+          echo "location=$LOCATION" >> $GITHUB_OUTPUT
+          echo "template=$TEMPLATE" >> $GITHUB_OUTPUT
+          echo "appName=$APP_NAME" >> $GITHUB_OUTPUT
+          
+          echo "📍 Location: $LOCATION"
+          echo "📄 Template: $TEMPLATE"
+          echo "🏷️  App Name: $APP_NAME"
 
       - name: Create Resource Group
         run: |
           RESOURCE_GROUP="rg-agentic-ai-app-staging"
-          LOCATION="${{ github.event.inputs.location || 'East US' }}"
+          LOCATION="${{ steps.vars.outputs.location }}"
           
           if ! az group show --name $RESOURCE_GROUP >/dev/null 2>&1; then
-            echo "Creating resource group $RESOURCE_GROUP"
+            echo "Creating resource group $RESOURCE_GROUP in $LOCATION"
             az group create --name $RESOURCE_GROUP --location "$LOCATION"
           else
             echo "Resource group $RESOURCE_GROUP already exists"
           fi
 
       - name: Deploy Infrastructure
+        id: deploy
         run: |
           RESOURCE_GROUP="rg-agentic-ai-app-staging"
           DEPLOYMENT_NAME="infra-deployment-$(date +%Y%m%d-%H%M%S)"
+          LOCATION="${{ steps.vars.outputs.location }}"
+          APP_NAME="${{ steps.vars.outputs.appName }}"
+          TEMPLATE="${{ steps.vars.outputs.template }}"
+          
+          echo "🚀 Deploying $TEMPLATE.bicep to $RESOURCE_GROUP"
           
           az deployment group create \
             --resource-group $RESOURCE_GROUP \
-            --template-file infra/main.bicep \
-            --parameters @infra/parameters.staging.json \
+            --template-file "infra/${TEMPLATE}.bicep" \
+            --parameters location="$LOCATION" appName="$APP_NAME" \
             --name $DEPLOYMENT_NAME \
             --verbose
+          
+          echo "deploymentName=$DEPLOYMENT_NAME" >> $GITHUB_OUTPUT
+
+      - name: Get Deployment Outputs
+        run: |
+          RESOURCE_GROUP="rg-agentic-ai-app-staging"
+          DEPLOYMENT_NAME="${{ steps.deploy.outputs.deploymentName }}"
+          
+          echo "📦 Deployment completed: $DEPLOYMENT_NAME"
+          echo "Resource outputs:"
+          az deployment group show \
+            --resource-group $RESOURCE_GROUP \
+            --name $DEPLOYMENT_NAME \
+            --query "properties.outputs" \
+            || echo "No outputs defined"
 
   deploy-prod:
     runs-on: ubuntu-latest
@@ -190,35 +286,76 @@ jobs:
     needs: validate
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'prod'
     environment: production
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
-      - name: Azure Login
-        uses: azure/login@v1
+      - name: Azure Login via OIDC
+        uses: azure/login@6c251865b4e6290e7b78be643ea2d005bc51f69a # v2.1.1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Set deployment variables
+        id: vars
+        run: |
+          LOCATION="${{ github.event.inputs.location || 'eastus' }}"
+          TEMPLATE="${{ github.event.inputs.template || 'lab-deploy' }}"
+          APP_NAME="aiaaa-prod"
+          
+          echo "location=$LOCATION" >> $GITHUB_OUTPUT
+          echo "template=$TEMPLATE" >> $GITHUB_OUTPUT
+          echo "appName=$APP_NAME" >> $GITHUB_OUTPUT
+          
+          echo "📍 Location: $LOCATION"
+          echo "📄 Template: $TEMPLATE"
+          echo "🏷️  App Name: $APP_NAME"
 
       - name: Create Resource Group
         run: |
           RESOURCE_GROUP="rg-agentic-ai-app-prod"
-          LOCATION="${{ github.event.inputs.location || 'East US' }}"
+          LOCATION="${{ steps.vars.outputs.location }}"
           
           if ! az group show --name $RESOURCE_GROUP >/dev/null 2>&1; then
-            echo "Creating resource group $RESOURCE_GROUP"
+            echo "Creating resource group $RESOURCE_GROUP in $LOCATION"
             az group create --name $RESOURCE_GROUP --location "$LOCATION"
           else
             echo "Resource group $RESOURCE_GROUP already exists"
           fi
 
       - name: Deploy Infrastructure
+        id: deploy
         run: |
           RESOURCE_GROUP="rg-agentic-ai-app-prod"
           DEPLOYMENT_NAME="infra-deployment-$(date +%Y%m%d-%H%M%S)"
+          LOCATION="${{ steps.vars.outputs.location }}"
+          APP_NAME="${{ steps.vars.outputs.appName }}"
+          TEMPLATE="${{ steps.vars.outputs.template }}"
+          
+          echo "🚀 Deploying $TEMPLATE.bicep to $RESOURCE_GROUP"
           
           az deployment group create \
             --resource-group $RESOURCE_GROUP \
-            --template-file infra/main.bicep \
-            --parameters @infra/parameters.prod.json \
+            --template-file "infra/${TEMPLATE}.bicep" \
+            --parameters location="$LOCATION" appName="$APP_NAME" \
             --name $DEPLOYMENT_NAME \
             --verbose
+          
+          echo "deploymentName=$DEPLOYMENT_NAME" >> $GITHUB_OUTPUT
+
+      - name: Get Deployment Outputs
+        run: |
+          RESOURCE_GROUP="rg-agentic-ai-app-prod"
+          DEPLOYMENT_NAME="${{ steps.deploy.outputs.deploymentName }}"
+          
+          echo "📦 Deployment completed: $DEPLOYMENT_NAME"
+          echo "Resource outputs:"
+          az deployment group show \
+            --resource-group $RESOURCE_GROUP \
+            --name $DEPLOYMENT_NAME \
+            --query "properties.outputs" \
+            || echo "No outputs defined"
