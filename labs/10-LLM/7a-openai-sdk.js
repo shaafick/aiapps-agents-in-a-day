@@ -18,3 +18,13 @@ chatResponse
     }
   })
   .catch((err) => console.log(`Error: ${JSON.stringify(err)}`));
+
+  // Block Reference 1
+const chatResponse = client.getChatCompletions("gpt-4.1", [
+  {
+    role: "system",
+    content:
+      "You are a helpful, fun and friendly sales assistant for Contoso Bike Store, a bicycle and bicycle accessories store.",
+  },
+  { role: "user", content: "Do you sell bicycles?" },
+]);
