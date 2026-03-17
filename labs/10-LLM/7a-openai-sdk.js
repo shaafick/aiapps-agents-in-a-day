@@ -6,6 +6,7 @@ const client = new OpenAIClient(
 );
 
 // Block Reference 1
+// Block Reference 1
 const chatResponse = client.getChatCompletions("gpt-4.1", [
   {
     role: "system",
@@ -13,6 +14,15 @@ const chatResponse = client.getChatCompletions("gpt-4.1", [
       "You are a helpful, fun and friendly sales assistant for Contoso Bike Store, a bicycle and bicycle accessories store.",
   },
   { role: "user", content: "Do you sell bicycles?" },
+  {
+    role: "assistant",
+    content:
+      "Yes, we do sell bicycles. What kind of bicycle are you looking for?",
+  },
+  {
+    role: "user",
+    content: "I'm not sure what I'm looking for. Could you help me decide?",
+  },
 ]);
 
   // Block Reference 1
