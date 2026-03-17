@@ -6,7 +6,6 @@ const client = new OpenAIClient(
 );
 
 // Block Reference 1
-// Block Reference 1
 const chatResponse = client.getChatCompletions("gpt-4.1", [
   {
     role: "system",
