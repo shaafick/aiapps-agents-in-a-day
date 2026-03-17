@@ -4,15 +4,15 @@
 
 # Define the search and replace pairs
 declare -A replacements=(
-    ["<DEV_Name>"]="add_value"
-    ["<MONGODB_CONNECTION_STRING>"]="add_value"
+    ["<DEV_Name>"]="lab2user325@aiapps.top"
+    ["<MONGODB_CONNECTION_STRING>"]="mongodb+srv://aiaaaadmin:Pswd6202@aiaaa-s2-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
     ["<AZURE_OPENAI_API_INSTANCE_NAME>"]="aiaaa-s2-openai"
-    ["<AZURE_OPENAI_API_KEY>"]="add_value"
+    ["<AZURE_OPENAI_API_KEY>"]="8d91f222533647a488602ebc75e7a180"
     # see examples below
-    # ["<DEV_Name>"]="dev_daniel_66"
-    # ["<MONGODB_CONNECTION_STRING>"]="mongodb+srv://aiaaaadmin:aiaaapassword123@arg-syd-aiaaa-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
-    # ["<AZURE_OPENAI_API_INSTANCE_NAME>"]="aiaaa-s2-openai"
-    # ["<AZURE_OPENAI_API_KEY>"]=""
+    #["<DEV_Name>"]="dev_daniel_66"
+    #["<MONGODB_CONNECTION_STRING>"]="mongodb+srv://aiaaaadmin:Pswd6202@aiaaa-s2-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
+    #["<AZURE_OPENAI_API_INSTANCE_NAME>"]="aiaaa-s2-openai"
+    #["<AZURE_OPENAI_API_KEY>"]="8d91f222533647a488602ebc75e7a180"
 )
 
 # Check if parent directory exists
