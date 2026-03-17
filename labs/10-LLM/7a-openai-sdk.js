@@ -6,18 +6,18 @@ const client = new OpenAIClient(
 );
 
 // Block Reference 1
-const chatResponse = client.getChatCompletions("gpt-4.1", [
-  { role: "user", content: "What are the different types of road bikes?" },
-]);
+// const chatResponse = client.getChatCompletions("gpt-4.1", [
+//   { role: "user", content: "What are the different types of road bikes?" },
+// ]);
 
-// Block Reference 2
-chatResponse
-  .then((result) => {
-    for (const choice of result.choices) {
-      console.log(choice.message.content);
-    }
-  })
-  .catch((err) => console.log(`Error: ${JSON.stringify(err)}`));
+// // Block Reference 2
+// chatResponse
+//   .then((result) => {
+//     for (const choice of result.choices) {
+//       console.log(choice.message.content);
+//     }
+//   })
+//   .catch((err) => console.log(`Error: ${JSON.stringify(err)}`));
 
   // Block Reference 1
 const chatResponse = client.getChatCompletions("gpt-4.1", [
