@@ -1,4 +1,4 @@
-rrequire('dotenv').config();
+require('dotenv').config();
 const { MongoClient } = require('mongodb');
 const fs = require('fs');
 const path = require('path');
